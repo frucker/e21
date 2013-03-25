@@ -1,0 +1,57 @@
+{% extends "core.Experiment.html" %}
+{% block measurements %}
+  {% if obj.temperature_scans %}
+  <h2>Temperature Scans:</h2>
+  <div class="row-fluid">
+    <div class="span8">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Field</th>
+            <th>Temperature Stability</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for meas in obj.temperature_scans %}
+        <tr>
+          <td>{{ meas.params['path'] }}</td>
+          <td>{{ meas.field[0] }}</td>
+          {% set offset, deviation = meas.temperature_stability() %}
+          <td>{{ meas.temperature_stability()|temp_stability }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="span4"></div>
+  </div>
+  {% endif %}
+  {% if obj.field_scans %}
+  <h2>Field Scans:</h2>
+  <div class="row-fluid">
+    <div class="span8">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Target Temperature</th>
+            <th>Temperature Stability</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for meas in obj._measurements %}
+        <tr>
+          <td>{{ meas.params['path'] }}i</td>
+          <td>{{ meas.target_temperature[0] }}</td>
+          {% set offset, deviation = meas.temperature_stability() %}
+          <td>{{ offset }} ± {{ deviation }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="span4"></div>
+  </div>
+  {% endif %}
+{% endblock %}

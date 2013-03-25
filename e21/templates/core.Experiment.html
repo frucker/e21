@@ -1,0 +1,25 @@
+{% block title %}
+  <h1>Experiment at {{ obj.date.isoformat() }} </h1>
+{% endblock %}
+{% block description %}
+  {{ obj.description|markdown }}
+{% endblock %}
+{% block measurements %}
+  {% if obj._measurements %}
+  <h2>Measurements:</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Path</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for meas in obj._measurements %}
+    <tr>
+      <td>{{ meas.params['path'] }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+{% endblock %}

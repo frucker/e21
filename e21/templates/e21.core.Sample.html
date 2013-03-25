@@ -1,0 +1,11 @@
+<h1>{{ obj.name }}</h1>
+{{ obj.description|markdown if obj.description }}
+{% if obj.properties %}
+  <h3>Properties</h3>
+  <dl class="dl-horizontal">
+    {% for k, v in obj.properties.items() %}
+    <dt>{{ k }}</dt>
+    <dd>{{ v }}</dd>
+    {% endfor %}
+  </dl>
+{% endif %}
