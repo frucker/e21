@@ -8,6 +8,7 @@ import numpy as np
 import datetime as dt
 import itertools as it
 import os
+import warnings
 
 import e21.core
 from e21.core import env
@@ -156,7 +157,7 @@ class Loader(object):
         def assert_blank(line):
             """Tiny helper function, checking for a blank line."""
             if line.strip():
-                raise ParsingError('Line is not blank:{0}'.format(line.strip()))
+                warnings.warn('Line is not blank:{0}'.format(line.strip()))
 
         params = {
             'path': path,
