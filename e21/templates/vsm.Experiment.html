@@ -40,7 +40,7 @@
           </tr>
         </thead>
         <tbody>
-        {% for meas in obj._measurements %}
+        {% for meas in obj.field_scans %}
         <tr>
           <td>{{ meas.params['path'] }}i</td>
           <td>{{ meas.target_temperature[0] }}</td>
