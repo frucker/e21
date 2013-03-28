@@ -9,7 +9,7 @@
           <tr>
             <th>Path</th>
             <th>Field</th>
-            <th>Temperature Stability</th>
+            <th title="Offset and standard deviation of the sample temperature">Temperature Stability</th>
           </tr>
         </thead>
         <tbody>
@@ -17,7 +17,6 @@
         <tr>
           <td>{{ meas.params['path'] }}</td>
           <td>{{ meas.field[0] }}</td>
-          {% set offset, deviation = meas.temperature_stability() %}
           <td>{{ meas.temperature_stability()|temp_stability }}</td>
         </tr>
         {% endfor %}
@@ -36,7 +35,7 @@
           <tr>
             <th>Path</th>
             <th>Target Temperature</th>
-            <th>Temperature Stability</th>
+            <th title="Offset and standard deviation of the sample temperature">Temperature Stability</th>
           </tr>
         </thead>
         <tbody>
@@ -44,8 +43,7 @@
         <tr>
           <td>{{ meas.params['path'] }}i</td>
           <td>{{ meas.target_temperature[0] }}</td>
-          {% set offset, deviation = meas.temperature_stability() %}
-          <td>{{ offset }} ± {{ deviation }}</td>
+          <td>{{ meas.temperature_stability()|temp_stability }}</td>
         </tr>
         {% endfor %}
         </tbody>
