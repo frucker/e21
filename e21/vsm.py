@@ -9,6 +9,7 @@ import datetime as dt
 import itertools as it
 import os
 import warnings
+import collections
 
 import e21.core
 from e21.core import env
@@ -114,6 +115,12 @@ class TScan(MagnetisationMeasurement):
     def __init__(self, datas, params):
         super(TScan, self).__init__(datas, params)
 
+
+class TListView(ListView):
+    def plot(self, *args, **kw):
+        f, ax = pp.subplots(1, 1, *args, **kw)
+        for ts in self:
+            ax.plot(
 
 class Loader(object):
     def __init__(self, **kw):
