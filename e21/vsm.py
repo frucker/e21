@@ -122,6 +122,7 @@ class TScan(MagnetisationMeasurement):
 
 class TListView(ListView):
     def plot(self, subplot_kw=None, **fig_kw):
+        subplot_kw = subplot_kw or {}
         subplot_kw = dict(xlabel='T (K)', ylabel='m (Am$^2$)', **subplot_kw)
         f, ax = pp.subplots(1, 1, subplot_kw=subplot_kw, **fig_kw)
         for ts in self:
@@ -132,7 +133,7 @@ class TListView(ListView):
 class BListView(ListView):
     def plot(self, subplot_kw=None, **fig_kw):
         subplot_kw = subplot_kw or {}
-        subplot_kw = dict(xlabel='T (K)', ylabel='m (Am$^2$)', **subplot_kw)
+        subplot_kw = dict(xlabel='B (T)', ylabel='m (Am$^2$)', **subplot_kw)
         f, ax = pp.subplots(1, 1, subplot_kw=subplot_kw, **fig_kw)
         for hs in self:
             ax.plot(hs.field, hs.m, label='{0}'.format(np.mean(hs.temperature)))
