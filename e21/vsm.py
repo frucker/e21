@@ -4,7 +4,7 @@
 
 import quantities as pq
 import numpy as np
-
+import matplotlib.pyplot as pp
 import datetime as dt
 import itertools as it
 import os
@@ -55,8 +55,8 @@ class Experiment(e21.core.Experiment):
     def __init__(self, date, description=None, measurements=None):
         super(Experiment, self).__init__(date, description)
         self._measurements = []
-        self.field_scans = ListView(self._measurements)
-        self.temperature_scans = ListView(self._measurements)
+        self.field_scans = BListView(self._measurements)
+        self.temperature_scans = TListView(self._measurements)
 
     def __getitem__(self, item):
         return self._measurements[item]
@@ -101,6 +101,10 @@ class MagnetisationMeasurement(e21.core.Measurement):
     def target_temperature(self):
         return self._data['Tset']
 
+    @property
+    def temperature(self):
+        return self._data['Tsample']
+
     def temperature_stability(self):
         dT = self._data['Tcontrol'] - self._data['Tset']
         return np.mean(dT), np.std(dT)
@@ -117,10 +121,22 @@ class TScan(MagnetisationMeasurement):
 
 
 class TListView(ListView):
-    def plot(self, *args, **kw):
-        f, ax = pp.subplots(1, 1, *args, **kw)
+    def plot(self, subplot_kw=None, **fig_kw):
+        subplot_kw = dict(xlabel='T (K)', ylabel='m (Am$^2$)', **subplot_kw)
+        f, ax = pp.subplots(1, 1, subplot_kw=subplot_kw, **fig_kw)
         for ts in self:
-            ax.plot(
+            ax.plot(ts.temperature, ts.m, label='{0}'.format(ts.field[0]))
+        ax.legend()
+
+
+class BListView(ListView):
+    def plot(self, subplot_kw=None, **fig_kw):
+        subplot_kw = dict(xlabel='T (K)', ylabel='m (Am$^2$)', **subplot_kw)
+        f, ax = pp.subplots(1, 1, subplot_kw=subplot_kw, **fig_kw)
+        for hs in self:
+            ax.plot(hs.field, hs.m, label='{0}'.format(np.mean(hs.temperature)))
+        ax.legend()
+
 
 class Loader(object):
     def __init__(self, **kw):
