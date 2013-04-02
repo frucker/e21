@@ -34,9 +34,14 @@ class ListView(object):
         return len(self._indices)
 
     def __getitem__(self, item):
-        return self._source[self._indices[item]]
+        idx = self._indices[item]
+        if isinstance(idx, collections.Iterable):
+            return [self._source[x] for x in idx]
+        else:
+            return self._source[idx]
 
     def __setitem__(self, item, value):
+        # TODO This does not support slicing yet.
         self._source[self._indices[item]] = value
 
     def append(self, value):
