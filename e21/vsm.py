@@ -145,7 +145,7 @@ class Magnetisation(e21.core.Measurement):
         return np.mean(dT), np.std(dT)
 
 
-class FieldScan(Magnetisation, Plottable):
+class FieldScan(Magnetisation, e21.core.Plottable):
     def plot(self, y='m', x='field', axes=None, subplot_kw={}, fig_kw={}, **kw):
         """A default implementation for a generic fieldscan plot."""
         subplot_default = {
@@ -157,7 +157,7 @@ class FieldScan(Magnetisation, Plottable):
         return super(FieldScan, self).plot(y, x, axes, subplot_default, fig_kw, label, **kw)
 
 
-class TemperatureScan(Magnetisation, Plottable):
+class TemperatureScan(Magnetisation, e21.core.Plottable):
     def plot(self, y='m', x='temperature', axes=None, subplot_kw={}, fig_kw={}, **kw):
         """A default implementation for a generic fieldscan plot."""
         subplot_default = {

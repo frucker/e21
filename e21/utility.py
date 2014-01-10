@@ -1,3 +1,5 @@
+import itertools as it
+
 # colors taken from bootstrap
 COLORS = {
     'black': '#000000',
@@ -23,3 +25,15 @@ COLORS = {
     'pink': '#c3325f',
     'purple': '#7a43b6',
 }
+
+def merge_dicts(*dicts):
+    """Merges multiple dicts together.
+    
+    ::
+        >>> x = dict(a=1, b=1)
+        >>> y = dict(b=2)
+        >>> merge_dicts(x, y, {'c': 1})
+        {'a': 1, 'b': 2, 'c': 1}
+    
+    """
+    return dict(it.chain(*[x.iteritems() for x in dicts]))
