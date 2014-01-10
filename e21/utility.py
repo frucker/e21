@@ -1,0 +1,25 @@
+# colors taken from bootstrap
+COLORS = {
+    'black': '#000000',
+    'darker gray': '#222222',
+    'dark gray': '#333333',  #text color
+    'gray': '#555555',
+    'light gray': '#999999',
+    'lighter gray': '#eeeeee',
+    'white': '#ffffff',
+    'blue': '#049cdb',
+    'dark blue': '#0064cd',
+    'light blue': '#3a87ad',
+    'lighter blue': '#d9edf7',
+    'green': '#46a546',
+    'light green': '#468847',
+    'lighter green': '#dff0d8',
+    'red': '#9d261d',
+    'light red': '#b94a48',
+    'lighter red': '#f2dede',
+    'yellow': '#ffc40d',
+    'light yellow': '#fcf8e3',
+    'orange': '#f89406',
+    'pink': '#c3325f',
+    'purple': '#7a43b6',
+}

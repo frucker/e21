@@ -2,19 +2,18 @@
 #
 # e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.
 
-import quantities as pq
-import numpy as np
-import matplotlib.pyplot as pp
+import collections
 import datetime as dt
 import itertools as it
 import os
 import warnings
-import collections
+
+import quantities as pq
+import numpy as np
 
 import e21.core
-from e21.core import env
 
-
+#-Loader-----------------------------------------------------------------------
 def _to_quantity(x):
     if not isinstance(x, pq.Quantity):
         val, unit = x
@@ -23,121 +22,7 @@ def _to_quantity(x):
 
 
 class ParsingError(Exception):
-    pass
-
-
-class ListView(object):
-    def __init__(self, source, indices=None):
-        self._source = source
-        self._indices = indices or []
-
-    def __len__(self):
-        return len(self._indices)
-
-    def __getitem__(self, item):
-        idx = self._indices[item]
-        if isinstance(idx, collections.Iterable):
-            return [self._source[x] for x in idx]
-        else:
-            return self._source[idx]
-
-    def __setitem__(self, item, value):
-        # TODO This does not support slicing yet.
-        self._source[self._indices[item]] = value
-
-    def append(self, value):
-        idx = len(self._source)
-        self._source.append(value)
-        self._indices.append(idx)
-
-
-class Experiment(e21.core.Experiment):
-    def __init__(self, date, description=None, measurements=None):
-        super(Experiment, self).__init__(date, description)
-        self._measurements = []
-        self.field_scans = BListView(self._measurements)
-        self.temperature_scans = TListView(self._measurements)
-
-    def __getitem__(self, item):
-        return self._measurements[item]
-
-    def append(self, measurement):
-        if isinstance(measurement, TScan):
-            self.temperature_scans.append(measurement)
-        elif isinstance(measurement, BScan):
-            self.field_scans.append(measurement)
-        else:
-            self._measurements.append(measurement)
-
-    def _repr_html_(self):
-        template = e21.core.env.get_template('vsm.Experiment.html')
-        return template.render(obj=self)
-
-
-class MagnetisationMeasurement(e21.core.Measurement):
-    @property
-    def x(self):
-        return self._data['X']
-
-    def y(self):
-        return self._data['Y']
-
-    @property
-    def m(self):
-        """Calculates the magnetic moment of the X signal."""
-        m_ref = self.params['m_ref']
-        U_ref = self.params['U_ref']
-        return self._data['X'] * m_ref / U_ref
-
-    @property
-    def field(self):
-        return self._data['H']
-
-    @property
-    def control_temperature(self):
-        return self._data['Tcontrol']
-
-    @property
-    def target_temperature(self):
-        return self._data['Tset']
-
-    @property
-    def temperature(self):
-        return self._data['Tsample']
-
-    def temperature_stability(self):
-        dT = self._data['Tcontrol'] - self._data['Tset']
-        return np.mean(dT), np.std(dT)
-
-
-class BScan(MagnetisationMeasurement):
-    def __init__(self, datas, params):
-        super(BScan, self).__init__(datas, params)
-
-
-class TScan(MagnetisationMeasurement):
-    def __init__(self, datas, params):
-        super(TScan, self).__init__(datas, params)
-
-
-class TListView(ListView):
-    def plot(self, subplot_kw=None, **fig_kw):
-        subplot_kw = subplot_kw or {}
-        subplot_kw = dict(xlabel='T (K)', ylabel='m (Am$^2$)', **subplot_kw)
-        f, ax = pp.subplots(1, 1, subplot_kw=subplot_kw, **fig_kw)
-        for ts in self:
-            ax.plot(ts.temperature, ts.m, label='{0}'.format(ts.field[0]))
-        ax.legend()
-
-
-class BListView(ListView):
-    def plot(self, subplot_kw=None, **fig_kw):
-        subplot_kw = subplot_kw or {}
-        subplot_kw = dict(xlabel='B (T)', ylabel='m (Am$^2$)', **subplot_kw)
-        f, ax = pp.subplots(1, 1, subplot_kw=subplot_kw, **fig_kw)
-        for hs in self:
-            ax.plot(hs.field, hs.m, label='{0}'.format(np.mean(hs.temperature)))
-        ax.legend()
+    """Raised by the Loader classes when a parsing error occures."""
 
 
 class Loader(object):
@@ -162,8 +47,7 @@ class Loader(object):
                 return TScan(data, params)
             if not dT and dH:
                 return BScan(data, params)
-
-        return MagnetisationMeasurement(data, params)
+        return Magnetisation(data, params)
 
     def parse(self, path):
         """Importer for VSM datafiles.
@@ -223,3 +107,64 @@ class Loader(object):
             return dt.datetime.strptime(x.strip(), '%a %b %d %H:%M:%S %Y')
         except ValueError:
             raise ParsingError('Invalid Date.')
+
+#-Measurement-classes----------------------------------------------------------
+class Magnetisation(e21.core.Measurement):
+    @property
+    def x(self):
+        return self.data['X']
+
+    def y(self):
+        return self.data['Y']
+
+    @property
+    def m(self):
+        """Calculates the magnetic moment of the X signal."""
+        m_ref = self.params['m_ref']
+        U_ref = self.params['U_ref']
+        return self.data['X'] * m_ref / U_ref
+
+    @property
+    def field(self):
+        return self.data['H']
+
+    @property
+    def control_temperature(self):
+        return self.data['Tcontrol']
+
+    @property
+    def target_temperature(self):
+        return self.data['Tset']
+
+    @property
+    def temperature(self):
+        return self.data['Tsample']
+
+    def temperature_stability(self):
+        dT = self.data['Tcontrol'] - self._data['Tset']
+        return np.mean(dT), np.std(dT)
+
+
+class FieldScan(Magnetisation, Plottable):
+    def plot(self, y='m', x='field', axes=None, subplot_kw={}, fig_kw={}, **kw):
+        """A default implementation for a generic fieldscan plot."""
+        subplot_default = {
+            'xlabel': 'B ({0})'.format(x.dimensionality),
+            'ylabel': 'm ({0})'.format(y.dimensionality),
+        }
+        subplot_default.update(subplot_kw)
+        label = kw.pop('label', str(np.mean(self.control_temperature)))
+        return super(FieldScan, self).plot(y, x, axes, subplot_default, fig_kw, label, **kw)
+
+
+class TemperatureScan(Magnetisation, Plottable):
+    def plot(self, y='m', x='temperature', axes=None, subplot_kw={}, fig_kw={}, **kw):
+        """A default implementation for a generic fieldscan plot."""
+        subplot_default = {
+            'xlabel': 'T ({0})'.format(x.dimensionality),
+            'ylabel': 'm ({0})'.format(y.dimensionality),
+        }
+        subplot_default.update(subplot_kw)
+        label = kw.pop('label', '{0}'.format(self.field[0]))
+        return super(TemperatureScan, self).plot(y, x, axes, subplot_default, fig_kw, label, **kw)
+

@@ -1,59 +1,87 @@
 # -*- coding: utf-8 -*-
 #
 # e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.
-import jinja2
-import markdown2
+import matplotlib as mpl
+import matplotlib.ticker
+import matplotlib.pyplot as pl
 
+from e21.utility import COLORS
 
-env = jinja2.Environment(loader=jinja2.PackageLoader('e21', 'templates'))
-
-
-def markdown(value):
-    return markdown2.markdown(value)
-
-def temperature_stability(value):
-    offset, deviation = value
-    return u'{0:.3f} {1} \u00B1 {2:.3f} {3}'.format(offset.item(), offset.dimensionality.unicode, deviation.item(), deviation.dimensionality.unicode)
-
-# register markdown filter
-env.filters['markdown'] = markdown
-env.filters['temp_stability'] = temperature_stability
-
-
-class Html(object):
-    def _repr_html_(self):
-        try:
-            path = '{0}.{1}.html'.format(type(self).__module__, type(self).__name__)
-            template = env.get_template(path)
-            return template.render(obj=self)
-        except jinja2.TemplateNotFound:
-            return None
-
-
-class Sample(Html):
-    def __init__(self, name, description=None, properties=None):
-        self.name = name
-        self.description = description
-        self.properties = properties or {}
-
-
-class Experiment(object):
-    def __init__(self, date, description=None):
-        self.date = date
-        self.description = description
-
-    def _repr_html_(self):
-        template = env.get_template('core.Experiment.html')
-        return template.render(obj=self)
-
-
+#-Measurement-classes----------------------------------------------------------
 class Measurement(object):
+    """Measurement base class."""
     def __init__(self, data, params):
+        self.data = data
         self.params = params
-        self._data = data
 
-    def __getitem__(self, item):
-        return self._data[item]
+    def __getattr__(self, item):
+        return self.data[item]
 
-    def _repr_html_(self):
-        template = env.get_template('core.Measurement.html')
+#-Plottable-classes------------------------------------------------------------
+class Plottable(object):
+    """Mixin class providing a generic plot function."""
+    RC = {
+        'ticker.nbins': 4, #number of ticker bins
+        'ticker.steps': [1, 2, 3, 5, 10],
+        'lines.linewidth': 2,
+        'lines.linewidth': 2,
+        'axes.edgecolor': COLORS['dark gray'],
+        'axes.labelsize': 14,
+        'axes.linewidth': 2,
+        'grid.color': COLORS['dark gray'],
+        'grid.linewidth': 1,
+        'xtick.major.width': 1.5,
+        'xtick.color': COLORS['dark gray'],
+        'xtick.labelsize': 14,
+        'ytick.major.width': 1.5,
+        'ytick.labelsize': 14,
+        'ytick.color': COLORS['dark gray'],
+        'axes.color_cycle': (COLORS['light blue'], COLORS['green'], COLORS['light red'], COLORS['yellow'], COLORS['pink'], COLORS['black']),
+        'axes.labelcolor': COLORS['dark gray'],
+        'axes.grid': True,
+        'legend.fontsize': 14,
+        'figure.figsize': (8, 5)
+    }
+
+    def plot(self, y, x, axes=None, subplot_kw={}, fig_kw={}, **kw):
+        """
+        :returns: A matplotlib figure and axes instance.
+        """
+        x, y = lookup(x), lookup(y)
+        if not axes:
+            # monkey patch AutoLocator
+            old_init = matplotlib.ticker.AutoLocator.__init__
+            def init(this):
+                super(AutoLocator, this).__init__(
+                        this,
+                        nbins=self.RC['ticker.nbins'],
+                        steps=self.RC['ticker.steps'])
+            matplotlib.ticker.AutoLocator.__init__ = init
+            with mpl.rc_context(rc=self.RC):
+                f, axes = pl.subplots(1, 1, subplot_kw=subplot_kw, **fig_kw)
+                axes.plot(x, y, **kw)
+            matplotlib.ticker.AutoLocator.__init__ = old_init # undo monkeypatch
+        return axes.figure, axes
+
+
+def lookup(obj, name):
+    """Helper function to provide function and string lookup of attributes.
+
+    E.g.::
+        >>>class Test(object):
+        ...    pass
+        >>>t = Test()
+        >>>t.value = 'myvalue'
+        >>>lookup(t, 'value')
+        myvalue
+        >>>lookup(t, lambda x: x.value)
+        myvalue
+        >>lookup(t, [1, 2, 3])
+        [1, 2, 3]
+    """
+    if isinstance(name, basestring):
+        return getattr(obj, name)
+    elif isinstance(name, collections.Callable):
+        return name(obj)
+    else:
+        return obj
