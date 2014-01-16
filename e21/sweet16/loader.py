@@ -11,10 +11,11 @@ class Loader(object):
     E.g. loading a susceptibility measurement::
 
         >>>from e21.sweet16 import Loader
-        >>>s16 = Loader(mode='Susceptibility')
+        >>>s16 = Loader(mode='susceptibility')
         >>>measurement = s16('path/to/susceptibility_measurement.dat')
 
     """
+    CREATOR = {}
     def __init__(self, **kw):
         self.kw = kw
 

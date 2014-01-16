@@ -71,3 +71,14 @@ def create(data, params):
         return TemperatureScan(data, params)
     else:
         return Susceptibility(data, params)
+
+
+class Experiment(e21.core.Experiment):
+    @property
+    def temperature_scan(self):
+        return [x for x in self._measurements if isinstance(x, TemperatureScan)]
+
+    @property
+    def field_scan(self):
+        return [x for x in self._measurements if isinstance(x, FieldScan)]
+

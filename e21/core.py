@@ -17,6 +17,18 @@ class Measurement(object):
     def __getattr__(self, item):
         return self.data[item]
 
+
+class Experiment(object):
+    """Minimal implementation of a experiment class."""
+    def __init__(self, measurements=[]):
+        self._measurements = []
+
+    def __getitem__(self, item):
+        return self._measurements[item]
+
+    def __setitem__(self, item, value):
+        self._measurements[item] = value
+
 #-Plottable-classes------------------------------------------------------------
 class Plottable(object):
     """Mixin class providing a generic plot function."""
