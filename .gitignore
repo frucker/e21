@@ -32,3 +32,5 @@ pip-log.txt
 
 #pydev
 .pydevproject
+
+*.py~

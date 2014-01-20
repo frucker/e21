@@ -2,15 +2,16 @@
 #
 # e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.
 import e21.core
+from e21.core import lookup
 
 #-Susceptibility-classes-------------------------------------------------------
 class Susceptibility(e21.core.Measurement):
     @property
-    def x(self):
-        return self.data['LI1_CH1']
-
-    def y(self):
+    def real(self):
         return self.data['LI1_CH2']
+
+    def imag(self):
+        return self.data['LI1_CH1']
 
     @property
     def chi(self):
@@ -19,7 +20,7 @@ class Susceptibility(e21.core.Measurement):
 
     @property
     def field(self):
-        return self.data['H']
+        return self.data['B_field']
 
     @property
     def target_temperature(self):
@@ -38,38 +39,42 @@ class Susceptibility(e21.core.Measurement):
         return np.mean(dT), np.std(dT)
 
 
-class FieldScan(Susceptibility, Plottable):
-    def plot(self, y='chi', x='field', axes=None, subplot_kw={}, fig_kw={}, **kw):
+class FieldScan(Susceptibility, e21.core.Plottable):
+    def plot(self, y='real', x='field', axes=None, subplot_kw={}, fig_kw={}, **kw):
         """A default implementation for a generic fieldscan plot."""
+        x, y = lookup(self, x), lookup(self, y)
         subplot_default = {
             'xlabel': 'B ({0})'.format(x.dimensionality),
             'ylabel': r'$\mathrm{{\chi}}$ ({0})'.format(y.dimensionality),
         }
         subplot_default.update(subplot_kw)
         label = kw.pop('label', str(np.mean(self.control_temperature)))
-        return super(FieldScan, self).plot(y, x, axes, subplot_default, fig_kw, label, **kw)
+        return super(FieldScan, self).plot(y, x, axes, subplot_default, fig_kw, label=label, **kw)
 
 
-class TemperatureScan(Susceptibility, Plottable):
-    def plot(self, y='chi', x='temperature', axes=None, subplot_kw={}, fig_kw={}, **kw):
+class TemperatureScan(Susceptibility, e21.core.Plottable):
+    def plot(self, y='real', x='temperature', axes=None, subplot_kw={}, fig_kw={}, **kw):
         """A default implementation for a generic fieldscan plot."""
+        xa, ya = lookup(self, x), lookup(self, y)
+        xlabel = 'T ({0})'.format(xa.dimensionality) if x is 'temperature' else ''
+        ylabel = r'${\chi}$' if y is 'real' else ''
         subplot_default = {
-            'xlabel': 'T ({0})'.format(x.dimensionality),
-            'ylabel': r'$\mathrm{{\chi}}$ ({0})'.format(y.dimensionality),
+            'xlabel': xlabel,
+            'ylabel': ylabel
         }
         subplot_default.update(subplot_kw)
         label = kw.pop('label', '{0}'.format(self.field[0]))
-        return super(TemperatureScan, self).plot(y, x, axes, subplot_default, fig_kw, label, **kw)
+        return super(TemperatureScan, self).plot(y, x, axes, subplot_default, fig_kw, label=label, **kw)
 
 
 def create(data, params):
     """Takes data and param and creates a FieldScan or TemperatureScan."""
-    mode = params['info']['command'].mode
+    mode = params['info']['command']['mode']
     if mode == 'BSWEEP' or mode == 'BSTEP':
         return FieldScan(data, params)
     elif mode == 'TSWEEP' or mode == 'TSTEP':
         return TemperatureScan(data, params)
-    else:
+    else:   
         return Susceptibility(data, params)
 
 

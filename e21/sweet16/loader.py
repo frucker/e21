@@ -5,6 +5,9 @@ from e21.core import Measurement
 from e21.utility import merge_dicts
 import datetime as dt
 import os
+import matplotlib as mpl
+import quantities as pq
+
 
 class Loader(object):
     """A sweet16 file loader.
@@ -58,17 +61,23 @@ class Loader(object):
             params[block_title] = {}
             for line in f:
                 if line.startswith('#'):
-                    params, block_title = parse_header(line, params, block_title)
+                    params, block_title = self.parse_header(line[1:], params, block_title)
                 elif line.startswith('date'):
                     variables = line.strip().split('\t')
                     data = { k:[] for k in variables[2:]} 
                     data['datetime'] = []
                     data['time_numpy'] = []
-                elif line.startswith('(dd'):
-                    units = line.strip().split('\t')
+                elif line.startswith('('):
+                    units = [tok.strip('() ') for tok in line.split('\t')]
                 elif line.strip():
-                    data = parse_data(line, variables, data)
-        return  params,data
+                    data = self.parse_data(line, variables, data)
+            # convert python datetime to plottable float (matplotlib: plot_date function) and store in data dictionary
+            data['time_numpy'] = mpl.dates.date2num(data['datetime']) 
+            data['datetime'] = np.array(data['datetime'])
+            for col, unit in zip(variables, units):
+                if col not in ['date', 'time']:
+                    data[col] = pq.Quantity(data[col], unit)
+        return  data, params
 
     def parse_header(self, line, params, block_title):
         """
@@ -86,8 +95,6 @@ class Loader(object):
                                         stored in params[block_title][kw] = argument
             block_title  'string'       new block title if line defines new block in data file, i.e. '#'+block_title+'' (no argument)  
         """
-        
-        line = line.strip('#')
         if line.strip():                          # True, wenn Zeile nicht nur aus leerzeichen besteht.   
             line = line.split(':')
             kw, arg = line[0].strip(), line[1].strip()
@@ -97,10 +104,10 @@ class Loader(object):
                 params[block_title] = {}
             # check if time information (containing an additional ':', thus treated seperately
             if (kw == 'time'):
-                arg = line[1].strip()+':'+line[2].strip()
+                arg = ':'.join((line[1].strip(), line[2].strip()))
             # check if 'command' line. Then argument is dictionary containing infromation of command line of command_file.txt of measurement
             if (kw == 'command'):
-                arg = parse_commands(arg) 
+                arg = self.parse_commands(arg) 
             # if not block title, then store information
             if not (arg == ''):
                 params[block_title][kw] = arg
@@ -113,8 +120,6 @@ class Loader(object):
             data[k].append(float(v))
         # convert date and time row to python datetime
         data['datetime'].append(dt.datetime.strptime(columns[0]+columns[1], '%d.%m.%Y%H:%M:%S')) # convert date and time to one datetime and insert in dict
-        # convert python datetime to plottable float (matplotlib: plot_date function) and store in data dictionary
-        data['time_numpy'] = matplotlib.dates.date2num(data['datetime'])   
         return data
 
     def parse_commands(self, arguments):
@@ -129,5 +134,7 @@ class Loader(object):
                         'init_field', 'init_field_rate', 'target_field', 'target_field_rate', 
                         'lockin1_sensitivity', 'lockin2_sensitivity',
                         'delay', 'needle_valve_const', 'needle_valve_percentage', 'steps', 'target_current', 'target_rate','init_angle', 'target_angle']
+        modes = {'1': 'BSWEEP', '2': 'TSWEEP', '3':'CONST', '4': 'BSTEP','5':'TSTEP'}
         args =  dict(zip(command_line,arguments.split('\t')))
+        args['mode'] = modes[args['mode']]
         return args
