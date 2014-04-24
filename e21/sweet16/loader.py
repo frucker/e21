@@ -7,6 +7,7 @@ import datetime as dt
 import os
 import matplotlib as mpl
 import quantities as pq
+import numpy as np
 
 
 class Loader(object):
@@ -30,6 +31,7 @@ class Loader(object):
             return Loader.CREATOR[params['mode']](data, params)
         except KeyError:
             return Measurement(data, params)
+
 
     def parse(self,path):  
         """
@@ -69,8 +71,12 @@ class Loader(object):
                     data['time_numpy'] = []
                 elif line.startswith('('):
                     units = [tok.strip('() ') for tok in line.split('\t')]
+                    # The Sweet 16 uses 'Deg' as symbol for degree but quantities uses 'deg'.
+                    units = ['deg' if u == 'Deg' else u for u in units]
                 elif line.strip():
-                    data = self.parse_data(line, variables, data)
+                    row = self.parse_data(line, variables)
+                    for key, val in row.iteritems():
+                        data[key].append(val)
             # convert python datetime to plottable float (matplotlib: plot_date function) and store in data dictionary
             data['time_numpy'] = mpl.dates.date2num(data['datetime']) 
             data['datetime'] = np.array(data['datetime'])
@@ -113,14 +119,23 @@ class Loader(object):
                 params[block_title][kw] = arg
         return params, block_title
         
-    def parse_data(self, line,variables, data):        
-        columns = line.strip().split('\t')
-        #iterate over values in line and append to corresponding column in data dictionary
-        for k,v in zip(variables[2:],columns[2:]):
-            data[k].append(float(v))
-        # convert date and time row to python datetime
-        data['datetime'].append(dt.datetime.strptime(columns[0]+columns[1], '%d.%m.%Y%H:%M:%S')) # convert date and time to one datetime and insert in dict
-        return data
+    def parse_data(self, line, variables):        
+        tokens = line.strip().split('\t')
+        row = {key: float(val) for key, val in zip(variables[2:], tokens[2:])}
+        # convert date and time to one datetime and insert in dict
+        row['datetime'] = dt.datetime.strptime(tokens[0] + tokens[1], '%d.%m.%Y%H:%M:%S')
+        # TODO: From time to time, the LS340 creates misreadings which result in either 100K or 0K readings.
+        # Currently we simply ignore these lines. For th future it would be better to check if a value
+        # of 100K is actually an outlier an should be removed or a valid temperature.
+        if row['sample_temp_1'] == 0.:
+            return {}
+        elif row['sample_temp_1'] == 100.:
+            return {}
+        # ignore lines which don't contain the whole data set (i.e. last line after measurement abort)
+        elif (len(tokens)!=len(variables)):
+            # TODO: show a warning message.
+            return {}
+        return row
 
     def parse_commands(self, arguments):
         """ Parses the command line of a Sweet 16 measurement file and returns a dicitionary of command string.
@@ -134,7 +149,7 @@ class Loader(object):
                         'init_field', 'init_field_rate', 'target_field', 'target_field_rate', 
                         'lockin1_sensitivity', 'lockin2_sensitivity',
                         'delay', 'needle_valve_const', 'needle_valve_percentage', 'steps', 'target_current', 'target_rate','init_angle', 'target_angle']
-        modes = {'1': 'BSWEEP', '2': 'TSWEEP', '3':'CONST', '4': 'BSTEP','5':'TSTEP'}
+        modes = {'1': 'BSWEEP', '2': 'TSWEEP', '3':'CONST', '4': 'BSTEP','5':'TSTEP','Tramp':'TSWEEP','Bramp':'BSWEEP','7':'ASWEEP'}
         args =  dict(zip(command_line,arguments.split('\t')))
         args['mode'] = modes[args['mode']]
         return args
