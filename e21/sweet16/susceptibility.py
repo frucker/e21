@@ -9,7 +9,7 @@ import quantities as pq
 
 
 def _correct_field(field, correction):
-	return field - correction * np.abs(field)
+	return field - correction*pq.T # * np.abs(field)
 
 #-Susceptibility-classes-------------------------------------------------------
 class Susceptibility(e21.core.Measurement, e21.core.Plottable):
@@ -49,10 +49,20 @@ class Susceptibility(e21.core.Measurement, e21.core.Plottable):
         return self.data['B_field']
 
     @property
+    def mean_field(self):
+        return np.mean(self.field)
+
+    @property
+    def mean_current(self):
+        return np.mean(np.median(self.data['current']))
+
+    @property
     def field_corrected(self):
         """ Correction for Remanent Field offset during Magnetic Field Sweeps."""
         if float(self.params['info']['command']['target_field_rate']) == 0.05:
-            return _correct_field(self.field, 0.02)
+            return _correct_field(self.field, 0.03)
+        elif float(self.params['info']['command']['target_field_rate']) == 0.02:
+            return _correct_field(self.field, 0.01)
         else:
             return self.field
 
@@ -133,6 +143,13 @@ def create(data, params):
     else:   
         return Susceptibility(data, params)
 
+def sort_experiment(Exp, key = 'mean_field'):
+    sorted_list = sorted(Exp._measurements.items(), key=lambda x: float(x[1].__getattribute__(key)))
+    sorted_exp = Experiment()
+    for i in range(len(sorted_list)):
+        sorted_exp[i] = sorted_list[i][1]
+    return sorted_exp
+
 
 class Experiment(e21.core.Experiment):
     @property
@@ -166,6 +183,8 @@ class Experiment(e21.core.Experiment):
             self._measurements[index].params['general']['filename'] = files
             if not 'amplification' in self._measurements[index].params['general'].keys():
                self._measurements[index].params['general']['amplification'] = amplification
+            if not 'current' in self._measurements[index].data.keys():
+               self._measurements[index].data['current'] = 0 
             if 'dropping_resistance' in self._measurements[index].params['general'].keys():
                self._measurements[index].params['general']['dropping_resistance'] = float(self._measurements[index].params['general']['dropping_resistance'].strip('kOhm'))
             else:
@@ -179,13 +198,20 @@ class Experiment(e21.core.Experiment):
                 files: if true append column indicating paths of measurement files
 
         """
-        html_table = '<h1> %s - Measurement Overview </h1>' % str(self[0].params['info']['sample']) #Create Table Header 
-        html_table += '<strong> Sample: </strong> {} <br>'.format(self[0].params['info']['sample']) 
+        html_table = ''
+        html_table = '<h1> {} - Measurement Overview </h1>' .format(str(self[0].params['info']['sample']).decode('latin-1')) #Create Table Header 
+        html_table += '<strong> Sample: </strong> {} <br>'.format(self[0].params['info']['sample']).decode('latin-1') 
         
         html_table += '<strong> Measurement Option: </strong> Susceptibility <br> <br> '
-        html_table += '<table class="table table-striped">'
-        html_table += ('<tr> <th> Number </th> <th> Sweep Type </th> <th> Start </th> <th> Stop </th> <th> T / B </th> <th> B_init </th> <th> T_init </th><th> Ampl </th><th> dropping res </th><th> sweep [T,K/min] </th><th> filepath </th><th> reserve </th></tr>')
-    
+        html_table += '<table class="table table-hover">'
+        html_table += ('<tr> <th> Number </th> <th> Sweep Type </th> <th> Start </th> <th> Stop </th> <th> T / B </th> <th> B_init </th> <th> T_init </th><th> Ampl </th><th> dropping res </th><th> sweep [T,K/min] </th><th> reserve </th>')
+        html_table += '<th> current </th></tr>'
+        if 'angle' in kw:
+            html_table += '<th> reserve </th></tr>'
+        elif 'current' in kw:
+            html_table += '<th> current </th></tr>'
+        else:
+            html_table += '</tr>'
         for num in range(len(self)):
                        
            
@@ -195,27 +221,31 @@ class Experiment(e21.core.Experiment):
                 B_field = float(np.round(np.median(self[num].data['B_field']),3))
                 sigma = float(np.round(np.std(self[num].data['B_field']),3))
                 html_table += ('<tr> <td>{}</td> <td> Tsweep </td>'
-                                    '<td> {} K </td>' 
-                                    '<td> {} K </td>' 
-                                    '<td> {}+-{} T </td>'
-                                    '<td> {} T </td>'
-                                    '<td> {} K </td>'
-                                    '<td> {} </td>'
-                                    '<td> {} k&Omega; </td>'
-                                    '<td> {} </td>'
-                                    '<td> {} </td>'
-                                    '<td> {} </td>'
-                                    '</tr>').format(num,
-                                    T_init,T_final,B_field,sigma, 
-                                    self[num].params['info']['command']['init_field'],
-                                    self[num].params['info']['command']['init_temperature'],
-                                    self[num].params['general']['amplification'],
-                                    self[num].params['general']['dropping_resistance'],
-                                    self[num].params['info']['command']['target_temperature_rate'],
-                                    self[num].params['general']['filename'],
-                                    self[num].params['lock_in_1']['dyn_reserve'])
-
-            elif (type(self[num]) == e21.sweet16.susceptibility.FieldScan):   
+                    '<td> {} K </td>' 
+                    '<td> {} K </td>' 
+                    '<td> {}+-{} T </td>'
+                    '<td> {} T </td>'
+                    '<td> {} K </td>'
+                    '<td> {} </td>'
+                    '<td> {} k&Omega; </td>'
+                    '<td> {} </td>'
+                    '<td> {} </td>').format(num,
+                    T_init,T_final,B_field,sigma, 
+                    self[num].params['info']['command']['init_field'],
+                    self[num].params['info']['command']['init_temperature'],
+                    self[num].params['general']['amplification'],
+                    self[num].params['general']['dropping_resistance'],
+                    self[num].params['info']['command']['target_temperature_rate'],
+                    self[num].params['lock_in_1']['dyn_reserve'])
+                html_table +=  '<td> {} </td></tr>'.format(round(np.median(self[num].data['current']),2))
+                if 'angle' in kw:
+                    html_table +=  '<td> {} </td></tr>'.format(round(self[num].data['angle'][0],2))
+                elif 'current' in kw:
+                    html_table +=  '<td> {} </td></tr>'.format(round(np.median(self[num].data['current']),2))
+                else:
+                    html_table += '</tr>'
+                
+            elif (type(self[num]) == e21.sweet16.susceptibility.FieldScan):  
                 B_init = float(np.round(self[num].data['B_field'][0],6))
                 B_final = float(np.round(self[num].data['B_field'][-1],6))
                 Temp = float(np.round(np.median(self[num].data['sample_temp_1']),3))               
@@ -229,18 +259,22 @@ class Experiment(e21.core.Experiment):
                                     '<td> {} </td>'
                                     '<td> {} k&Omega; </td>'
                                     '<td> {} </td>'
-                                    '<td> {} </td>'
-                                    '<td> {} </td>'
-                                    '</tr>').format(num,
+                                    '<td> {} </td>').format(num,
                                     B_init,B_final,Temp,sigma, 
                                     self[num].params['info']['command']['init_field'],
                                     self[num].params['info']['command']['init_temperature'],
                                     self[num].params['general']['amplification'],
                                     self[num].params['general']['dropping_resistance'],
                                     self[num].params['info']['command']['target_field_rate'],
-                                    self[num].params['general']['filename'],
                                     self[num].params['lock_in_1']['dyn_reserve'])
-                    
+                html_table +=  '<td> {} </td></tr>'.format(round(np.median(self[num].data['current']),2))                
+                if 'angle' in kw:
+                    html_table +=  '<td> {} </td></tr>'.format(round(self[num].data['angle'][0],2))
+                elif 'current' in kw:
+                    html_table +=  '<td> {} </td></tr>'.format(round(np.median(self[num].data['current']),2))
+                else:
+                    html_table += '</tr>'
+                                        
         html_table += '</table>'
         return html_table
 

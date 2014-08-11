@@ -114,6 +114,9 @@ class Loader(object):
             # check if 'command' line. Then argument is dictionary containing infromation of command line of command_file.txt of measurement
             if (kw == 'command'):
                 arg = self.parse_commands(arg) 
+            # Corret bad data file output (corrected by now in the sweet 16 software. (lock_in_2 kw 'offset' was 'offset.' accidently)
+            if (kw == 'offset.'):
+                kw = 'offset'
             # if not block title, then store information
             if not (arg == ''):
                 params[block_title][kw] = arg
@@ -148,8 +151,22 @@ class Loader(object):
         command_line = ['mode', 'init_temperature','init_temperature_rate', 'target_temperature','target_temperature_rate',
                         'init_field', 'init_field_rate', 'target_field', 'target_field_rate', 
                         'lockin1_sensitivity', 'lockin2_sensitivity',
-                        'delay', 'needle_valve_const', 'needle_valve_percentage', 'steps', 'target_current', 'target_rate','init_angle', 'target_angle']
+                        'delay', 'needle_valve_const', 'needle_valve_percentage', 'steps', 'target_current', 'current_rate','init_angle', 'target_angle']
+        command_line_units = ['', ' K', ' K/min',' K',' K/min', ' T', ' T/min', ' T', ' T/min', '', '', ' min', '', ' %', '', ' A', ' A/min', ' Deg', ' Deg']
+        args = []
+        for i in range(len(arguments.split('\t'))):
+            args.append(arguments.split('\t')[i] + command_line_units[i])
         modes = {'1': 'BSWEEP', '2': 'TSWEEP', '3':'CONST', '4': 'BSTEP','5':'TSTEP','Tramp':'TSWEEP','Bramp':'BSWEEP','7':'ASWEEP'}
-        args =  dict(zip(command_line,arguments.split('\t')))
+        sensitivities ={'0':'2e-9 V','1':'5e-9 V','2':'1e-8 V','3':'2e-8 V','4':'5e-8 V',
+        '5':'1e-7 V','6':'2e-7 V','7':'5e-7 V','8':'1e-6 V','9':'2e-6 V','10':'5e-6 V',
+        '11':'1e-5 V','12':'2e-5 V','13':'5e-5 V','14':'1e-4 V','15':'2e-4 V','16':'5e-4 V',
+        '17':'1e-3 V','18':'2e-3 V','19':'5e-3 V','20':'0.01 V','21':'0.02 V','22':'0.05 V',
+        '23':'0.1 V','24':'0.2 V','25':'0.5 V','26':'1 V'}
+        needle_valve = {'0':'Not Constant', '1':'Constant'}
+        args =  dict(zip(command_line,args))
+        # Convert Lockin Sensitivity Units
+        args['lockin1_sensitivity'] = sensitivities[args['lockin1_sensitivity']]
+        args['lockin2_sensitivity'] = sensitivities[args['lockin2_sensitivity']]
+        args['needle_valve_const'] = needle_valve[args['needle_valve_const']]
         args['mode'] = modes[args['mode']]
         return args

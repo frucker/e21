@@ -34,3 +34,5 @@ pip-log.txt
 .pydevproject
 
 *.py~
+
+*.ipynb_checkpoints

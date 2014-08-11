@@ -6,7 +6,7 @@ import collections
 import matplotlib as mpl
 import matplotlib.ticker
 import matplotlib.pyplot as pl
-
+#import seaborn as sns
 from e21.utility import COLORS
 import e21.core
 
@@ -42,7 +42,8 @@ def init_mpl(nbins=4, steps=[1, 2, 3, 5, 10]):
               nbins=nbins,
               steps=steps)
     matplotlib.ticker.AutoLocator.__init__ = init
-
+    #sns.set_style("whitegrid",RC)
+    #sns.set(font="Arial")
 
 #-Measurement-classes----------------------------------------------------------
 class Measurement(object):
