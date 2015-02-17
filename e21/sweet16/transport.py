@@ -4,9 +4,12 @@
 import e21.core
 from e21.core import lookup
 from e21.sweet16 import Loader
+from e21.sweet16.loader import parse_header
+from e21.sweet16.loader import parse_commands
 import numpy as np
 import operator
 import quantities as pq
+from e21.utility import replace
 
 #-Transport-classes-------------------------------------------------------
 
@@ -48,7 +51,17 @@ class Transport(e21.core.Measurement, e21.core.Plottable):
         """
         return (1/self.excitation_current*self.sample_width*
                 self.sample_thickness/self.contact_distance/
-                self.amplification*10e8)
+                self.amplification)
+
+    @property
+    def geometry_factor_hall(self):
+        """
+        Calculates geometry factor b*d/(I_ac*Ampl*l_xx) 
+        in muOhm*cm/V.
+        """
+        return (1/self.excitation_current*self.sample_width*
+                self.sample_thickness/self.contact_distance_hall/
+                self.amplification)
 
     @property
     def res(self):
@@ -58,23 +71,30 @@ class Transport(e21.core.Measurement, e21.core.Plottable):
     @property
     def hall(self):
         """Calculates the resistance of the X signal."""
-        return self.real_hall*self.geometry_factor
+        return self.real_hall*self.geometry_factor_hall
     
     @property
     def sample_thickness(self):
-        return float(self.params['general']['sample_thickness'])*pq.mm
-
+        return float(self.params['general']['sample_thickness'])*1e-3*pq.m
     @property
     def sample_width(self):
-        return float(self.params['general']['sample_width'])*pq.mm
+        return float(self.params['general']['sample_width'])*1e-3*pq.m
 
     @property
     def contact_distance(self):
-        return float(self.params['general']['contact_distance'])*pq.mm
+        return float(self.params['general']['contact_distance'])*1e-3*pq.m
+
+    @property
+    def contact_distance_hall(self):
+        return float(self.params['general']['contact_distance_hall'])*1e-3*pq.m
 
     @property
     def field(self):
         return self.data['B_field']
+
+    @property
+    def NV(self):
+        return self.params['info']['command']['needle_valve_percentage']
 
     @property
     def amplification(self):
@@ -90,8 +110,14 @@ class Transport(e21.core.Measurement, e21.core.Plottable):
 
     @property
     def excitation_current(self):
-        return self.excitation_amplitude/self.dropping_resistance
+        return float(self.excitation_amplitude/self.dropping_resistance)*1e-3*pq.A
 
+    @property
+    def mean_current(self):
+        if 'current' in self.data.keys():        
+            return np.round(np.mean(self.data['current']), 2)
+        else:
+            return 0
     @property
     def target_temperature(self):
         # NOTE: The sweet 16 uses control_temp as the name for the target temp.
@@ -113,6 +139,7 @@ class Transport(e21.core.Measurement, e21.core.Plottable):
     def mean_temperature(self):
         return np.mean(self.temperature)
 
+    
 class FieldScan(Transport, e21.core.Plottable):
     def plot(self, y='real', x='field',
             axes=None, subplot_kw={}, fig_kw={}, **kw):
@@ -210,6 +237,24 @@ class TemperatureScan(Transport, e21.core.Plottable):
         return super(TemperatureScan, self).plot(y, x, axes,
                                                 subplot_default,
                                                 fig_kw, label=label, **kw)
+
+def check_empty_files(filelist, mode = 'susceptibility'):
+    """ Checks for empty files in list of files.
+        Empty files are files containing only header lines.
+        input: filelist
+        output: filelist, list of non-empty files
+    """ 
+
+    s16 = Loader(mode=mode)
+    fl = []
+    for n, files in enumerate(filelist):
+        Test = s16(files)
+        try:
+            if Test.data['control_temp'][0]:
+                fl.append(files)
+        except IndexError:
+            print 'file empty: {}'.format(files)
+    return fl
     
 def create(data, params):
     """Takes data and param and creates a FieldScan or TemperatureScan."""
@@ -239,11 +284,13 @@ class Experiment(e21.core.Experiment):
         s16 = Loader(mode='transport')
         
         meas_len = len(self._measurements)
-        
+        filelist = check_empty_files(filelist, mode = 'transport')
         testfile = s16(filelist[0])
 
-        if not 'contact_distance' in testfile.params['general'].keys():
+        if 'contact_distance' not in testfile.params['general'].keys():
             contact_distance = float(raw_input('Contact distance [mm]: '))
+        if 'contact_distance_hall' not in testfile.params['general'].keys():
+            contact_distance_hall = float(raw_input('Contact distance hall [mm]: '))
         if not 'sample_width' in testfile.params['general'].keys():
             sample_width = float(raw_input('Sample width [mm]: '))
         if not 'sample_thickness' in testfile.params['general'].keys():
@@ -255,7 +302,6 @@ class Experiment(e21.core.Experiment):
 
         for n, files in enumerate(filelist):
             index = n + meas_len
-            
             self._measurements[index] = s16(files)
             self._measurements[index].params['general']['filename'] = files
                      
@@ -263,16 +309,20 @@ class Experiment(e21.core.Experiment):
             if not 'amplification' in self._measurements[index].params['general'].keys():
                self._measurements[index].params['general']['amplification'] = amplification
             if 'dropping_resistance' in self._measurements[index].params['general'].keys():
-               self._measurements[index].params['general']['dropping_resistance'] = float(self._measurements[index].params['general']['dropping_resistance'].strip('kOhm'))
+               self._measurements[index].params['general']['dropping_resistance'] =self._measurements[index].params['general']['dropping_resistance']
             else:
                 self._measurements[index].params['general']['dropping_resistance'] = dropping_resistance
             if not 'contact_distance' in self._measurements[index].params['general'].keys():
                 self._measurements[index].params['general']['contact_distance'] = contact_distance
+            if not 'contact_distance_hall' in self._measurements[index].params['general'].keys():
+                self._measurements[index].params['general']['contact_distance_hall'] = contact_distance_hall
             if not 'sample_width' in self._measurements[index].params['general'].keys():
                 self._measurements[index].params['general']['sample_width'] = sample_width
             if not 'sample_thickness' in self._measurements[index].params['general'].keys():
                 self._measurements[index].params['general']['sample_thickness'] = sample_thickness
+       
 
+           
     def MakeOverview(self, **kw):    
         """
         Overview over all measurements including every type of measurement (so far B/T Sweeps)

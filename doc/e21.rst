@@ -1,0 +1,54 @@
+e21 package
+===========
+
+Subpackages
+-----------
+
+.. toctree::
+
+    e21.PPMS
+    e21.sweet16
+
+Submodules
+----------
+
+e21.core module
+---------------
+
+.. automodule:: e21.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.filter module
+-----------------
+
+.. automodule:: e21.filter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.utility module
+------------------
+
+.. automodule:: e21.utility
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.vsm module
+--------------
+
+.. automodule:: e21.vsm
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: e21
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,46 @@
+e21.PPMS package
+================
+
+Submodules
+----------
+
+e21.PPMS.ACMS module
+--------------------
+
+.. automodule:: e21.PPMS.ACMS
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.PPMS.loader module
+----------------------
+
+.. automodule:: e21.PPMS.loader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.PPMS.susceptibility module
+------------------------------
+
+.. automodule:: e21.PPMS.susceptibility
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.PPMS.transport module
+-------------------------
+
+.. automodule:: e21.PPMS.transport
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: e21.PPMS
+    :members:
+    :undoc-members:
+    :show-inheritance:

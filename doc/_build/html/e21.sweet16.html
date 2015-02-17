@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>e21.sweet16 package &mdash; E21 0.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="E21 0.1.0dev documentation" href="index.html" />
+    <link rel="up" title="e21 package" href="e21.html" />
+    <link rel="prev" title="e21.PPMS package" href="e21.PPMS.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          E21</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.0dev</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="simple">
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="e21.html">e21 package</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">e21.sweet16 package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-e21.sweet16.loader">e21.sweet16.loader module</a></li>
+<li><a class="reference internal" href="#module-e21.sweet16.spintorque_utility">e21.sweet16.spintorque_utility module</a></li>
+<li><a class="reference internal" href="#module-e21.sweet16.susceptibility">e21.sweet16.susceptibility module</a></li>
+<li><a class="reference internal" href="#module-e21.sweet16.transport">e21.sweet16.transport module</a></li>
+<li><a class="reference internal" href="#module-e21.sweet16">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="e21.PPMS.html" title="Previous Chapter: e21.PPMS package"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; e21.PPMS package</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/e21.sweet16.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="e21-sweet16-package">
+<h1>e21.sweet16 package<a class="headerlink" href="#e21-sweet16-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-e21.sweet16.loader">
+<span id="e21-sweet16-loader-module"></span><h2>e21.sweet16.loader module<a class="headerlink" href="#module-e21.sweet16.loader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.sweet16.loader.Loader">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.loader.</tt><tt class="descname">Loader</tt><big>(</big><em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/loader.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.loader.Loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A sweet16 file loader.</p>
+<p>E.g. loading a susceptibility measurement:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="go">&gt;&gt;&gt;from e21.sweet16 import Loader</span>
+<span class="go">&gt;&gt;&gt;s16 = Loader(mode=&#39;susceptibility&#39;)</span>
+<span class="go">&gt;&gt;&gt;measurement = s16(&#39;path/to/susceptibility_measurement.dat&#39;)</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="e21.sweet16.loader.Loader.CREATOR">
+<tt class="descname">CREATOR</tt><em class="property"> = {'susceptibility': &lt;function create at 0x2b29d174ccf8&gt;, 'transport': &lt;function create at 0x2b29d17d02a8&gt;}</em><a class="headerlink" href="#e21.sweet16.loader.Loader.CREATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.loader.Loader.parse">
+<tt class="descname">parse</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/loader.html#Loader.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.loader.Loader.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parser for sweet 16 measurement files. Only works for files younger
+than september 2013. Header files start with &#8216;#&#8217; and are parsed in
+blocks. Each block starts with &#8216;#&#8217;+block_title+&#8217;&#8216;.</p>
+<p>Returns two dicitonaries. Header information is stored in &#8216;params&#8217;
+dicitonary, data is stored in &#8216;data&#8217; dictionary.</p>
+<p>Converts the first two columns of sweet 16 data files (date, time)
+into two columns, &#8216;datetime&#8217; in datetime format, and &#8216;time_numpy&#8217;
+in float, which can be plotted directly by matplotlib.</p>
+<p>Unit information is restored from data file and added to dictionary
+via quantities package.</p>
+<p>Input parameters:</p>
+<blockquote>
+<div>path: &#8216;string&#8217;         file path to valid sweet 16 file</div></blockquote>
+<p>Output parameters:</p>
+<blockquote>
+<div><p>data: &#8216;dict&#8217;           dictionary containing data
+params: &#8216;dict&#8217;         dictionary containing header information</p>
+<blockquote>
+<div>as blocks (each block a dictionary)</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.loader.Loader.parse_data">
+<tt class="descname">parse_data</tt><big>(</big><em>line</em>, <em>variables</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/loader.html#Loader.parse_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.loader.Loader.parse_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.loader.parse_commands">
+<tt class="descclassname">e21.sweet16.loader.</tt><tt class="descname">parse_commands</tt><big>(</big><em>arguments</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/loader.html#parse_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.loader.parse_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the command line of a Sweet 16 measurement file and returns
+a dicitionary of command string.</p>
+<p>Input parameters:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>arguments:     list, list of command string entries,</dt>
+<dd>(like one line in S16 command_file.txt)</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.loader.parse_header">
+<tt class="descclassname">e21.sweet16.loader.</tt><tt class="descname">parse_header</tt><big>(</big><em>line</em>, <em>params</em>, <em>block_title</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/loader.html#parse_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.loader.parse_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses header of sweet 16 files. Function is called within parse,
+but can be called seperately</p>
+<p>input parameters:</p>
+<blockquote>
+<div><p>line:       &#8216;string&#8217;        line of data file
+params:     &#8216;dict&#8217;          dictionary, empty dictionary containing</p>
+<blockquote>
+<div>only one key, value pair:
+params[block_title] = {}</div></blockquote>
+<p>block_title:&#8217;string&#8217;        initial block tile</p>
+</div></blockquote>
+<p>output:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>params:      &#8216;dict&#8217;         containing header information</dt>
+<dd>(key, value pair)of this line, stored
+in params[block_title][kw] = argument</dd>
+<dt>block_title  &#8216;string&#8217;       new block title if line defines new</dt>
+<dd>block in data file,
+i.e. &#8216;#&#8217;+block_title+&#8217;&#8217; (no argument)</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="module-e21.sweet16.spintorque_utility">
+<span id="e21-sweet16-spintorque-utility-module"></span><h2>e21.sweet16.spintorque_utility module<a class="headerlink" href="#module-e21.sweet16.spintorque_utility" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.chi_I">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">chi_I</tt><big>(</big><em>Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#chi_I"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.chi_I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produces a plot of Chi vs. I.</p>
+<blockquote>
+<div>Takes a Dictionary containing various grids of data for different
+currents. Checks which currents are available in grid.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Grids</strong> (<em>dict</em>) &#8211; Dictionary, output of <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a></li>
+<li><strong>Grids_zero</strong> (<em>dict</em>) &#8211; Dictionary, output of <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a>
+usually Grids</li>
+<li><strong>T</strong> (<em>float</em>) &#8211; Temperature</li>
+<li><strong>B</strong> (<em>list</em>) &#8211; List of Field values at which to evaluate Chi Vs I</li>
+<li><strong>B_min</strong> (<em>float</em>) &#8211; Lower boundary of comparison region</li>
+<li><strong>B_max</strong> (<em>float</em>) &#8211; Upper boundary of comparison region</li>
+<li><strong>full_out</strong> (<em>bool</em>) &#8211; False returns the minimal res and the
+corresponding ind,True returns all residua</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.current_dep">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">current_dep</tt><big>(</big><em>Grids</em>, <em>Grids_zero</em>, <em>T=28.4</em>, <em>B_min=0</em>, <em>B_max=0.55</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#current_dep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.current_dep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Muss noch kommentiert werden</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.find_index">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">find_index</tt><big>(</big><em>Grids</em>, <em>value</em>, <em>parameter='fields'</em>, <em>current=0</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#find_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.find_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the index closest to the given field at a given 
+current in a given Grid</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                        <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">find_field_index</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Grids</strong> (<em>list</em>) &#8211; Dictionary, output of <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a></li>
+<li><strong>Grids</strong> &#8211; Arabitrary measurement, eg. Exp[meas].field</li>
+<li><strong>value</strong> (<em>float</em>) &#8211; Value to look for closest index</li>
+<li><strong>parameter</strong> (<em>str</em>) &#8211; &#8216;fields&#8217; or &#8216;temps&#8217;, irrelevant if Grids is list</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return (int):</th><td class="field-body"><p class="first last">Returns index</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.find_res">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">find_res</tt><big>(</big><em>Grids</em>, <em>Grids_zero</em>, <em>T=28</em>, <em>current=0.0</em>, <em>B_min=0</em>, <em>B_max=0.55</em>, <em>full_out=False</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#find_res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.find_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds residuum of two curves.</p>
+<p>Compares a Bsweep at given T and 0 A stored in Grids_zero with a Bsweep
+stored in Grids at T and I in the region between B_min and B_max.
+Returns the residuum of the two best fitting curves and
+the corresponding index. If full_out is True, then returns the
+residua of the difference between every curve at I and
+the curve at I = 0.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                               <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">meas</span> <span class="o">=</span> <span class="n">get_current_meas</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">g</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+<span class="n">Grids</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
+<span class="n">res</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">find_res</span><span class="p">(</span><span class="n">Grids</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Grids</strong> (<em>dict</em>) &#8211; Dictionary, output of <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a></li>
+<li><strong>Grids_zero</strong> (<em>dict</em>) &#8211; Dictionary, output of <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a></li>
+<li><strong>T</strong> (<em>float</em>) &#8211; Temperature at which to compare Tsweeps</li>
+<li><strong>I</strong> (<em>float</em>) &#8211; Current of sweeps to compare with zero current sweeps</li>
+<li><strong>B_min</strong> (<em>float</em>) &#8211; Lower boundary of comparison region</li>
+<li><strong>B_max</strong> (<em>float</em>) &#8211; Upper boundary of comparison region</li>
+<li><strong>full_out</strong> (<em>bool</em>) &#8211; False returns the minimal res and the
+corresponding ind,True returns all residua</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return (float, int):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">Returns the residuum and the corresponding index</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.find_sweep">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">find_sweep</tt><big>(</big><em>Grids</em>, <em>value</em>, <em>parameter='fields'</em>, <em>current=0</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#find_sweep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.find_sweep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a certain B odr T sweep in the Grids dictionary</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                               <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">g</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+<span class="n">Grids</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
+<span class="n">find_sweep</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">=</span> <span class="s">&#39;fields&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Grids</strong> (<em>dict</em>) &#8211; Dictionary, output of <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a></li>
+<li><strong>value</strong> (<em>float</em>) &#8211; Value at which sweep was performed</li>
+<li><strong>parameter</strong> (<em>str</em>) &#8211; &#8216;fields&#8217; for Tsweep or &#8216;temps&#8217; for Bsweep</li>
+<li><strong>current</strong> (<em>float</em>) &#8211; Current at which to look for</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return (list):</th><td class="field-body"><p class="first last">Returns corresponding sweep</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.get_all_Tshifts">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">get_all_Tshifts</tt><big>(</big><em>Grids</em>, <em>Grids_zero</em>, <em>I=[]</em>, <em>T=28</em>, <em>B_min=0.49</em>, <em>B_max=0.55</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#get_all_Tshifts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.get_all_Tshifts" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the temperature shifts for different currents</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Grids</strong> (<em>dict</em>) &#8211; Dictionary, output of <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a></li>
+<li><strong>T</strong> (<em>float</em>) &#8211; Temperature at which to compare Bsweeps</li>
+<li><strong>I</strong> (<em>list</em>) &#8211; list of currents</li>
+<li><strong>B_min</strong> (<em>float</em>) &#8211; Lower boundary of comparison region</li>
+<li><strong>B_max</strong> (<em>float</em>) &#8211; Upper boundary of comparison region</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return (list):</th><td class="field-body"><p class="first last">List of temperature differences</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.get_current">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">get_current</tt><big>(</big><em>Exp</em>, <em>meas</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#get_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.get_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current of a list of measurement.</p>
+<p>Exception raised if measurements have different currents.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                        <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">current</span><span class="p">,</span> <span class="n">current_string</span> <span class="o">=</span> <span class="n">get_current</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Exp</strong> (<em>dict</em>) &#8211; sweet16 Experiment class dictionary</li>
+<li><strong>meas</strong> (<em>list</em>) &#8211; list of numbers of desired measurements</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first">ValueError, Measuremetns don&#8217;t have the same current</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Return (float, str):</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first last">current of measurements as float and string, (e.g. &#8216;0.0 A&#8217;)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.get_current_meas">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">get_current_meas</tt><big>(</big><em>Exp</em>, <em>current</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#get_current_meas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.get_current_meas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of measurement numbers with given current.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                        <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">meas</span> <span class="o">=</span> <span class="n">get_current_meas</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Exp</strong> (<em>dict</em>) &#8211; Sweet 16 Experiment class</li>
+<li><strong>current</strong> (<em>float</em>) &#8211; Current</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return (list):</th><td class="field-body"><p class="first last">List of measurements</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.get_temperature_shift">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">get_temperature_shift</tt><big>(</big><em>Grids</em>, <em>Grids_zero</em>, <em>I=0.0</em>, <em>T=28</em>, <em>B_min=0.49</em>, <em>B_max=0.55</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#get_temperature_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.get_temperature_shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the temperature shift of two sweeps at same 
+Temperature but different currents</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Grids</strong> (<em>dict</em>) &#8211; Dictionary, output of <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a></li>
+<li><strong>T</strong> (<em>float</em>) &#8211; Temperature at which to compare Bsweeps</li>
+<li><strong>I</strong> (<em>float</em>) &#8211; Current of sweep to compare with zero current sweep</li>
+<li><strong>B_min</strong> (<em>float</em>) &#8211; Lower boundary of comparison region</li>
+<li><strong>B_max</strong> (<em>float</em>) &#8211; Upper boundary of comparison region</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return (float):</th><td class="field-body"><p class="first last">Returns temperature shift</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.get_valid_currents">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">get_valid_currents</tt><big>(</big><em>Grids</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#get_valid_currents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.get_valid_currents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all valid currents in Grids</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.lookup">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">lookup</tt><big>(</big><em>obj</em>, <em>name</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to provide function and string lookup of attributes.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="go">&gt;&gt;&gt;class Test(object):</span>
+<span class="gp">... </span>   <span class="k">pass</span>
+<span class="go">&gt;&gt;&gt;t = Test()</span>
+<span class="go">&gt;&gt;&gt;t.value = &#39;myvalue&#39;</span>
+<span class="go">&gt;&gt;&gt;lookup(t, &#39;value&#39;)</span>
+<span class="go">myvalue</span>
+<span class="go">&gt;&gt;&gt;lookup(t, lambda x: x.value)</span>
+<span class="go">myvalue</span>
+<span class="go">&gt;&gt;lookup(t, [1, 2, 3])</span>
+<span class="go">[1, 2, 3]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.make_grid">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">make_grid</tt><big>(</big><em>Exp</em>, <em>meas=[]</em>, <em>data='temperature'</em>, <em>min_y=0</em>, <em>max_y=0.6</em>, <em>scaling=-1</em>, <em>N=400j</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#make_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.make_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an extended grid for 2D plotting of Data.</p>
+<p>The desired data set is interpolated on a regular gird of size (NxN). X and
+Y axis of the grid temperature and magnetic field. The date can be chosen 
+freely.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                               <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">g</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+<span class="n">Grids</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Exp</strong> (<em>dict</em>) &#8211; sweet16 Experiment class</li>
+<li><strong>meas</strong> (<em>list</em>) &#8211; list of measurements</li>
+<li><strong>data</strong> (<em>str,callable</em>) &#8211; Desired Measurement data
+(property of Susc. Measurement),
+e.g. &#8216;imag&#8217; or callable</li>
+<li><strong>min_y</strong> (<em>float</em>) &#8211; min field value</li>
+<li><strong>max_y</strong> (<em>float</em>) &#8211; max field value</li>
+<li><strong>scaling</strong> (<em>float</em>) &#8211; scaling factor of data</li>
+<li><strong>N</strong> (<em>complex</em>) &#8211; Gridsize (NxN)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return (dict, str):</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">Returns a dictionary containing:</p>
+<ul class="last simple">
+<li><cite>temps</cite>: list of temperature values</li>
+<li>&#8216;grid&#8217;:  actual grid</li>
+<li>&#8216;fields&#8217;:list of field values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.mark_critical_current">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">mark_critical_current</tt><big>(</big><em>I=0.426</em>, <em>pos=0.1</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#mark_critical_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.mark_critical_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Places a dashed line in plot at I with name Ic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>I</strong> (<em>float</em>) &#8211; Critical current</li>
+<li><strong>pos</strong> (<em>float</em>) &#8211; Horizontal position of Text in percent of total height</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.plot_anpassung_auto">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">plot_anpassung_auto</tt><big>(</big><em>Grids</em>, <em>Grids_zero</em>, <em>T=28</em>, <em>current=0.0</em>, <em>B_min=0</em>, <em>B_max=0.55</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#plot_anpassung_auto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.plot_anpassung_auto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Muss noch kommentiert werden</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.plot_data">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">plot_data</tt><big>(</big><em>Exp</em>, <em>meas=[]</em>, <em>data='real'</em>, <em>scaling=-1</em>, <em>N=400j</em>, <em>nbins=4</em>, <em>legopts=[]</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#plot_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.plot_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a set of data which corresponds
+to <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a> function as a probe.</p>
+<p>Usually only used together with <a class="reference internal" href="#e21.sweet16.spintorque_utility.make_grid" title="e21.sweet16.spintorque_utility.make_grid"><tt class="xref py py-func docutils literal"><span class="pre">make_grid()</span></tt></a></p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                               <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">plot_data</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Exp</strong> (<em>dict</em>) &#8211; Sweet 16 Experiment class dictionary</li>
+<li><strong>meas</strong> (<em>list</em>) &#8211; List of measurements</li>
+<li><strong>scaling</strong> (<em>float</em>) &#8211; Scales the susceptibility with the factor scaling</li>
+<li><strong>N</strong> (<em>complex</em>) &#8211; Gridsize of corresponding grid</li>
+<li><strong>nbins</strong> (<em>int</em>) &#8211; Number of bins in plot</li>
+<li><strong>legopts</strong> (<em>dict</em>) &#8211; <p>Valid options are:</p>
+<ul>
+<li>&#8216;small&#8217;: Small legend (min and max value) within plot</li>
+<li>&#8216;short&#8217;: Smmall legend (min, max) outside of plot</li>
+<li>&#8216;remove&#8217;: no legend</li>
+</ul>
+</li>
+<li><strong>kwargs</strong> (<em>dict</em>) &#8211; <p>Valid kwargs are:</p>
+<ul>
+<li>min_x: float, minimal field value</li>
+<li>max_x: float, maximum field value</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.plot_grid">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">plot_grid</tt><big>(</big><em>Grids</em>, <em>current</em>, <em>vmin=0</em>, <em>vmax=1e-06</em>, <em>nbins=4</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#plot_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.plot_grid" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Makes a 2D Contourplot of a given Grid. The input grid has </dt>
+<dd>to be stored in a dicitionary (result of make_grid)</dd>
+</dl>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                               <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">g</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">make_grid_real</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+<span class="n">Grids</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
+<span class="n">current</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="c"># enter your measurement current here</span>
+<span class="n">plot_grid</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">current</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Grids</strong> (<em>dict</em>) &#8211; Dicitonary containing a grid of data as well
+as x and y axis values (result of make_grid)</li>
+<li><strong>current</strong> (<em>float</em>) &#8211; current of measurements to plot</li>
+<li><strong>vmin</strong> (<em>float</em>) &#8211; min susceptiblity value</li>
+<li><strong>vamx</strong> (<em>float</em>) &#8211; max susceptiblity value</li>
+<li><strong>nbins</strong> (<em>float</em>) &#8211; number of bins</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.spintorque_utility.plot_interpolated_sweeps">
+<tt class="descclassname">e21.sweet16.spintorque_utility.</tt><tt class="descname">plot_interpolated_sweeps</tt><big>(</big><em>Grids</em>, <em>current</em>, <em>N=400j</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/spintorque_utility.html#plot_interpolated_sweeps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.spintorque_utility.plot_interpolated_sweeps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots interpolated sweeps</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;*.dat&#39;</span><span class="p">),</span>
+                               <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">g</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">make_grid</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+<span class="n">Grids</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
+<span class="n">plot_interpolated_sweeps</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Grids</strong> (<em>dict</em>) &#8211; Dicitonary containing a grid of data as well as x 
+and y axis values (result of make_grid)</li>
+<li><strong>current</strong> (<em>float</em>) &#8211; Current for which the grid should be plotted.</li>
+<li><strong>N</strong> (<em>complex</em>) &#8211; Gridsize (NxN)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-e21.sweet16.susceptibility">
+<span id="e21-sweet16-susceptibility-module"></span><h2>e21.sweet16.susceptibility module<a class="headerlink" href="#module-e21.sweet16.susceptibility" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.sweet16.susceptibility.AngleScan">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.susceptibility.</tt><tt class="descname">AngleScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#AngleScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.AngleScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.sweet16.susceptibility.Susceptibility" title="e21.sweet16.susceptibility.Susceptibility"><tt class="xref py py-class docutils literal"><span class="pre">e21.sweet16.susceptibility.Susceptibility</span></tt></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="method">
+<dt id="e21.sweet16.susceptibility.AngleScan.plot">
+<tt class="descname">plot</tt><big>(</big><em>y='real'</em>, <em>x='angle'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#AngleScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.AngleScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.sweet16.susceptibility.Experiment">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.susceptibility.</tt><tt class="descname">Experiment</tt><big>(</big><em>measurements={}</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="e21.html#e21.core.Experiment" title="e21.core.Experiment"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Experiment</span></tt></a></p>
+<dl class="method">
+<dt id="e21.sweet16.susceptibility.Experiment.MakeOverview">
+<tt class="descname">MakeOverview</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Experiment.MakeOverview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Experiment.MakeOverview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview over all measurements including every type of measurement (so far B/T Sweeps)
+args options:</p>
+<blockquote>
+<div>files: if true append column indicating paths of measurement files</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.susceptibility.Experiment.add_measurements">
+<tt class="descname">add_measurements</tt><big>(</big><em>filelist</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Experiment.add_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Experiment.add_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds measurements to Experiment</p>
+<p>filelist: list of measurement files</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Experiment.field_scans">
+<tt class="descname">field_scans</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Experiment.field_scans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Experiment.field_scans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Experiment.temperature_scans">
+<tt class="descname">temperature_scans</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Experiment.temperature_scans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Experiment.temperature_scans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.sweet16.susceptibility.FieldScan">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.susceptibility.</tt><tt class="descname">FieldScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#FieldScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.FieldScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.sweet16.susceptibility.Susceptibility" title="e21.sweet16.susceptibility.Susceptibility"><tt class="xref py py-class docutils literal"><span class="pre">e21.sweet16.susceptibility.Susceptibility</span></tt></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="method">
+<dt id="e21.sweet16.susceptibility.FieldScan.plot">
+<tt class="descname">plot</tt><big>(</big><em>y='real'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#FieldScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.FieldScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.sweet16.susceptibility.Susceptibility">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.susceptibility.</tt><tt class="descname">Susceptibility</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="e21.html#e21.core.Measurement" title="e21.core.Measurement"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Measurement</span></tt></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.NV">
+<tt class="descname">NV</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.NV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.NV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.angle">
+<tt class="descname">angle</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.chi">
+<tt class="descname">chi</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.chi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.chi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the susceptibility of the X signal.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.field">
+<tt class="descname">field</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.field_corrected">
+<tt class="descname">field_corrected</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.field_corrected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.field_corrected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correction for Remanent Field offset during Magnetic Field Sweeps.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.heater">
+<tt class="descname">heater</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.heater"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.heater" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.imag">
+<tt class="descname">imag</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.imag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.imag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.mean_current">
+<tt class="descname">mean_current</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.mean_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.mean_current" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.mean_field">
+<tt class="descname">mean_field</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.mean_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.mean_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.mean_temperature">
+<tt class="descname">mean_temperature</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.mean_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.mean_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.needle_valve">
+<tt class="descname">needle_valve</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.needle_valve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.needle_valve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.real">
+<tt class="descname">real</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.real"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.real" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.target_temperature">
+<tt class="descname">target_temperature</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.target_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.target_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.temperature">
+<tt class="descname">temperature</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.susceptibility.Susceptibility.temperature_stability">
+<tt class="descname">temperature_stability</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.temperature_stability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.temperature_stability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the offset and standart deviation of the temperature
+from the target value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.susceptibility.Susceptibility.time">
+<tt class="descname">time</tt><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#Susceptibility.time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.Susceptibility.time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.sweet16.susceptibility.TemperatureScan">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.susceptibility.</tt><tt class="descname">TemperatureScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#TemperatureScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.TemperatureScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.sweet16.susceptibility.Susceptibility" title="e21.sweet16.susceptibility.Susceptibility"><tt class="xref py py-class docutils literal"><span class="pre">e21.sweet16.susceptibility.Susceptibility</span></tt></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="method">
+<dt id="e21.sweet16.susceptibility.TemperatureScan.plot">
+<tt class="descname">plot</tt><big>(</big><em>y='real'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#TemperatureScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.TemperatureScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.susceptibility.check_empty_files">
+<tt class="descclassname">e21.sweet16.susceptibility.</tt><tt class="descname">check_empty_files</tt><big>(</big><em>filelist</em>, <em>mode='susceptibility'</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#check_empty_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.check_empty_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks for empty files in list of files.
+Empty files are files containing only header lines.
+input: filelist
+output: filelist, list of non-empty files</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.susceptibility.create">
+<tt class="descclassname">e21.sweet16.susceptibility.</tt><tt class="descname">create</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/susceptibility.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.susceptibility.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes data and param and creates a FieldScan or TemperatureScan.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-e21.sweet16.transport">
+<span id="e21-sweet16-transport-module"></span><h2>e21.sweet16.transport module<a class="headerlink" href="#module-e21.sweet16.transport" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.sweet16.transport.Experiment">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.transport.</tt><tt class="descname">Experiment</tt><big>(</big><em>measurements={}</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="e21.html#e21.core.Experiment" title="e21.core.Experiment"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Experiment</span></tt></a></p>
+<dl class="method">
+<dt id="e21.sweet16.transport.Experiment.MakeOverview">
+<tt class="descname">MakeOverview</tt><big>(</big><em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#Experiment.MakeOverview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Experiment.MakeOverview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview over all measurements including every type of measurement (so far B/T Sweeps)
+KW options:</p>
+<blockquote>
+<div>files: if true append column indicating paths of measurement files</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.transport.Experiment.add_measurements">
+<tt class="descname">add_measurements</tt><big>(</big><em>filelist</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#Experiment.add_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Experiment.add_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds measurements to Experiment</p>
+<p>filelist: list of measurement files</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Experiment.field_scans">
+<tt class="descname">field_scans</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Experiment.field_scans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Experiment.field_scans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Experiment.temperature_scans">
+<tt class="descname">temperature_scans</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Experiment.temperature_scans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Experiment.temperature_scans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.sweet16.transport.FieldScan">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.transport.</tt><tt class="descname">FieldScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#FieldScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.FieldScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.sweet16.transport.Transport" title="e21.sweet16.transport.Transport"><tt class="xref py py-class docutils literal"><span class="pre">e21.sweet16.transport.Transport</span></tt></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="method">
+<dt id="e21.sweet16.transport.FieldScan.plot">
+<tt class="descname">plot</tt><big>(</big><em>y='real'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#FieldScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.FieldScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.transport.FieldScan.plot_hall">
+<tt class="descname">plot_hall</tt><big>(</big><em>y='hall'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#FieldScan.plot_hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.FieldScan.plot_hall" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.transport.FieldScan.plot_res">
+<tt class="descname">plot_res</tt><big>(</big><em>y='res'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#FieldScan.plot_res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.FieldScan.plot_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.sweet16.transport.TemperatureScan">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.transport.</tt><tt class="descname">TemperatureScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#TemperatureScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.TemperatureScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.sweet16.transport.Transport" title="e21.sweet16.transport.Transport"><tt class="xref py py-class docutils literal"><span class="pre">e21.sweet16.transport.Transport</span></tt></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="method">
+<dt id="e21.sweet16.transport.TemperatureScan.plot">
+<tt class="descname">plot</tt><big>(</big><em>y='real'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#TemperatureScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.TemperatureScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic temperature scan plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.transport.TemperatureScan.plot_hall">
+<tt class="descname">plot_hall</tt><big>(</big><em>y='hall'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#TemperatureScan.plot_hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.TemperatureScan.plot_hall" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.transport.TemperatureScan.plot_res">
+<tt class="descname">plot_res</tt><big>(</big><em>y='res'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#TemperatureScan.plot_res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.TemperatureScan.plot_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.sweet16.transport.Transport">
+<em class="property">class </em><tt class="descclassname">e21.sweet16.transport.</tt><tt class="descname">Transport</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="e21.html#e21.core.Measurement" title="e21.core.Measurement"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Measurement</span></tt></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.NV">
+<tt class="descname">NV</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.NV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.NV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.amplification">
+<tt class="descname">amplification</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.amplification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.amplification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.contact_distance">
+<tt class="descname">contact_distance</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.contact_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.contact_distance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.contact_distance_hall">
+<tt class="descname">contact_distance_hall</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.contact_distance_hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.contact_distance_hall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.dropping_resistance">
+<tt class="descname">dropping_resistance</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.dropping_resistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.dropping_resistance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.excitation_amplitude">
+<tt class="descname">excitation_amplitude</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.excitation_amplitude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.excitation_amplitude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.excitation_current">
+<tt class="descname">excitation_current</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.excitation_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.excitation_current" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.field">
+<tt class="descname">field</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.geometry_factor">
+<tt class="descname">geometry_factor</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.geometry_factor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.geometry_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates geometry factor b*d/(I_ac*Ampl*l_xx) 
+in muOhm*cm/V.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.geometry_factor_hall">
+<tt class="descname">geometry_factor_hall</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.geometry_factor_hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.geometry_factor_hall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates geometry factor b*d/(I_ac*Ampl*l_xx) 
+in muOhm*cm/V.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.hall">
+<tt class="descname">hall</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.hall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the resistance of the X signal.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.heater">
+<tt class="descname">heater</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.heater"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.heater" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.imag">
+<tt class="descname">imag</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.imag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.imag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.imag_hall">
+<tt class="descname">imag_hall</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.imag_hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.imag_hall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.mean_current">
+<tt class="descname">mean_current</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.mean_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.mean_current" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.mean_temperature">
+<tt class="descname">mean_temperature</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.mean_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.mean_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.needle_valve">
+<tt class="descname">needle_valve</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.needle_valve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.needle_valve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.real">
+<tt class="descname">real</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.real"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.real" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.real_hall">
+<tt class="descname">real_hall</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.real_hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.real_hall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.res">
+<tt class="descname">res</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.res" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the resistance of the X signal.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.sample_thickness">
+<tt class="descname">sample_thickness</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.sample_thickness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.sample_thickness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.sample_width">
+<tt class="descname">sample_width</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.sample_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.sample_width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.target_temperature">
+<tt class="descname">target_temperature</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.target_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.target_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.temperature">
+<tt class="descname">temperature</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.sweet16.transport.Transport.temperature_stability">
+<tt class="descname">temperature_stability</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.temperature_stability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.temperature_stability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the offset and standart deviation of the temperature
+from the target value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.sweet16.transport.Transport.time">
+<tt class="descname">time</tt><a class="reference internal" href="_modules/e21/sweet16/transport.html#Transport.time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.Transport.time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.transport.check_empty_files">
+<tt class="descclassname">e21.sweet16.transport.</tt><tt class="descname">check_empty_files</tt><big>(</big><em>filelist</em>, <em>mode='susceptibility'</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#check_empty_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.check_empty_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks for empty files in list of files.
+Empty files are files containing only header lines.
+input: filelist
+output: filelist, list of non-empty files</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.sweet16.transport.create">
+<tt class="descclassname">e21.sweet16.transport.</tt><tt class="descname">create</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/sweet16/transport.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.sweet16.transport.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes data and param and creates a FieldScan or TemperatureScan.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-e21.sweet16">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-e21.sweet16" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Felix.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

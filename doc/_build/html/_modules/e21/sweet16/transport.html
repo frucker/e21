@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>e21.sweet16.transport &mdash; E21 0.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="E21 0.1.0dev documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          E21</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.0dev</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="simple">
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../e21.html">e21 package</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for e21.sweet16.transport</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c">#</span>
+<span class="c"># e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.</span>
+<span class="kn">import</span> <span class="nn">e21.core</span>
+<span class="kn">from</span> <span class="nn">e21.core</span> <span class="kn">import</span> <span class="n">lookup</span>
+<span class="kn">from</span> <span class="nn">e21.sweet16</span> <span class="kn">import</span> <span class="n">Loader</span>
+<span class="kn">from</span> <span class="nn">e21.sweet16.loader</span> <span class="kn">import</span> <span class="n">parse_header</span>
+<span class="kn">from</span> <span class="nn">e21.sweet16.loader</span> <span class="kn">import</span> <span class="n">parse_commands</span>
+<span class="c">#from e21.sweet16.utility import check_empty_files</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">quantities</span> <span class="kn">as</span> <span class="nn">pq</span>
+<span class="kn">from</span> <span class="nn">e21.utility</span> <span class="kn">import</span> <span class="n">replace</span>
+
+<span class="c">#-Transport-classes-------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Transport"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport">[docs]</a><span class="k">class</span> <span class="nc">Transport</span><span class="p">(</span><span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Measurement</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
+    
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.real"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.real">[docs]</a>    <span class="k">def</span> <span class="nf">real</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;LI1_CH1&#39;</span><span class="p">]</span>
+    </div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.imag"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.imag">[docs]</a>    <span class="k">def</span> <span class="nf">imag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;LI1_CH2&#39;</span><span class="p">]</span>
+    </div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.real_hall"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.real_hall">[docs]</a>    <span class="k">def</span> <span class="nf">real_hall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;LI2_CH1&#39;</span><span class="p">]</span>
+    </div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.imag_hall"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.imag_hall">[docs]</a>    <span class="k">def</span> <span class="nf">imag_hall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;LI2_CH2&#39;</span><span class="p">]</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.time"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.time">[docs]</a>    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">]</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.heater"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.heater">[docs]</a>    <span class="k">def</span> <span class="nf">heater</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;heater&#39;</span><span class="p">]</span>
+    </div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.needle_valve"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.needle_valve">[docs]</a>    <span class="k">def</span> <span class="nf">needle_valve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;needle_valve&#39;</span><span class="p">]</span>
+    </div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.geometry_factor"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.geometry_factor">[docs]</a>    <span class="k">def</span> <span class="nf">geometry_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates geometry factor b*d/(I_ac*Ampl*l_xx) </span>
+<span class="sd">        in muOhm*cm/V.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">excitation_current</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_width</span><span class="o">*</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sample_thickness</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">contact_distance</span><span class="o">/</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">amplification</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.geometry_factor_hall"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.geometry_factor_hall">[docs]</a>    <span class="k">def</span> <span class="nf">geometry_factor_hall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates geometry factor b*d/(I_ac*Ampl*l_xx) </span>
+<span class="sd">        in muOhm*cm/V.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">excitation_current</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_width</span><span class="o">*</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sample_thickness</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">contact_distance_hall</span><span class="o">/</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">amplification</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.res"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.res">[docs]</a>    <span class="k">def</span> <span class="nf">res</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the resistance of the X signal.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_factor</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.hall"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.hall">[docs]</a>    <span class="k">def</span> <span class="nf">hall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the resistance of the X signal.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">real_hall</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_factor_hall</span>
+    </div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.sample_thickness"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.sample_thickness">[docs]</a>    <span class="k">def</span> <span class="nf">sample_thickness</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;sample_thickness&#39;</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">m</span></div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.sample_width"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.sample_width">[docs]</a>    <span class="k">def</span> <span class="nf">sample_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;sample_width&#39;</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">m</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.contact_distance"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.contact_distance">[docs]</a>    <span class="k">def</span> <span class="nf">contact_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;contact_distance&#39;</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">m</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.contact_distance_hall"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.contact_distance_hall">[docs]</a>    <span class="k">def</span> <span class="nf">contact_distance_hall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;contact_distance_hall&#39;</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">m</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.field"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.field">[docs]</a>    <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">]</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.NV"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.NV">[docs]</a>    <span class="k">def</span> <span class="nf">NV</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;needle_valve_percentage&#39;</span><span class="p">]</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.amplification"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.amplification">[docs]</a>    <span class="k">def</span> <span class="nf">amplification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;amplification&#39;</span><span class="p">])</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.dropping_resistance"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.dropping_resistance">[docs]</a>    <span class="k">def</span> <span class="nf">dropping_resistance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">])</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.excitation_amplitude"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.excitation_amplitude">[docs]</a>    <span class="k">def</span> <span class="nf">excitation_amplitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;lock_in_1&#39;</span><span class="p">][</span><span class="s">&#39;osc_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;V&#39;</span><span class="p">))</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">V</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.excitation_current"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.excitation_current">[docs]</a>    <span class="k">def</span> <span class="nf">excitation_current</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">excitation_amplitude</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">dropping_resistance</span><span class="p">)</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">A</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.mean_current"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.mean_current">[docs]</a>    <span class="k">def</span> <span class="nf">mean_current</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s">&#39;current&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>        
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;current&#39;</span><span class="p">]),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.target_temperature"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.target_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">target_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># NOTE: The sweet 16 uses control_temp as the name for the target temp.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;control_temp&#39;</span><span class="p">]</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.temperature"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.temperature">[docs]</a>    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Transport.temperature_stability"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.temperature_stability">[docs]</a>    <span class="k">def</span> <span class="nf">temperature_stability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the offset and standart deviation of the temperature</span>
+<span class="sd">        from the target value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_temperature</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dT</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dT</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Transport.mean_temperature"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Transport.mean_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">mean_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
+
+    </div></div>
+<div class="viewcode-block" id="FieldScan"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.FieldScan">[docs]</a><span class="k">class</span> <span class="nc">FieldScan</span><span class="p">(</span><span class="n">Transport</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
+<div class="viewcode-block" id="FieldScan.plot"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.FieldScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;real&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;field&#39;</span><span class="p">,</span>
+            <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
+        <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;B ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;B_field&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;V&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;real&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+        <span class="p">}</span>
+        <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_temperature</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FieldScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span>
+                                          <span class="n">subplot_default</span><span class="p">,</span>
+                                          <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FieldScan.plot_res"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.FieldScan.plot_res">[docs]</a>    <span class="k">def</span> <span class="nf">plot_res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;res&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;field&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
+        <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;B ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;field&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;$ </span><span class="se">\\</span><span class="s">rho_{xx}$ ($\mu\Omega\cdot$cm)&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;res&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+        <span class="p">}</span>
+        <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_temperature</span><span class="p">),</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FieldScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span>
+                                          <span class="n">subplot_default</span><span class="p">,</span>
+                                          <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FieldScan.plot_hall"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.FieldScan.plot_hall">[docs]</a>    <span class="k">def</span> <span class="nf">plot_hall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;hall&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;field&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
+        <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;B ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;field&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;$ </span><span class="se">\\</span><span class="s">rho_{xy}$ ($\mu\Omega\cdot$cm)&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;hall&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+        <span class="p">}</span>
+        <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_temperature</span><span class="p">),</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FieldScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span>
+                                          <span class="n">subplot_default</span><span class="p">,</span>
+                                          <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="TemperatureScan"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.TemperatureScan">[docs]</a><span class="k">class</span> <span class="nc">TemperatureScan</span><span class="p">(</span><span class="n">Transport</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
+<div class="viewcode-block" id="TemperatureScan.plot"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.TemperatureScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;real&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;temperature&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A default implementation for a generic temperature scan plot.&quot;&quot;&quot;</span>
+        <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;T ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;temperature&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;V&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;real&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+        <span class="p">}</span>
+        <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="s">&#39;{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TemperatureScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span>
+                                                <span class="n">subplot_default</span><span class="p">,</span>
+                                                <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TemperatureScan.plot_res"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.TemperatureScan.plot_res">[docs]</a>    <span class="k">def</span> <span class="nf">plot_res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;res&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;temperature&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
+        <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;T ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;temperature&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;$</span><span class="se">\\</span><span class="s">rho_{xx}$ ($\mu\Omega\cdot$cm)&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;res&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+        <span class="p">}</span>
+        <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">),</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TemperatureScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span>
+                                                <span class="n">subplot_default</span><span class="p">,</span>
+                                                <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TemperatureScan.plot_hall"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.TemperatureScan.plot_hall">[docs]</a>    <span class="k">def</span> <span class="nf">plot_hall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;hall&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;temperature&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
+        <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;T ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;temperature&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;$</span><span class="se">\\</span><span class="s">rho_{xy}$ ($\mu\Omega\cdot$cm)&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;hall&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+        <span class="p">}</span>
+        <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">),</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TemperatureScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span>
+                                                <span class="n">subplot_default</span><span class="p">,</span>
+                                                <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="check_empty_files"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.check_empty_files">[docs]</a><span class="k">def</span> <span class="nf">check_empty_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;susceptibility&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Checks for empty files in list of files.</span>
+<span class="sd">        Empty files are files containing only header lines.</span>
+<span class="sd">        input: filelist</span>
+<span class="sd">        output: filelist, list of non-empty files</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+
+    <span class="n">s16</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+    <span class="n">fl</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
+        <span class="n">Test</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Test</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;control_temp&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">fl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;file empty: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fl</span>
+    </div>
+<div class="viewcode-block" id="create"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes data and param and creates a FieldScan or TemperatureScan.&quot;&quot;&quot;</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;mode&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;BSWEEP&#39;</span> <span class="ow">or</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;BSTEP&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">FieldScan</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;TSWEEP&#39;</span> <span class="ow">or</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;TSTEP&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TemperatureScan</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>   
+        <span class="k">return</span> <span class="n">Transport</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Experiment"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Experiment">[docs]</a><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Experiment</span><span class="p">):</span>
+    
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Experiment.temperature_scans"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Experiment.temperature_scans">[docs]</a>    <span class="k">def</span> <span class="nf">temperature_scans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">TemperatureScan</span><span class="p">)]</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Experiment.field_scans"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Experiment.field_scans">[docs]</a>    <span class="k">def</span> <span class="nf">field_scans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">mean_temperature</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">FieldScan</span><span class="p">)]</span>
+</div>
+<div class="viewcode-block" id="Experiment.add_measurements"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Experiment.add_measurements">[docs]</a>    <span class="k">def</span> <span class="nf">add_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filelist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Adds measurements to Experiment</span>
+<span class="sd">            </span>
+<span class="sd">            filelist: list of measurement files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s16</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;transport&#39;</span><span class="p">)</span>
+        
+        <span class="n">meas_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">)</span>
+        <span class="n">filelist</span> <span class="o">=</span> <span class="n">check_empty_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;transport&#39;</span><span class="p">)</span>
+        <span class="n">testfile</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s">&#39;contact_distance&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">contact_distance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Contact distance [mm]: &#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s">&#39;contact_distance_hall&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">contact_distance_hall</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Contact distance hall [mm]: &#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;sample_width&#39;</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">sample_width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Sample width [mm]: &#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;sample_thickness&#39;</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">sample_thickness</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Sample thickness [mm]: &#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;dropping_resistance&#39;</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">dropping_resistance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Dropping Resistance [kOhms]: &#39;</span><span class="p">))</span>   
+        <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;amplification&#39;</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">amplification</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Amplification: &#39;</span><span class="p">))</span>     
+
+        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">meas_len</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
+                     
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;amplification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;amplification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplification</span>
+            <span class="k">if</span> <span class="s">&#39;dropping_resistance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dropping_resistance</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;contact_distance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;contact_distance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contact_distance</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;contact_distance_hall&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;contact_distance_hall&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contact_distance_hall</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;sample_width&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;sample_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample_width</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;sample_thickness&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;sample_thickness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample_thickness</span>
+       
+
+           </div>
+<div class="viewcode-block" id="Experiment.MakeOverview"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.transport.Experiment.MakeOverview">[docs]</a>    <span class="k">def</span> <span class="nf">MakeOverview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>    
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overview over all measurements including every type of measurement (so far B/T Sweeps)</span>
+<span class="sd">        KW options:</span>
+
+<span class="sd">                files: if true append column indicating paths of measurement files</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">html_table</span> <span class="o">=</span> <span class="s">&#39;&lt;table border = &quot;1&quot;&gt;&#39;</span>
+        <span class="c">#html_table += &#39;&lt;tr&gt;&lt;h1&gt; %s - Measurement Overview &lt;/h1&gt;&lt;/tr&gt;&#39;%str(self[0].params[&#39;info&#39;][&#39;sample&#39;]) #Create Table Header </span>
+        <span class="c">#html_table += &#39;&lt;strong&gt; Sample: &lt;/strong&gt; {} &lt;br&gt;&#39;.format(self[0].params[&#39;info&#39;][&#39;sample&#39;]) </span>
+        <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;strong&gt; Contact Distance: &lt;/strong&gt; {}&lt;br&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">contact_distance</span><span class="p">)</span>
+        <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;strong&gt; Measurement Option: &lt;/strong&gt; Transport &lt;br&gt; &lt;br&gt; &#39;</span>
+        <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;p style=&quot;color:blue;margin-left:20px;&quot;&gt;This is a paragraph.&lt;/p&gt;  &#39;</span>
+        <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;table&gt;&#39;</span>
+        <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;&lt;tr&gt; &lt;th&gt; Number &lt;/th&gt; &lt;th&gt; Sweep Type &lt;/th&gt; &lt;th&gt; Start &lt;/th&gt; &lt;th&gt; Stop &lt;/th&gt; &lt;th&gt; T / B &lt;/th&gt; &lt;th&gt; B_init &lt;/th&gt; &lt;th&gt; T_init &lt;/th&gt;&#39;</span>
+                      <span class="s">&#39;&lt;th&gt; Amplification &lt;/th&gt;&lt;th&gt; dropping_resistance &lt;/th&gt;&lt;th&gt; filepath &lt;/th&gt;&lt;th&gt; reserve &lt;/th&gt;&lt;/tr&gt;&#39;</span><span class="p">)</span>
+    
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+                       
+           
+            <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">])</span> <span class="o">==</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">TemperatureScan</span><span class="p">):</span>
+                <span class="n">T_init</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="mi">6</span><span class="p">))</span>
+                <span class="n">T_final</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="mi">6</span><span class="p">))</span>
+                <span class="n">B_field</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">]),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">]),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;&lt;tr&gt; &lt;td&gt;{}&lt;/td&gt; &lt;td&gt; Tsweep &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} K &lt;/td&gt;&#39;</span> 
+                                    <span class="s">&#39;&lt;td&gt; {} K &lt;/td&gt;&#39;</span> 
+                                    <span class="s">&#39;&lt;td&gt; {}+-{} T &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} T &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} K &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} k&amp;Omega; &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;/tr&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">,</span>
+                                    <span class="n">T_init</span><span class="p">,</span><span class="n">T_final</span><span class="p">,</span><span class="n">B_field</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span> 
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_field&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_temperature&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;amplification&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;filename&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;lock_in_1&#39;</span><span class="p">][</span><span class="s">&#39;dyn_reserve&#39;</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">])</span> <span class="o">==</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">FieldScan</span><span class="p">):</span>   
+                <span class="n">B_init</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="mi">6</span><span class="p">))</span>
+                <span class="n">B_final</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="mi">6</span><span class="p">))</span>
+                <span class="n">Temp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">]),</span><span class="mi">3</span><span class="p">))</span>               
+                <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">]),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;&lt;tr&gt; &lt;td&gt;{}&lt;/td&gt; &lt;td&gt; Field &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span> 
+                                    <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span> 
+                                    <span class="s">&#39;&lt;td&gt; {}+-{} K &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} T &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} K &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} k&amp;Omega; &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                                    <span class="s">&#39;&lt;/tr&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">,</span>
+                                    <span class="n">B_init</span><span class="p">,</span><span class="n">B_final</span><span class="p">,</span><span class="n">Temp</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span> 
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_field&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_temperature&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;amplification&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">],</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;lock_in_1&#39;</span><span class="p">][</span><span class="s">&#39;dyn_reserve&#39;</span><span class="p">])</span>
+                    
+        <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;/table&gt;&#39;</span>
+        <span class="k">return</span> <span class="n">html_table</span>
+</pre></div></div></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Felix.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

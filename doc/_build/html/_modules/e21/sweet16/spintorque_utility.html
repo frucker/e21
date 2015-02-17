@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>e21.sweet16.spintorque_utility &mdash; E21 0.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="E21 0.1.0dev documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          E21</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.0dev</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="simple">
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../e21.html">e21 package</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for e21.sweet16.spintorque_utility</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">e21.utility</span> <span class="kn">as</span> <span class="nn">e21u</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">griddata</span>
+<span class="kn">import</span> <span class="nn">quantities</span> <span class="kn">as</span> <span class="nn">pq</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="kn">as</span> <span class="nn">cm</span>
+
+<div class="viewcode-block" id="get_current"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.get_current">[docs]</a><span class="k">def</span> <span class="nf">get_current</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">meas</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns current of a list of measurement. </span>
+<span class="sd">      </span>
+<span class="sd">    Exception raised if measurements have different currents.</span>
+<span class="sd">    </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">        </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                key=os.path.getmtime))</span>
+<span class="sd">        current, current_string = get_current(MnSi_T, meas)</span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Exp: sweet16 Experiment class dictionary</span>
+<span class="sd">    :param list meas: list of numbers of desired measurements</span>
+<span class="sd">    </span>
+<span class="sd">    :raises: ValueError, Measuremetns don&#39;t have the same current</span>
+<span class="sd">    </span>
+<span class="sd">    :return (float, str): current of measurements as float and string, (e.g. &#39;0.0 A&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;No measurements given&#39;</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c">#get current</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">meas</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">mean_current</span><span class="p">)</span>
+        <span class="c"># format string</span>
+        <span class="n">current_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">current</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="c"># check consitency</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meas</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">mean_current</span><span class="o">-</span><span class="n">current</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Current of measurement number {} not &quot;</span> 
+                      <span class="s">&quot;the same ({})&quot;</span>
+                      <span class="s">&quot;as standard: {}!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">Exp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">mean_current</span><span class="p">,</span> <span class="n">current</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">current</span><span class="p">,</span> <span class="n">current_string</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;0A&#39;</span>
+</div>
+<div class="viewcode-block" id="lookup"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.lookup">[docs]</a><span class="k">def</span> <span class="nf">lookup</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Helper function to provide function and string lookup of attributes.</span>
+
+<span class="sd">    E.g.::</span>
+
+<span class="sd">        &gt;&gt;&gt;class Test(object):</span>
+<span class="sd">        ...    pass</span>
+<span class="sd">        &gt;&gt;&gt;t = Test()</span>
+<span class="sd">        &gt;&gt;&gt;t.value = &#39;myvalue&#39;</span>
+<span class="sd">        &gt;&gt;&gt;lookup(t, &#39;value&#39;)</span>
+<span class="sd">        myvalue</span>
+<span class="sd">        &gt;&gt;&gt;lookup(t, lambda x: x.value)</span>
+<span class="sd">        myvalue</span>
+<span class="sd">        &gt;&gt;lookup(t, [1, 2, 3])</span>
+<span class="sd">        [1, 2, 3]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="nb">unicode</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;No valid data&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="make_grid"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.make_grid">[docs]</a><span class="k">def</span> <span class="nf">make_grid</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">meas</span> <span class="o">=</span> <span class="p">[],</span><span class="n">data</span> <span class="o">=</span> <span class="s">&#39;temperature&#39;</span><span class="p">,</span> <span class="n">min_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
+              <span class="n">scaling</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">400j</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot; Creates an extended grid for 2D plotting of Data.</span>
+
+<span class="sd">    The desired data set is interpolated on a regular gird of size (NxN). X and</span>
+<span class="sd">    Y axis of the grid temperature and magnetic field. The date can be chosen </span>
+<span class="sd">    freely.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                       key=os.path.getmtime))</span>
+<span class="sd">        meas = [0,1,2,3]</span>
+<span class="sd">        g, c = make_grid(MnSi_T, meas)</span>
+<span class="sd">        Grids[c] = g</span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Exp: sweet16 Experiment class</span>
+<span class="sd">    :param list meas: list of measurements</span>
+<span class="sd">    :param str,callable data: Desired Measurement data</span>
+<span class="sd">                              (property of Susc. Measurement),</span>
+<span class="sd">                              e.g. &#39;imag&#39; or callable</span>
+<span class="sd">    :param float min_y: min field value</span>
+<span class="sd">    :param float max_y: max field value</span>
+<span class="sd">    :param float scaling: scaling factor of data</span>
+<span class="sd">    :param complex N: Gridsize (NxN)</span>
+<span class="sd">            </span>
+<span class="sd">    :return (dict, str): Returns a dictionary containing:</span>
+
+<span class="sd">        * `temps`: list of temperature values</span>
+<span class="sd">        * &#39;grid&#39;:  actual grid</span>
+<span class="sd">        * &#39;fields&#39;:list of field values</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    <span class="n">Grd</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;No measurements given!&quot;</span><span class="p">)</span>
+    
+    <span class="c"># get current</span>
+    <span class="n">current</span><span class="p">,</span> <span class="n">current_string</span> <span class="o">=</span> <span class="n">get_current</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+       
+    <span class="c"># get temperature boundaries</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;min_x&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">meas</span><span class="p">])</span>
+        <span class="c">#min_x = min_x + 0.05*min_x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">min_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;min_x&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">K</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;max_x&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">meas</span><span class="p">])</span>
+        <span class="c">#max_x = max_x - 0.05*max_x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">max_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;max_x&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">K</span>
+    <span class="c">#generate grid</span>
+    <span class="n">grid_x</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="n">min_x</span><span class="p">:</span><span class="n">max_x</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">min_y</span><span class="p">:</span><span class="n">max_y</span><span class="p">:</span><span class="n">N</span><span class="p">]</span>
+    <span class="c"># x coordinates (list)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c"># y cooordinates</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c"># values</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">meas</span><span class="p">:</span> 
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">e21u</span><span class="o">.</span><span class="n">calibrate</span><span class="p">(</span><span class="n">lookup</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">data</span><span class="p">),</span> <span class="n">scaling</span><span class="p">)[</span><span class="mi">0</span><span class="p">::</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">x1</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">y1</span><span class="p">))</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">values</span><span class="p">,</span> <span class="n">val</span><span class="p">))</span>
+    <span class="c">#scatter(x,y)</span>
+    <span class="c"># scale x and y scale for interpolation. Else bad interpolation</span>
+    <span class="c"># due do difference in absolute values</span>
+    <span class="n">xscale</span> <span class="o">=</span> <span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span>
+    <span class="n">yscale</span> <span class="o">=</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xscale</span><span class="p">,</span> <span class="n">yscale</span><span class="p">])</span>
+    <span class="n">punkte</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span><span class="n">punkte</span><span class="o">/</span><span class="n">scale</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="p">(</span><span class="n">grid_x</span><span class="o">/</span><span class="n">xscale</span><span class="p">,</span> <span class="n">grid_y</span><span class="o">/</span><span class="n">yscale</span><span class="p">),</span>
+                    <span class="n">method</span> <span class="o">=</span> <span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">fill_value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    
+    <span class="n">Grd</span><span class="p">[</span><span class="s">&#39;temps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    <span class="n">Grd</span><span class="p">[</span><span class="s">&#39;grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span>
+    <span class="n">Grd</span><span class="p">[</span><span class="s">&#39;fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">imag</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">Grd</span><span class="p">,</span> <span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plot_grid"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.plot_grid">[docs]</a><span class="k">def</span> <span class="nf">plot_grid</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="n">nbins</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+       
+    <span class="sd">&quot;&quot;&quot; Makes a 2D Contourplot of a given Grid. The input grid has </span>
+<span class="sd">        to be stored in a dicitionary (result of make_grid)</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                       key=os.path.getmtime))</span>
+<span class="sd">        meas = [0,1,2,3]</span>
+<span class="sd">        g, c = make_grid_real(MnSi_T, meas)</span>
+<span class="sd">        Grids[c] = g</span>
+<span class="sd">        current = 0.0 # enter your measurement current here</span>
+<span class="sd">        plot_grid(Grids, current)</span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Grids: Dicitonary containing a grid of data as well</span>
+<span class="sd">                       as x and y axis values (result of make_grid)</span>
+<span class="sd">    :param float current: current of measurements to plot</span>
+<span class="sd">    :param float vmin: min susceptiblity value</span>
+<span class="sd">    :param float vamx: max susceptiblity value</span>
+<span class="sd">    :param float nbins: number of bins</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># get grid information</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;grid&#39;</span><span class="p">]</span>
+    <span class="n">temps</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;temps&#39;</span><span class="p">]</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;fields&#39;</span><span class="p">]</span>
+    <span class="c"># get temperature boundaries</span>
+    <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">temps</span><span class="p">)</span>
+    <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">temps</span><span class="p">)</span>
+    <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+    <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        
+    
+    <span class="c"># Gernerate Plot</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>    
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="n">min_x</span><span class="p">,</span><span class="n">max_x</span><span class="p">,</span><span class="n">min_y</span><span class="p">,</span><span class="n">max_y</span><span class="p">],</span>
+           <span class="n">aspect</span><span class="o">=</span><span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Bsweeps @ I = {}</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">nbins</span><span class="o">=</span><span class="n">nbins</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;T (K)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;B (T)&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;clabel&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">clabel</span> <span class="o">=</span> <span class="s">&quot;$\chi&#39;_T$&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">clabel</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;clabel&#39;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span> <span class="o">=</span> <span class="n">clabel</span><span class="p">)</span>
+    <span class="n">current_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">current</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="c">#savefig(plot_path + &#39;Interpolation_{}.png&#39;.format(current_string))</span>
+</div>
+<div class="viewcode-block" id="plot_data"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.plot_data">[docs]</a><span class="k">def</span> <span class="nf">plot_data</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">meas</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">data</span> <span class="o">=</span> <span class="s">&#39;real&#39;</span><span class="p">,</span> <span class="n">scaling</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">400j</span><span class="p">,</span> <span class="n">nbins</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+              <span class="n">legopts</span> <span class="o">=</span> <span class="p">[],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a set of data which corresponds</span>
+<span class="sd">    to :func:`.make_grid` function as a probe.</span>
+
+<span class="sd">    Usually only used together with :func:`~.make_grid`</span>
+<span class="sd">       </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                       key=os.path.getmtime))</span>
+<span class="sd">        meas = [0,1,2,3]</span>
+<span class="sd">        plot_data(MnSi_T, meas)</span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Exp: Sweet 16 Experiment class dictionary</span>
+<span class="sd">    :param list meas: List of measurements</span>
+<span class="sd">    :param float scaling: Scales the susceptibility with the factor scaling</span>
+<span class="sd">    :param complex N: Gridsize of corresponding grid</span>
+<span class="sd">    :param int nbins: Number of bins in plot</span>
+<span class="sd">    :param dict legopts: Valid options are:</span>
+
+<span class="sd">                * &#39;small&#39;: Small legend (min and max value) within plot</span>
+<span class="sd">                * &#39;short&#39;: Smmall legend (min, max) outside of plot</span>
+<span class="sd">                * &#39;remove&#39;: no legend</span>
+<span class="sd">    :param dict kwargs: Valid kwargs are:</span>
+
+<span class="sd">                * min_x: float, minimal field value</span>
+<span class="sd">                * max_x: float, maximum field value</span>
+<span class="sd">              </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c"># get temperature boundaries</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;min_x&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">meas</span><span class="p">])</span>
+        <span class="c">#min_x = min_x + 0.05*min_x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">min_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;max_x&#39;</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;max_x&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">meas</span><span class="p">])</span>
+        <span class="c">#max_x = max_x - 0.05*max_x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">max_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;max_x&#39;</span><span class="p">]</span>
+    
+    <span class="n">current</span><span class="p">,</span> <span class="n">current_string</span> <span class="o">=</span> <span class="n">get_current</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">meas</span><span class="p">)</span>
+    
+    <span class="c"># Order Measuerments after Temperature</span>
+    <span class="n">meas</span> <span class="o">=</span> <span class="n">e21u</span><span class="o">.</span><span class="n">order_measurements</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">meas</span><span class="p">,</span> <span class="n">param</span> <span class="o">=</span> <span class="s">&#39;temp&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meas</span><span class="p">):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">e21u</span><span class="o">.</span><span class="n">Felix_colormap</span><span class="p">(</span><span class="n">j</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="p">)))</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_temperature&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;K&#39;</span><span class="p">)</span>
+        <span class="n">mT</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_temperature</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">data</span><span class="p">)</span><span class="o">*</span><span class="n">scaling</span> <span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> 
+                    <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;{} / {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;{:.2f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mT</span><span class="p">),</span>
+                                            <span class="nb">float</span><span class="p">(</span><span class="n">T</span><span class="p">)))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;B (T)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;U ($\mu$V)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Bsweeps @ I = {}</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">locator_params</span><span class="p">(</span><span class="n">nbins</span><span class="o">=</span><span class="n">nbins</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;small&#39;</span> <span class="ow">in</span> <span class="n">legopts</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;lower right&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s">&#39;short&#39;</span> <span class="ow">in</span> <span class="n">legopts</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;T (K)</span><span class="se">\n</span><span class="s"> meas / set&#39;</span><span class="p">,</span>
+                   <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">lines</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;T (K)</span><span class="se">\n</span><span class="s"> meas / set&#39;</span><span class="p">,</span>
+                   <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;remove&#39;</span> <span class="ow">in</span> <span class="n">legopts</span><span class="p">:</span>
+        <span class="n">l</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="plot_interpolated_sweeps"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.plot_interpolated_sweeps">[docs]</a><span class="k">def</span> <span class="nf">plot_interpolated_sweeps</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">400j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots interpolated sweeps</span>
+<span class="sd">       </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                       key=os.path.getmtime))</span>
+<span class="sd">        meas = [0,1,2,3]</span>
+<span class="sd">        g, c = make_grid(MnSi_T, meas)</span>
+<span class="sd">        Grids[c] = g</span>
+<span class="sd">        plot_interpolated_sweeps(Grids, c)</span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Grids: Dicitonary containing a grid of data as well as x </span>
+<span class="sd">                       and y axis values (result of make_grid)</span>
+<span class="sd">    :param float current: Current for which the grid should be plotted.</span>
+<span class="sd">    :param complex N: Gridsize (NxN)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;grid&#39;</span><span class="p">]</span> 
+    <span class="n">temps</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;temps&#39;</span><span class="p">]</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;fields&#39;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figsize</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">80</span><span class="p">)</span>
+    <span class="n">nmb</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">steps</span><span class="p">)[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nmb</span><span class="p">):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">e21u</span><span class="o">.</span><span class="n">Felix_colormap</span><span class="p">(</span><span class="n">j</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="n">steps</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;B (T)&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;U ($\mu$V)&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="get_current_meas"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.get_current_meas">[docs]</a><span class="k">def</span> <span class="nf">get_current_meas</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">current</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a list of measurement numbers with given current.</span>
+<span class="sd">       </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                key=os.path.getmtime))</span>
+<span class="sd">        meas = get_current_meas(MnSi_T, 1.0)</span>
+<span class="sd">           </span>
+<span class="sd">    :param dict Exp: Sweet 16 Experiment class</span>
+<span class="sd">    :param float current: Current</span>
+<span class="sd">    :return (list): List of measurements</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">meas</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Exp</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_current</span> <span class="o">==</span> <span class="n">current</span> <span class="p">:</span>
+
+            <span class="n">meas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">meas</span>
+</div>
+<div class="viewcode-block" id="find_index"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.find_index">[docs]</a><span class="k">def</span> <span class="nf">find_index</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span><span class="n">value</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">=</span> <span class="s">&#39;fields&#39;</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the index closest to the given field at a given </span>
+<span class="sd">    current in a given Grid</span>
+<span class="sd">       </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                key=os.path.getmtime))</span>
+<span class="sd">        find_field_index(MnSi_T[0].field, 2)</span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Grids: Dictionary, output of :func:`~.make_grid`</span>
+<span class="sd">    :param list Grids: Arabitrary measurement, eg. Exp[meas].field</span>
+<span class="sd">    :param float value: Value to look for closest index</span>
+<span class="sd">    :param str parameter: &#39;fields&#39; or &#39;temps&#39;, irrelevant if Grids is list</span>
+<span class="sd">    :return (int): Returns index</span>
+<span class="sd">    </span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="n">parameter</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">Grids</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;No valid input format, must be dict or list&#39;</span><span class="p">)</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">ind</span>
+</div>
+<div class="viewcode-block" id="find_sweep"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.find_sweep">[docs]</a><span class="k">def</span> <span class="nf">find_sweep</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">=</span> <span class="s">&#39;fields&#39;</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Find a certain B odr T sweep in the Grids dictionary</span>
+<span class="sd">    </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                       key=os.path.getmtime))</span>
+<span class="sd">        meas = [0,1,2,3]</span>
+<span class="sd">        g, c = make_grid(MnSi_T, meas)</span>
+<span class="sd">        Grids[c] = g</span>
+<span class="sd">        find_sweep(Grids, 1, parameter = &#39;fields&#39;)</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Grids: Dictionary, output of :func:`~.make_grid`</span>
+<span class="sd">    :param float value: Value at which sweep was performed</span>
+<span class="sd">    :param str parameter: &#39;fields&#39; for Tsweep or &#39;temps&#39; for Bsweep</span>
+<span class="sd">    :param float current: Current at which to look for</span>
+<span class="sd">    :return (list): Returns corresponding sweep</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">num</span> <span class="o">=</span> <span class="n">find_index</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">current</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;grid&#39;</span><span class="p">][</span><span class="n">num</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="find_res"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.find_res">[docs]</a><span class="k">def</span> <span class="nf">find_res</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">B_min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+             <span class="n">B_max</span> <span class="o">=</span> <span class="mf">0.55</span><span class="p">,</span> <span class="n">full_out</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds residuum of two curves. </span>
+<span class="sd">    </span>
+<span class="sd">    Compares a Bsweep at given T and 0 A stored in Grids_zero with a Bsweep</span>
+<span class="sd">    stored in Grids at T and I in the region between B_min and B_max.</span>
+<span class="sd">    Returns the residuum of the two best fitting curves and</span>
+<span class="sd">    the corresponding index. If full_out is True, then returns the</span>
+<span class="sd">    residua of the difference between every curve at I and</span>
+<span class="sd">    the curve at I = 0.</span>
+<span class="sd">    </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;),</span>
+<span class="sd">                                       key=os.path.getmtime))</span>
+<span class="sd">        meas = get_current_meas(MnSi_T, 0)</span>
+<span class="sd">        g, c = make_grid(MnSi_T, meas)</span>
+<span class="sd">        Grids[c] = g</span>
+<span class="sd">        res, ind = find_res(Grids)</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Grids: Dictionary, output of :func:`~.make_grid`</span>
+<span class="sd">    :param dict Grids_zero: Dictionary, output of :func:`~.make_grid`</span>
+<span class="sd">    :param float T: Temperature at which to compare Tsweeps</span>
+<span class="sd">    :param float I: Current of sweeps to compare with zero current sweeps</span>
+<span class="sd">    :param float B_min: Lower boundary of comparison region</span>
+<span class="sd">    :param float B_max: Upper boundary of comparison region</span>
+<span class="sd">    :param bool full_out: False returns the minimal res and the</span>
+<span class="sd">                          corresponding ind,True returns all residua</span>
+<span class="sd">    :return (float, int): Returns the residuum and the corresponding index</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">I0</span> <span class="o">=</span> <span class="n">find_index</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">B_min</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">=</span> <span class="s">&#39;fields&#39;</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">I1</span> <span class="o">=</span> <span class="n">find_index</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">B_max</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">=</span> <span class="s">&#39;fields&#39;</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">residua</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y1</span> <span class="o">=</span> <span class="n">find_sweep</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">=</span> <span class="s">&#39;temps&#39;</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)[</span><span class="n">I0</span><span class="p">:</span><span class="n">I1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;grid&#39;</span><span class="p">])):</span>
+        <span class="n">y2</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;grid&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">I0</span><span class="p">:</span><span class="n">I1</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y1</span><span class="o">-</span><span class="n">y2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">residua</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">res</span><span class="p">,</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">full_out</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">residua</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">residua</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">residua</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  
+</div>
+<div class="viewcode-block" id="get_temperature_shift"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.get_temperature_shift">[docs]</a><span class="k">def</span> <span class="nf">get_temperature_shift</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">I</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">28</span><span class="p">,</span> <span class="n">B_min</span> <span class="o">=</span> <span class="mf">0.49</span><span class="p">,</span> <span class="n">B_max</span> <span class="o">=</span> <span class="mf">0.55</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; gets the temperature shift of two sweeps at same </span>
+<span class="sd">    Temperature but different currents</span>
+<span class="sd">       </span>
+<span class="sd">    :param dict Grids: Dictionary, output of :func:`~.make_grid`</span>
+<span class="sd">    :param float T: Temperature at which to compare Bsweeps</span>
+<span class="sd">    :param float I: Current of sweep to compare with zero current sweep</span>
+<span class="sd">    :param float B_min: Lower boundary of comparison region</span>
+<span class="sd">    :param float B_max: Upper boundary of comparison region</span>
+<span class="sd">    :return (float): Returns temperature shift </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">res</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">find_res</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="n">I</span><span class="p">,</span> <span class="n">B_min</span><span class="o">=</span><span class="n">B_min</span><span class="p">,</span> <span class="n">B_max</span><span class="o">=</span><span class="n">B_max</span><span class="p">)</span>
+    <span class="n">T0</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">I</span><span class="p">)][</span><span class="s">&#39;temps&#39;</span><span class="p">][</span><span class="n">ind</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">T</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">K</span><span class="o">-</span><span class="n">T0</span>
+</div>
+<div class="viewcode-block" id="get_all_Tshifts"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.get_all_Tshifts">[docs]</a><span class="k">def</span> <span class="nf">get_all_Tshifts</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">I</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">28</span><span class="p">,</span> <span class="n">B_min</span> <span class="o">=</span> <span class="mf">0.49</span><span class="p">,</span> <span class="n">B_max</span> <span class="o">=</span> <span class="mf">0.55</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; gets the temperature shifts for different currents</span>
+<span class="sd">       </span>
+<span class="sd">    :param dict Grids: Dictionary, output of :func:`~.make_grid`</span>
+<span class="sd">    :param float T: Temperature at which to compare Bsweeps</span>
+<span class="sd">    :param list I: list of currents</span>
+<span class="sd">    :param float B_min: Lower boundary of comparison region</span>
+<span class="sd">    :param float B_max: Upper boundary of comparison region</span>
+<span class="sd">    :return (list): List of temperature differences</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">get_temperature_shift</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">I</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> <span class="n">B_min</span><span class="o">=</span><span class="n">B_min</span><span class="p">,</span> <span class="n">B_max</span><span class="o">=</span><span class="n">B_max</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">I</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="get_valid_currents"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.get_valid_currents">[docs]</a><span class="k">def</span> <span class="nf">get_valid_currents</span><span class="p">(</span><span class="n">Grids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns all valid currents in Grids</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">currents</span> <span class="o">=</span> <span class="n">Grids</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">currents</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;A&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">currents</span><span class="p">]</span>
+    <span class="n">currents</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">currents</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">currents</span>
+</div>
+<div class="viewcode-block" id="chi_I"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.chi_I">[docs]</a><span class="k">def</span> <span class="nf">chi_I</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">],</span> <span class="n">B_min</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">B_max</span><span class="o">=</span><span class="mf">0.4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Produces a plot of Chi vs. I. </span>
+<span class="sd">        </span>
+<span class="sd">        Takes a Dictionary containing various grids of data for different</span>
+<span class="sd">        currents. Checks which currents are available in grid.</span>
+
+<span class="sd">    </span>
+<span class="sd">    :param dict Grids: Dictionary, output of :func:`~.make_grid`</span>
+<span class="sd">    :param dict Grids_zero: Dictionary, output of :func:`~.make_grid`</span>
+<span class="sd">                            usually Grids</span>
+<span class="sd">    :param float T: Temperature</span>
+<span class="sd">    :param list B: List of Field values at which to evaluate Chi Vs I</span>
+<span class="sd">    :param float B_min: Lower boundary of comparison region</span>
+<span class="sd">    :param float B_max: Upper boundary of comparison region</span>
+<span class="sd">    :param bool full_out: False returns the minimal res and the</span>
+<span class="sd">                          corresponding ind,True returns all residua</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">get_chi</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;grid&#39;</span><span class="p">][</span><span class="n">ind</span><span class="p">][</span><span class="n">find_index</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">=</span> <span class="s">&#39;fields&#39;</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)]</span>
+
+    <span class="n">currents</span> <span class="o">=</span> <span class="n">get_valid_currents</span><span class="p">(</span><span class="n">Grids</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">((</span><span class="n">j</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">)))</span>
+        <span class="c">#color = e21u.Felix_colormap((j)/float(len(B)))</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">find_res</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span><span class="n">T</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">B_min</span><span class="p">,</span> <span class="n">B_max</span><span class="p">)</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">get_chi</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
+        <span class="n">min_I</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">currents</span><span class="p">)</span>
+        <span class="n">max_I</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">currents</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">I</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">currents</span><span class="p">):</span>
+            <span class="n">res</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">find_res</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span><span class="n">Grids_zero</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">B_min</span><span class="p">,</span> <span class="n">B_max</span><span class="p">)</span>
+            <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">get_chi</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span><span class="o">/</span><span class="n">x0</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;T = {} K&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T</span><span class="p">))</span>
+        <span class="c">#s = UnivariateSpline(x, points)</span>
+        <span class="c">#xs = np.linspace(min_I, max_I, 1000)</span>
+        <span class="c">#ys = s(xs)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="s">&#39;-o&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+        <span class="c">#plot(xs, ys)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;$\Delta\chi$ (%)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;I (A)&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plot_anpassung_auto"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.plot_anpassung_auto">[docs]</a><span class="k">def</span> <span class="nf">plot_anpassung_auto</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">28</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">B_min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">B_max</span> <span class="o">=</span> <span class="mf">0.55</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Muss noch kommentiert werden</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="s">&#39;0.0 A&#39;</span><span class="p">][</span><span class="s">&#39;fields&#39;</span><span class="p">],</span> <span class="n">find_sweep</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">=</span> <span class="s">&#39;temps&#39;</span><span class="p">,</span>
+             <span class="n">current</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">),</span><span class="n">label</span> <span class="o">=</span> <span class="s">&#39;0 A&#39;</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">find_res</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="n">current</span><span class="p">,</span> <span class="n">B_min</span><span class="o">=</span><span class="n">B_min</span><span class="p">,</span>
+                        <span class="n">B_max</span><span class="o">=</span><span class="n">B_max</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;fields&#39;</span><span class="p">],</span> 
+             <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">)][</span><span class="s">&#39;grid&#39;</span><span class="p">][</span><span class="n">ind</span><span class="p">],</span>
+             <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Magnetic Field (T)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;$\chi$ (a.u.)&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="current_dep"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.current_dep">[docs]</a><span class="k">def</span> <span class="nf">current_dep</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mf">28.4</span><span class="p">,</span> <span class="n">B_min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">B_max</span> <span class="o">=</span> <span class="mf">0.55</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Muss noch kommentiert werden</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">currents</span> <span class="o">=</span> <span class="n">get_valid_currents</span><span class="p">(</span><span class="n">Grids</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">e21u</span><span class="o">.</span><span class="n">Felix_colormap</span><span class="p">(</span><span class="mf">0.</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">currents</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c">#plot(Grids[&#39;0.0 A&#39;][&#39;fields&#39;], </span>
+    <span class="c">#     find_temperature(Grids, T, 0.0),label = &#39;0&#39;, color = color)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">I</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">currents</span><span class="p">):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">e21u</span><span class="o">.</span><span class="n">Felix_colormap</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">currents</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="n">find_res</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">Grids_zero</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">B_min</span><span class="p">,</span> <span class="n">B_max</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">I</span><span class="p">)][</span><span class="s">&#39;fields&#39;</span><span class="p">],</span> 
+                 <span class="n">Grids</span><span class="p">[</span><span class="s">&#39;{} A&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">I</span><span class="p">)][</span><span class="s">&#39;grid&#39;</span><span class="p">][</span><span class="n">ind</span><span class="p">],</span>
+                 <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">currents</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="mark_critical_current"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.spintorque_utility.mark_critical_current">[docs]</a><span class="k">def</span> <span class="nf">mark_critical_current</span><span class="p">(</span><span class="n">I</span> <span class="o">=</span> <span class="mf">0.426</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="o">.</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Places a dashed line in plot at I with name Ic</span>
+<span class="sd">    </span>
+<span class="sd">    :param float I: Critical current</span>
+<span class="sd">    :param float pos: Horizontal position of Text in percent of total height</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.426</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">,</span> <span class="n">ls</span> <span class="o">=</span> <span class="s">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;grey&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">I</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">xmin</span><span class="o">-</span><span class="n">xmax</span><span class="p">))</span><span class="o">*</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">ymin</span><span class="o">+</span><span class="n">pos</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ymin</span><span class="o">-</span><span class="n">ymax</span><span class="p">),</span> <span class="s">&#39;$I_c$&#39;</span><span class="p">)</span>
+</pre></div></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Felix.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

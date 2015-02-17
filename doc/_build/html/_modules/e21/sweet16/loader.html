@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>e21.sweet16.loader &mdash; E21 0.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="E21 0.1.0dev documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          E21</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.0dev</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="simple">
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../e21.html">e21 package</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for e21.sweet16.loader</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c">#</span>
+<span class="c"># e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.</span>
+<span class="kn">from</span> <span class="nn">e21.core</span> <span class="kn">import</span> <span class="n">Measurement</span>
+<span class="kn">import</span> <span class="nn">e21.utility</span> 
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="kn">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">quantities</span> <span class="kn">as</span> <span class="nn">pq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.loader.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A sweet16 file loader.</span>
+
+<span class="sd">    E.g. loading a susceptibility measurement::</span>
+
+<span class="sd">        &gt;&gt;&gt;from e21.sweet16 import Loader</span>
+<span class="sd">        &gt;&gt;&gt;s16 = Loader(mode=&#39;susceptibility&#39;)</span>
+<span class="sd">        &gt;&gt;&gt;measurement = s16(&#39;path/to/susceptibility_measurement.dat&#39;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">CREATOR</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kw</span> <span class="o">=</span> <span class="n">kw</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">merge_dicts</span><span class="p">(</span><span class="n">kw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kw</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Loader</span><span class="o">.</span><span class="n">CREATOR</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">]](</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Measurement</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Loader.parse"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.loader.Loader.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parser for sweet 16 measurement files. Only works for files younger</span>
+<span class="sd">        than september 2013. Header files start with &#39;#&#39; and are parsed in</span>
+<span class="sd">        blocks. Each block starts with &#39;#&#39;+block_title+&#39;&#39;.</span>
+
+<span class="sd">        Returns two dicitonaries. Header information is stored in &#39;params&#39;</span>
+<span class="sd">        dicitonary, data is stored in &#39;data&#39; dictionary.</span>
+
+<span class="sd">        Converts the first two columns of sweet 16 data files (date, time)</span>
+<span class="sd">        into two columns, &#39;datetime&#39; in datetime format, and &#39;time_numpy&#39;</span>
+<span class="sd">        in float, which can be plotted directly by matplotlib.</span>
+
+<span class="sd">        Unit information is restored from data file and added to dictionary</span>
+<span class="sd">        via quantities package.</span>
+
+<span class="sd">        Input parameters:</span>
+
+<span class="sd">            path: &#39;string&#39;         file path to valid sweet 16 file</span>
+
+<span class="sd">        Output parameters:</span>
+
+<span class="sd">            data: &#39;dict&#39;           dictionary containing data</span>
+<span class="sd">            params: &#39;dict&#39;         dictionary containing header information</span>
+<span class="sd">                                   as blocks (each block a dictionary)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">block_title</span> <span class="o">=</span> <span class="s">&#39;info&#39;</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">variables</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">params</span><span class="p">[</span><span class="n">block_title</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">):</span>
+                    <span class="n">params</span><span class="p">,</span> <span class="n">block_title</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+                                                            <span class="n">params</span><span class="p">,</span>
+                                                            <span class="n">block_title</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">):</span>
+                    <span class="n">variables</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">[</span><span class="mi">2</span><span class="p">:]}</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s">&#39;time_numpy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">):</span>
+                    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;() &#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)]</span>
+                    <span class="c"># TODO: Es tritt ein Fehler auf da Ohm am ende in Klammern</span>
+                    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;)</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">units</span><span class="p">]</span>
+                    <span class="c"># The Sweet 16 uses &#39;Deg&#39;, quantities uses &#39;deg&#39;.</span>
+                    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;deg&#39;</span> <span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="s">&#39;Deg&#39;</span> <span class="k">else</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">units</span><span class="p">]</span>
+                    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ohm&#39;</span> <span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="s">&#39;Ohm&#39;</span> <span class="k">else</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">units</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                    <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_data</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="c"># convert python datetime to plottable float</span>
+            <span class="c"># (matplotlib: plot_date function) and store in data dictionary</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">&#39;time_numpy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">unit</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time&#39;</span><span class="p">]:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">unit</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">params</span>
+
+    </div>
+<div class="viewcode-block" id="Loader.parse_data"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.loader.Loader.parse_data">[docs]</a>    <span class="k">def</span> <span class="nf">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">:])}</span>
+        <span class="c"># convert date and time to one datetime and insert in dict</span>
+        <span class="n">row</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                               <span class="s">&#39;</span><span class="si">%d</span><span class="s">.%m.%Y%H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="c"># TODO: From time to time, the LS340 creates misreadings which result</span>
+        <span class="c"># in either 100K or 0K readings.</span>
+        <span class="c"># Currently we simply ignore these lines.</span>
+        <span class="c"># For th future it would be better to check if a value of 100K is</span>
+        <span class="c"># actually an outlier an should be removed or a valid temperature.</span>
+        <span class="k">try</span><span class="p">:</span>       
+            <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{}</span>
+            <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">100.</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{}</span>
+        
+            <span class="c"># ignore lines which don&#39;t contain the whole data set</span>
+            <span class="c"># (i.e. last line after measurement abort)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)):</span>
+                <span class="c"># TODO: show a warning message.</span>
+                <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">row</span>
+</div></div>
+<div class="viewcode-block" id="parse_commands"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.loader.parse_commands">[docs]</a><span class="k">def</span> <span class="nf">parse_commands</span><span class="p">(</span><span class="n">arguments</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Parses the command line of a Sweet 16 measurement file and returns</span>
+<span class="sd">        a dicitionary of command string.</span>
+
+<span class="sd">        Input parameters:</span>
+
+<span class="sd">            arguments:     list, list of command string entries,</span>
+<span class="sd">                           (like one line in S16 command_file.txt)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="n">command_line</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">,</span> <span class="s">&#39;init_temperature&#39;</span><span class="p">,</span> <span class="s">&#39;init_temperature_rate&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;target_temperature&#39;</span><span class="p">,</span> <span class="s">&#39;target_temperature_rate&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;init_field&#39;</span><span class="p">,</span> <span class="s">&#39;init_field_rate&#39;</span><span class="p">,</span> <span class="s">&#39;target_field&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;target_field_rate&#39;</span><span class="p">,</span> <span class="s">&#39;lockin1_sensitivity&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;lockin2_sensitivity&#39;</span><span class="p">,</span> <span class="s">&#39;delay&#39;</span><span class="p">,</span> <span class="s">&#39;needle_valve_const&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;needle_valve_percentage&#39;</span><span class="p">,</span> <span class="s">&#39;steps&#39;</span><span class="p">,</span> <span class="s">&#39;target_current&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;current_rate&#39;</span><span class="p">,</span> <span class="s">&#39;init_angle&#39;</span><span class="p">,</span> <span class="s">&#39;target_angle&#39;</span><span class="p">]</span>
+    <span class="n">command_line_units</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39; K&#39;</span><span class="p">,</span> <span class="s">&#39; K/min&#39;</span><span class="p">,</span> <span class="s">&#39; K&#39;</span><span class="p">,</span> <span class="s">&#39; K/min&#39;</span><span class="p">,</span> <span class="s">&#39; T&#39;</span><span class="p">,</span>
+                          <span class="s">&#39; T/min&#39;</span><span class="p">,</span> <span class="s">&#39; T&#39;</span><span class="p">,</span> <span class="s">&#39; T/min&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39; min&#39;</span><span class="p">,</span>
+                          <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39; %&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39; A&#39;</span><span class="p">,</span> <span class="s">&#39; A/min&#39;</span><span class="p">,</span> <span class="s">&#39; Deg&#39;</span><span class="p">,</span> <span class="s">&#39; Deg&#39;</span><span class="p">]</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">))):</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">command_line_units</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">modes</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;1&#39;</span><span class="p">:</span> <span class="s">&#39;BSWEEP&#39;</span><span class="p">,</span> <span class="s">&#39;2&#39;</span><span class="p">:</span> <span class="s">&#39;TSWEEP&#39;</span><span class="p">,</span> <span class="s">&#39;3&#39;</span><span class="p">:</span> <span class="s">&#39;CONST&#39;</span><span class="p">,</span> <span class="s">&#39;4&#39;</span><span class="p">:</span> <span class="s">&#39;BSTEP&#39;</span><span class="p">,</span>
+             <span class="s">&#39;5&#39;</span><span class="p">:</span> <span class="s">&#39;TSTEP&#39;</span><span class="p">,</span> <span class="s">&#39;Tramp&#39;</span><span class="p">:</span> <span class="s">&#39;TSWEEP&#39;</span><span class="p">,</span> <span class="s">&#39;Bramp&#39;</span><span class="p">:</span> <span class="s">&#39;BSWEEP&#39;</span><span class="p">,</span>
+             <span class="s">&#39;7&#39;</span><span class="p">:</span> <span class="s">&#39;ASWEEP&#39;</span><span class="p">}</span>
+    <span class="c"># Parse sensitivities</span>
+    <span class="n">sens</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;00&#39;</span><span class="p">:</span> <span class="s">&#39;2e-9 V&#39;</span><span class="p">,</span> <span class="s">&#39;01&#39;</span><span class="p">:</span> <span class="s">&#39;5e-9 V&#39;</span><span class="p">,</span> <span class="s">&#39;02&#39;</span><span class="p">:</span> <span class="s">&#39;1e-8 V&#39;</span><span class="p">,</span>
+            <span class="s">&#39;03&#39;</span><span class="p">:</span> <span class="s">&#39;2e-8 V&#39;</span><span class="p">,</span> <span class="s">&#39;04&#39;</span><span class="p">:</span> <span class="s">&#39;5e-8 V&#39;</span><span class="p">,</span> <span class="s">&#39;05&#39;</span><span class="p">:</span> <span class="s">&#39;1e-7 V&#39;</span><span class="p">,</span>
+            <span class="s">&#39;06&#39;</span><span class="p">:</span> <span class="s">&#39;2e-7 V&#39;</span><span class="p">,</span> <span class="s">&#39;07&#39;</span><span class="p">:</span> <span class="s">&#39;5e-7 V&#39;</span><span class="p">,</span> <span class="s">&#39;08&#39;</span><span class="p">:</span> <span class="s">&#39;1e-6 V&#39;</span><span class="p">,</span>
+            <span class="s">&#39;09&#39;</span><span class="p">:</span> <span class="s">&#39;2e-6 V&#39;</span><span class="p">,</span> <span class="s">&#39;10&#39;</span><span class="p">:</span> <span class="s">&#39;5e-6 V&#39;</span><span class="p">,</span> <span class="s">&#39;11&#39;</span><span class="p">:</span> <span class="s">&#39;1e-5 V&#39;</span><span class="p">,</span>
+            <span class="s">&#39;12&#39;</span><span class="p">:</span> <span class="s">&#39;2e-5 V&#39;</span><span class="p">,</span> <span class="s">&#39;13&#39;</span><span class="p">:</span> <span class="s">&#39;5e-5 V&#39;</span><span class="p">,</span> <span class="s">&#39;14&#39;</span><span class="p">:</span> <span class="s">&#39;1e-4 V&#39;</span><span class="p">,</span>
+            <span class="s">&#39;15&#39;</span><span class="p">:</span> <span class="s">&#39;2e-4 V&#39;</span><span class="p">,</span> <span class="s">&#39;16&#39;</span><span class="p">:</span> <span class="s">&#39;5e-4 V&#39;</span><span class="p">,</span> <span class="s">&#39;17&#39;</span><span class="p">:</span> <span class="s">&#39;1e-3 V&#39;</span><span class="p">,</span>
+            <span class="s">&#39;18&#39;</span><span class="p">:</span> <span class="s">&#39;2e-3 V&#39;</span><span class="p">,</span> <span class="s">&#39;19&#39;</span><span class="p">:</span> <span class="s">&#39;5e-3 V&#39;</span><span class="p">,</span> <span class="s">&#39;20&#39;</span><span class="p">:</span> <span class="s">&#39;0.01 V&#39;</span><span class="p">,</span>
+            <span class="s">&#39;21&#39;</span><span class="p">:</span> <span class="s">&#39;0.02 V&#39;</span><span class="p">,</span> <span class="s">&#39;22&#39;</span><span class="p">:</span> <span class="s">&#39;0.05 V&#39;</span><span class="p">,</span> <span class="s">&#39;23&#39;</span><span class="p">:</span> <span class="s">&#39;0.1 V&#39;</span><span class="p">,</span>
+            <span class="s">&#39;24&#39;</span><span class="p">:</span> <span class="s">&#39;0.2 V&#39;</span><span class="p">,</span> <span class="s">&#39;25&#39;</span><span class="p">:</span> <span class="s">&#39;0.5 V&#39;</span><span class="p">,</span> <span class="s">&#39;26&#39;</span><span class="p">:</span> <span class="s">&#39;1 V&#39;</span><span class="p">}</span>
+    <span class="n">needle_valve</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;0&#39;</span><span class="p">:</span> <span class="s">&#39;Not Constant&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">:</span> <span class="s">&#39;Constant&#39;</span><span class="p">}</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">command_line</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+    <span class="c"># Convert Lockin Sensitivity Units</span>
+    <span class="n">args</span><span class="p">[</span><span class="s">&#39;lockin1_sensitivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sens</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;lockin1_sensitivity&#39;</span><span class="p">]]</span>
+    <span class="n">args</span><span class="p">[</span><span class="s">&#39;lockin2_sensitivity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sens</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;lockin2_sensitivity&#39;</span><span class="p">]]</span>
+    <span class="n">args</span><span class="p">[</span><span class="s">&#39;needle_valve_const&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">needle_valve</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;needle_valve_const&#39;</span><span class="p">]]</span>
+    <span class="n">args</span><span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">modes</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">args</span>
+</div>
+<div class="viewcode-block" id="parse_header"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.loader.parse_header">[docs]</a><span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">block_title</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses header of sweet 16 files. Function is called within parse,</span>
+<span class="sd">        but can be called seperately</span>
+
+<span class="sd">        input parameters:</span>
+
+<span class="sd">            line:       &#39;string&#39;        line of data file</span>
+<span class="sd">            params:     &#39;dict&#39;          dictionary, empty dictionary containing</span>
+<span class="sd">                                        only one key, value pair:</span>
+<span class="sd">                                        params[block_title] = {}</span>
+<span class="sd">            block_title:&#39;string&#39;        initial block tile</span>
+
+<span class="sd">        output:</span>
+
+<span class="sd">            params:      &#39;dict&#39;         containing header information</span>
+<span class="sd">                                        (key, value pair)of this line, stored</span>
+<span class="sd">                                        in params[block_title][kw] = argument</span>
+
+<span class="sd">            block_title  &#39;string&#39;       new block title if line defines new</span>
+<span class="sd">                                        block in data file,</span>
+<span class="sd">                                        i.e. &#39;#&#39;+block_title+&#39;&#39; (no argument)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># True, wenn Zeile nicht nur aus leerzeichen besteht.</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+            <span class="n">kw</span><span class="p">,</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="c"># check if block title or information</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">arg</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
+                <span class="n">block_title</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">params</span><span class="p">[</span><span class="n">block_title</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="c"># check if time information</span>
+            <span class="c"># (containing an additional &#39;:&#39;, thus treated seperately)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">kw</span> <span class="o">==</span> <span class="s">&#39;time&#39;</span><span class="p">):</span>
+                <span class="n">arg</span> <span class="o">=</span> <span class="s">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+            <span class="c"># check if &#39;command&#39; line. Then argument is dictionary containing</span>
+            <span class="c"># infromation of command line of command_file.txt of measurement</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">kw</span> <span class="o">==</span> <span class="s">&#39;command&#39;</span><span class="p">):</span>
+                <span class="n">arg</span> <span class="o">=</span> <span class="n">parse_commands</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+            <span class="c"># Corret bad data file output (files befor 08/14)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">kw</span> <span class="o">==</span> <span class="s">&#39;offset.&#39;</span><span class="p">):</span>
+                <span class="n">kw</span> <span class="o">=</span> <span class="s">&#39;offset&#39;</span>
+            <span class="c"># if not block title, then store information</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">arg</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
+                <span class="n">params</span><span class="p">[</span><span class="n">block_title</span><span class="p">][</span><span class="n">kw</span><span class="p">]</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">return</span> <span class="n">params</span><span class="p">,</span> <span class="n">block_title</span>
+</pre></div></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Felix.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

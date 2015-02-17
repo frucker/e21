@@ -2,15 +2,37 @@
 #
 # e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.
 import collections
-
 import matplotlib as mpl
 import matplotlib.ticker
 import matplotlib.pyplot as pl
 #import seaborn as sns
-from e21.utility import COLORS
 import e21.core
 
-
+# colors taken from bootstrap
+COLORS = {
+    'black': '#000000',
+    'darker gray': '#222222',
+    'dark gray': '#333333',  #text color
+    'gray': '#555555',
+    'light gray': '#999999',
+    'lighter gray': '#eeeeee',
+    'white': '#ffffff',
+    'blue': '#049cdb',
+    'dark blue': '#0064cd',
+    'light blue': '#3a87ad',
+    'lighter blue': '#d9edf7',
+    'green': '#46a546',
+    'light green': '#468847',
+    'lighter green': '#dff0d8',
+    'red': '#9d261d',
+    'light red': '#b94a48',
+    'lighter red': '#f2dede',
+    'yellow': '#ffc40d',
+    'light yellow': '#fcf8e3',
+    'orange': '#f89406',
+    'pink': '#c3325f',
+    'purple': '#7a43b6',
+}
 RC = {
     'lines.linewidth': 2,
     'lines.linewidth': 2,
@@ -28,10 +50,9 @@ RC = {
     'axes.color_cycle': (COLORS['light blue'], COLORS['green'], COLORS['light red'], COLORS['yellow'], COLORS['pink'], COLORS['black']),
     'axes.labelcolor': COLORS['dark gray'],
     'axes.grid': True,
-    'legend.fontsize': 18,
+    'legend.fontsize': 22,
     'figure.figsize': (16, 10),
     'legend.fancybox': True, 
-    'legend.title' : 'True'
 }
 
 

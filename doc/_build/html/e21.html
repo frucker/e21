@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>e21 package &mdash; E21 0.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="E21 0.1.0dev documentation" href="index.html" />
+    <link rel="next" title="e21.PPMS package" href="e21.PPMS.html" />
+    <link rel="prev" title="Welcome to E21’s documentation!" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          E21</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.0dev</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="simple">
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">e21 package</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">e21 package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-e21.core">e21.core module</a></li>
+<li><a class="reference internal" href="#module-e21.filter">e21.filter module</a></li>
+<li><a class="reference internal" href="#e21-utility-module">e21.utility module</a></li>
+<li><a class="reference internal" href="#module-e21.vsm">e21.vsm module</a></li>
+<li><a class="reference internal" href="#module-e21">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: Welcome to E21’s documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Welcome to E21’s...</span>
+    </a>
+  </li>
+  <li>
+    <a href="e21.PPMS.html" title="Next Chapter: e21.PPMS package"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">e21.PPMS package &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/e21.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="e21-package">
+<h1>e21 package<a class="headerlink" href="#e21-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="e21.PPMS.html">e21.PPMS package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#e21-ppms-acms-module">e21.PPMS.ACMS module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#e21-ppms-loader-module">e21.PPMS.loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#e21-ppms-susceptibility-module">e21.PPMS.susceptibility module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#e21-ppms-transport-module">e21.PPMS.transport module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="e21.sweet16.html">e21.sweet16 package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16.loader">e21.sweet16.loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16.spintorque_utility">e21.sweet16.spintorque_utility module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16.susceptibility">e21.sweet16.susceptibility module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16.transport">e21.sweet16.transport module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-e21.core">
+<span id="e21-core-module"></span><h2>e21.core module<a class="headerlink" href="#module-e21.core" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.core.Experiment">
+<em class="property">class </em><tt class="descclassname">e21.core.</tt><tt class="descname">Experiment</tt><big>(</big><em>measurements={}</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Minimal implementation of a experiment class.</p>
+<dl class="method">
+<dt id="e21.core.Experiment.add_measurements">
+<tt class="descname">add_measurements</tt><big>(</big><em>filelist</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#Experiment.add_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Experiment.add_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds measurements to Experiment</p>
+<p>filelist: list of measurement files</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.core.Measurement">
+<em class="property">class </em><tt class="descclassname">e21.core.</tt><tt class="descname">Measurement</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#Measurement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Measurement base class.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.core.Plottable">
+<em class="property">class </em><tt class="descclassname">e21.core.</tt><tt class="descname">Plottable</tt><a class="reference internal" href="_modules/e21/core.html#Plottable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Plottable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Mixin class providing a generic plot function.</p>
+<dl class="method">
+<dt id="e21.core.Plottable.plot">
+<tt class="descname">plot</tt><big>(</big><em>y</em>, <em>x</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#Plottable.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Plottable.plot" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A matplotlib figure and axes instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.core.init_mpl">
+<tt class="descclassname">e21.core.</tt><tt class="descname">init_mpl</tt><big>(</big><em>nbins=7, steps=[1, 2, 3, 5, 10]</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#init_mpl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.init_mpl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.core.lookup">
+<tt class="descclassname">e21.core.</tt><tt class="descname">lookup</tt><big>(</big><em>obj</em>, <em>name</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to provide function and string lookup of attributes.</p>
+<dl class="docutils">
+<dt>E.g.::</dt>
+<dd>&gt;&gt;&gt;class Test(object):
+...    pass
+&gt;&gt;&gt;t = Test()
+&gt;&gt;&gt;t.value = &#8216;myvalue&#8217;
+&gt;&gt;&gt;lookup(t, &#8216;value&#8217;)
+myvalue
+&gt;&gt;&gt;lookup(t, lambda x: x.value)
+myvalue
+&gt;&gt;lookup(t, [1, 2, 3])
+[1, 2, 3]</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-e21.filter">
+<span id="e21-filter-module"></span><h2>e21.filter module<a class="headerlink" href="#module-e21.filter" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="e21.filter.savitzky_golay">
+<tt class="descclassname">e21.filter.</tt><tt class="descname">savitzky_golay</tt><big>(</big><em>y</em>, <em>window_size</em>, <em>order</em>, <em>deriv=0</em>, <em>rate=1</em><big>)</big><a class="reference internal" href="_modules/e21/filter.html#savitzky_golay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.filter.savitzky_golay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smooth (and optionally differentiate) data with a Savitzky-Golay filter.
+The Savitzky-Golay filter removes high frequency noise from data.
+It has the advantage of preserving the original shape and
+features of the signal better than other types of filtering
+approaches, such as moving averages techniques.
+Parameters
+&#8212;&#8212;&#8212;-
+y : array_like, shape (N,)</p>
+<blockquote>
+<div>the values of the time history of the signal.</div></blockquote>
+<dl class="docutils">
+<dt>window_size <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>the length of the window. Must be an odd integer number.</dd>
+<dt>order <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>the order of the polynomial used in the filtering.
+Must be less then <cite>window_size</cite> - 1.</dd>
+<dt>deriv: int</dt>
+<dd>the order of the derivative to compute (default = 0 means only smoothing)</dd>
+</dl>
+<dl class="docutils">
+<dt>ys <span class="classifier-delimiter">:</span> <span class="classifier">ndarray, shape (N)</span></dt>
+<dd>the smoothed signal (or it&#8217;s n-th derivative).</dd>
+</dl>
+<p>The Savitzky-Golay is a type of low-pass filter, particularly
+suited for smoothing noisy data. The main idea behind this
+approach is to make for each point a least-square fit with a
+polynomial of high order over a odd-sized window centered at
+the point.
+Examples
+&#8212;&#8212;&#8211;
+t = np.linspace(-4, 4, 500)
+y = np.exp( -t**2 ) + np.random.normal(0, 0.05, t.shape)
+ysg = savitzky_golay(y, window_size=31, order=4)
+import matplotlib.pyplot as plt
+plt.plot(t, y, label=&#8217;Noisy signal&#8217;)
+plt.plot(t, np.exp(-t**2), &#8216;k&#8217;, lw=1.5, label=&#8217;Original signal&#8217;)
+plt.plot(t, ysg, &#8216;r&#8217;, label=&#8217;Filtered signal&#8217;)
+plt.legend()
+plt.show()
+References
+&#8212;&#8212;&#8212;-
+.. [1] A. Savitzky, M. J. E. Golay, Smoothing and Differentiation of</p>
+<blockquote>
+<div>Data by Simplified Least Squares Procedures. Analytical
+Chemistry, 1964, 36 (8), pp 1627-1639.</div></blockquote>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[2]</td><td>Numerical Recipes 3rd Edition: The Art of Scientific Computing
+W.H. Press, S.A. Teukolsky, W.T. Vetterling, B.P. Flannery
+Cambridge University Press ISBN-13: 9780521880688</td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="e21-utility-module">
+<h2>e21.utility module<a class="headerlink" href="#e21-utility-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-e21.vsm">
+<span id="e21-vsm-module"></span><h2>e21.vsm module<a class="headerlink" href="#module-e21.vsm" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.vsm.FieldScan">
+<em class="property">class </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">FieldScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#FieldScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.FieldScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.vsm.Magnetisation" title="e21.vsm.Magnetisation"><tt class="xref py py-class docutils literal"><span class="pre">e21.vsm.Magnetisation</span></tt></a>, <a class="reference internal" href="#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="method">
+<dt id="e21.vsm.FieldScan.plot">
+<tt class="descname">plot</tt><big>(</big><em>y='m'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#FieldScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.FieldScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.vsm.Loader">
+<em class="property">class </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">Loader</tt><big>(</big><em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="e21.vsm.Loader.parse">
+<tt class="descname">parse</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Loader.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Loader.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Importer for VSM datafiles.</p>
+<p>The VSM files have the following syntax:</p>
+<blockquote>
+<div><p>COMMENTS
+DATETIME</p>
+<p>COLNAMES
+COLUNITS</p>
+<p>PRECISSION
+DATA</p>
+</div></blockquote>
+<p><cite>COMMENTS</cite> start with a <cite>;</cite> character. Multiple <cite>COMMENTS</cite> per line are
+possible. The datetime has the following syntax:
+<cite>day month date hh:mm:ss yyyy</cite> e.g. <cite>Wed May 23 16:11:30 2012</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.vsm.Magnetisation">
+<em class="property">class </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">Magnetisation</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.core.Measurement" title="e21.core.Measurement"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Measurement</span></tt></a></p>
+<dl class="attribute">
+<dt id="e21.vsm.Magnetisation.control_temperature">
+<tt class="descname">control_temperature</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.control_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.control_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.vsm.Magnetisation.field">
+<tt class="descname">field</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.vsm.Magnetisation.m">
+<tt class="descname">m</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the magnetic moment of the X signal.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.vsm.Magnetisation.target_temperature">
+<tt class="descname">target_temperature</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.target_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.target_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.vsm.Magnetisation.temperature">
+<tt class="descname">temperature</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.vsm.Magnetisation.temperature_stability">
+<tt class="descname">temperature_stability</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.temperature_stability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.temperature_stability" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.vsm.Magnetisation.x">
+<tt class="descname">x</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.vsm.Magnetisation.y">
+<tt class="descname">y</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="e21.vsm.ParsingError">
+<em class="property">exception </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">ParsingError</tt><a class="reference internal" href="_modules/e21/vsm.html#ParsingError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.ParsingError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>Raised by the Loader classes when a parsing error occures.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.vsm.TemperatureScan">
+<em class="property">class </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">TemperatureScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#TemperatureScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.TemperatureScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.vsm.Magnetisation" title="e21.vsm.Magnetisation"><tt class="xref py py-class docutils literal"><span class="pre">e21.vsm.Magnetisation</span></tt></a>, <a class="reference internal" href="#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<dl class="method">
+<dt id="e21.vsm.TemperatureScan.plot">
+<tt class="descname">plot</tt><big>(</big><em>y='m'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#TemperatureScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.TemperatureScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-e21">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-e21" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Felix.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+e21.sweet16 package
+===================
+
+Submodules
+----------
+
+e21.sweet16.loader module
+-------------------------
+
+.. automodule:: e21.sweet16.loader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.sweet16.spintorque_utility module
+-------------------------------------
+
+.. automodule:: e21.sweet16.spintorque_utility
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.sweet16.susceptibility module
+---------------------------------
+
+.. automodule:: e21.sweet16.susceptibility
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.sweet16.transport module
+----------------------------
+
+.. automodule:: e21.sweet16.transport
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: e21.sweet16
+    :members:
+    :undoc-members:
+    :show-inheritance:
