@@ -355,7 +355,48 @@ def MakeOverview(Exp, *args):
                     html_table += '<td> {} </td>'.format(
                         Exp[num].NV)
                 html_table += '</tr>'
-
+            else:
+                B_init = float(np.round(Exp[num].data['B_field'][0], 6))
+                B_final = float(np.round(Exp[num].data['B_field'][-1], 6))
+                Temp = float(
+                    np.round(np.median(Exp[num].temperature), 3))
+                sigma = float(
+                    np.round(np.std(Exp[num].temperature), 3))
+                html_table += ('<tr> <td>{}</td> <td> {} </td>'
+                               '<td> {} T </td>'
+                               '<td> {} T </td>'
+                               '<td> {}+-{} K </td>'
+                               '<td> {} </td>'
+                               '<td> {} </td>'
+                               '<td> {} </td>'
+                               '<td> {} k&Omega; </td>'
+                               '<td> {} </td>').format(
+                                    num,
+                                    Exp[num].params['info']['command']['mode'],
+                                    B_init,
+                                    B_final,
+                                    Temp,
+                                    sigma,
+                                    Exp[num].params['info']['command']['init_field'],
+                                    Exp[num].params['info']['command']['init_temperature'],
+                                    Exp[num].params['general']['amplification'],
+                                    Exp[num].params['general']['dropping_resistance'],
+                                    Exp[num].params['info']['command']['target_field_rate'])
+                if 'reserve' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].params['lock_in_1']['dyn_reserve'])
+                if 'angle' in args:
+                    html_table += '<td> {} </td>'.format(
+                        round(
+                            Exp[num].data['angle'][0],
+                            2))
+                if 'current' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].mean_current)
+                if 'NV' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].NV)
+                html_table += '</tr>'
         html_table += '</table>'
         return html_table
 

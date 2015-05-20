@@ -148,9 +148,9 @@ def parse_commands(arguments):
         args.append(arguments.split('\t')[i] + command_line_units[i])
     modes = {'1': 'BSWEEP', '2': 'TSWEEP', '3': 'CONST', '4': 'BSTEP',
              '5': 'TSTEP', 'Tramp': 'TSWEEP', 'Bramp': 'BSWEEP',
-             '7': 'ASWEEP'}
+             '7': 'ASWEEP', '8':'FSWEEP'}
     # Parse sensitivities
-    sens = {'00': '2e-9 V', '01': '5e-9 V', '02': '1e-8 V',
+    sens = {'0':'2e-9 V','00': '2e-9 V', '01': '5e-9 V', '02': '1e-8 V',
             '03': '2e-8 V', '04': '5e-8 V', '05': '1e-7 V',
             '06': '2e-7 V', '07': '5e-7 V', '08': '1e-6 V',
             '09': '2e-6 V', '10': '5e-6 V', '11': '1e-5 V',
