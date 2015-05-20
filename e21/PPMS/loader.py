@@ -33,6 +33,8 @@ class Loader(object):
         except KeyError:
             return Measurement(data, params)
 
+    path = '/home/felix/Documents/Doktorarbeit/Messdaten/PPMS/Co-OFZ86-2-3/Data/'
+
     def parse(path):
             """
             A PPMS Data Parser. 

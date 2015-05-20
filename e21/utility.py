@@ -370,6 +370,7 @@ def MakeOverview(Exp, *args):
                 if 'NV' in args:
                     html_table += '<td> {} </td>'.format(
                         Exp[num].NV)
+<<<<<<< HEAD
                 if 'filename' in args:
                     html_table += '<td> {} </td>'.format(
                         Exp[num].params['general']['filename'].split('/')[-1])
@@ -388,6 +389,36 @@ def MakeOverview(Exp, *args):
                                     num,
                                     Exp[num].params['general']['amplification'],
                                     Exp[num].params['general']['dropping_resistance'])
+=======
+                html_table += '</tr>'
+            else:
+                B_init = float(np.round(Exp[num].data['B_field'][0], 6))
+                B_final = float(np.round(Exp[num].data['B_field'][-1], 6))
+                Temp = float(
+                    np.round(np.median(Exp[num].temperature), 3))
+                sigma = float(
+                    np.round(np.std(Exp[num].temperature), 3))
+                html_table += ('<tr> <td>{}</td> <td> {} </td>'
+                               '<td> {} T </td>'
+                               '<td> {} T </td>'
+                               '<td> {}+-{} K </td>'
+                               '<td> {} </td>'
+                               '<td> {} </td>'
+                               '<td> {} </td>'
+                               '<td> {} k&Omega; </td>'
+                               '<td> {} </td>').format(
+                                    num,
+                                    Exp[num].params['info']['command']['mode'],
+                                    B_init,
+                                    B_final,
+                                    Temp,
+                                    sigma,
+                                    Exp[num].params['info']['command']['init_field'],
+                                    Exp[num].params['info']['command']['init_temperature'],
+                                    Exp[num].params['general']['amplification'],
+                                    Exp[num].params['general']['dropping_resistance'],
+                                    Exp[num].params['info']['command']['target_field_rate'])
+>>>>>>> 00351d5402a008df41df0f5a65f4ddc481431a91
                 if 'reserve' in args:
                     html_table += '<td> {} </td>'.format(
                         Exp[num].params['lock_in_1']['dyn_reserve'])
@@ -402,12 +433,16 @@ def MakeOverview(Exp, *args):
                 if 'NV' in args:
                     html_table += '<td> {} </td>'.format(
                         Exp[num].NV)
+<<<<<<< HEAD
                 if 'filename' in args:
                     html_table += '<td> {} </td>'.format(
                         Exp[num].params['general']['filename'].split('/')[-1])
                 html_table += '</tr>' 
                
 
+=======
+                html_table += '</tr>'
+>>>>>>> 00351d5402a008df41df0f5a65f4ddc481431a91
         html_table += '</table>'
         return html_table
 
