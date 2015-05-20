@@ -92,7 +92,7 @@ class Loader(object):
             data['time_numpy'] = mpl.dates.date2num(data['datetime'])
             data['datetime'] = np.array(data['datetime'])
             for col, unit in zip(variables, units):
-                if col not in ['date', 'time']:
+                if col not in ['date', 'time', 'capacity', 'loss']:
                     data[col] = pq.Quantity(data[col], unit)
         return data, params
 
