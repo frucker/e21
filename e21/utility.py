@@ -11,7 +11,7 @@ from shutil import move
 from os import remove, close
 
 
-def Felix_colormap(n):
+def Felix_colormap():
     cdict = {'red': ((0.0, 1.0, 1.0),
                      (0.7, 1.0, 1.0),
                      (1.0, 0.24, 0.24)),
@@ -22,7 +22,7 @@ def Felix_colormap(n):
                   (0.7, 0.0, 0.0), 
                   (1.0, 1.0, 1.0))}
     cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
-    return cmap(n)
+    return cmap
 
 def merge_dicts(*dicts):
     """Merges multiple dicts together.
@@ -51,7 +51,18 @@ def calibrate(data,scaling):
     calibrate data by multiplying a scaling factor
     
     """
-    return data*scaling
+    if type(scaling) is list:
+        if (len(scaling) ==2):
+            m = scaling[0]
+            b = scaling[1]
+        else:
+            raise ValueError('Scaling must be list of length 2 not {}'.format(len(scaling))) 
+    elif type(scaling) is float or int:
+        m = scaling
+        b = 0
+    else:
+        raise ValueError('Scaling must be list of length 2 or float not {}'.format(type(scaling)))  
+    return data*m+b*pq.V
 
 def export_FS(data, numbers, path, option = 'susceptibility',
               scailing = 1, t_off = 0):
@@ -273,6 +284,8 @@ def MakeOverview(Exp, *args):
             html_table += '<th> Current </th>'
         if 'NV' in args:
             html_table += '<th> Needle Valve </th>'
+        if 'filename' in args:
+            html_table += '<th> Filename </th>'
         else:
             html_table += '</tr>'
         for num in range(len(Exp)):
@@ -311,8 +324,11 @@ def MakeOverview(Exp, *args):
                 if 'current' in args:
                     html_table += '<td> {} </td>'.format(Exp[num].mean_current)
                 if 'NV' in args:
-                    html_table += '<td> {} </td>'.format(Exp[num].NV)
-                html_table += '</tr>'
+                    html_table += '<td> {} </td>'.format(Exp[num].NV)             
+                if 'filename' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].params['general']['filename'].split('/')[-1])
+                html_table += '</tr>'   
 
             elif (isinstance(Exp[num], Bscan)):
                 B_init = float(np.round(Exp[num].data['B_field'][0], 6))
@@ -354,7 +370,43 @@ def MakeOverview(Exp, *args):
                 if 'NV' in args:
                     html_table += '<td> {} </td>'.format(
                         Exp[num].NV)
-                html_table += '</tr>'
+                if 'filename' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].params['general']['filename'].split('/')[-1])
+                html_table += '</tr>'   
+            else:
+                html_table += ('<tr> <td>{}</td>'
+                               '<td> Other </td>'
+                               '<td> - </td>'
+                               '<td> - </td>'
+                               '<td> - </td>'
+                               '<td> - </td>'
+                               '<td> - </td>'
+                               '<td> {} </td>'
+                               '<td> {} k&Omega; </td>'
+                               '<td> - </td>').format(
+                                    num,
+                                    Exp[num].params['general']['amplification'],
+                                    Exp[num].params['general']['dropping_resistance'])
+                if 'reserve' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].params['lock_in_1']['dyn_reserve'])
+                if 'angle' in args:
+                    html_table += '<td> {} </td>'.format(
+                        round(
+                            Exp[num].data['angle'][0],
+                            2))
+                if 'current' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].mean_current)
+                if 'NV' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].NV)
+                if 'filename' in args:
+                    html_table += '<td> {} </td>'.format(
+                        Exp[num].params['general']['filename'].split('/')[-1])
+                html_table += '</tr>' 
+               
 
         html_table += '</table>'
         return html_table
@@ -402,8 +454,12 @@ def replace_zeros():
     for i, j in enumerate(xlabels):
         if j == u'0.0':
             xlabels[i] = '0'
+        elif j == u'0.00':
+            xlabels[i] = '0'
     for i, j in enumerate(ylabels):
         if j == u'0.0':
+            ylabels[i] = '0'
+        elif j == u'0.00':
             ylabels[i] = '0'
     ax.set_xticklabels(xlabels)
     ax.set_yticklabels(ylabels)
@@ -451,7 +507,7 @@ def order_measurements(Exp, meas, param = 'temp'):
         meas = [meas[i][1] for i in range(len(meas))]#
     elif param == 'field':
         for j, i in enumerate(meas):
-            TB = np.round(Exp[i].mean_field,3)
+            B = np.round(Exp[i].mean_field,3)
             val.append((B,i))
         meas = sorted(val, key=lambda x: x[0])  
         meas = [meas[i][1] for i in range(len(meas))]#

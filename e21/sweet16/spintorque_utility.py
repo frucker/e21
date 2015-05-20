@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
 import quantities as pq
 import matplotlib.cm as cm
+from pylab import get_cmap
 
 def get_current(Exp, meas):
     """ Returns current of a list of measurement. 
@@ -70,7 +71,7 @@ def lookup(obj, name):
         raise ValueError('No valid data')
 
 def make_grid(Exp, meas = [],data = 'temperature', min_y = 0, max_y = 0.6,
-              scaling = -1, N = 400j, **kwargs):
+              scaling = [-1,0], N = 400j, **kwargs):
     
     """ Creates an extended grid for 2D plotting of Data.
 
@@ -96,7 +97,7 @@ def make_grid(Exp, meas = [],data = 'temperature', min_y = 0, max_y = 0.6,
                               e.g. 'imag' or callable
     :param float min_y: min field value
     :param float max_y: max field value
-    :param float scaling: scaling factor of data
+    :param list scaling: scaling factors m, b (m*x+ b) of data
     :param complex N: Gridsize (NxN)
             
     :return (dict, str): Returns a dictionary containing:
@@ -106,7 +107,6 @@ def make_grid(Exp, meas = [],data = 'temperature', min_y = 0, max_y = 0.6,
         * 'fields':list of field values
 
     """
-    
     
     Grd = {}
     if len(meas) == 0:
@@ -196,9 +196,12 @@ def plot_grid(Grids, current, vmin = 0, vmax = 1e-6, nbins = 4, **kwargs):
         
     
     # Gernerate Plot
-    f, ax = plt.subplots(1,1)    
+    if not 'cmap' in kwargs.keys():
+        cmap = cm.jet
+    else:
+        cmap = kwargs['cmap']  
     plt.imshow(grid.T, origin='lower', extent=[min_x,max_x,min_y,max_y],
-           aspect='auto', vmin=vmin, vmax=vmax)
+           aspect='auto', vmin=vmin, vmax=vmax, cmap = cmap )
     plt.title('Bsweeps @ I = {}\n'.format(current))
     plt.locator_params(nbins=nbins)
     plt.xlabel('T (K)')
@@ -207,6 +210,11 @@ def plot_grid(Grids, current, vmin = 0, vmax = 1e-6, nbins = 4, **kwargs):
         clabel = "$\chi'_T$"
     else:
         clabel = kwargs['clabel']
+    if not 'cbin' in kwargs.keys():
+        cbin = 4
+    else:
+        cbin = kwargs['cbin']
+
     plt.colorbar(label = clabel)
     current_string = str(current).replace('.','_').replace(' ','')
     #savefig(plot_path + 'Interpolation_{}.png'.format(current_string))
@@ -261,13 +269,13 @@ def plot_data(Exp, meas = [], data = 'real', scaling = -1, N = 400j, nbins = 4,
     
     # Order Measuerments after Temperature
     meas = e21u.order_measurements(Exp, meas, param = 'temp')
-    f= plt.figure()
     ax = plt.gca()
     for j, i in enumerate(meas):
-        color = e21u.Felix_colormap(j/float(len(meas)))
-        T = Exp[i].params['info']['command']['init_temperature'].strip('K')
+        c = e21u.Felix_colormap()
+        color = c(j/float(len(meas)))
+        T = Exp[i].init_temp.strip('K')
         mT = round(Exp[i].mean_temperature,2)
-        Exp[i].plot(y = lookup(Exp[i],data)*scaling ,color=color, 
+        Exp[i].plot(y = e21u.calibrate(lookup(Exp[i],data), scaling),color=color, 
                     linewidth=3, axes = ax,
                     label = '{} / {}'.format('{:.2f}'.format(mT),
                                             float(T)))
@@ -321,7 +329,8 @@ def plot_interpolated_sweeps(Grids, current, N = 400j):
     steps = int(n/80)
     nmb = range(0,n,steps)[2:-4]
     for j, i in enumerate(nmb):
-        color = e21u.Felix_colormap(j/float(n/steps))
+        c = e21u.Felix_colormap()
+        color = c(j/float(n/steps))
         plt.plot(fields,grid[i], color = color)
         plt.xlabel('B (T)')
         plt.ylabel('U ($\mu$V)')
@@ -491,7 +500,7 @@ def get_valid_currents(Grids):
     currents = sorted(currents)
     return currents
 
-def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4):
+def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4, **kwargs):
     """ Produces a plot of Chi vs. I. 
         
         Takes a Dictionary containing various grids of data for different
@@ -509,16 +518,19 @@ def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4):
                           corresponding ind,True returns all residua
 
     """
-    
+    if not 'cmap' in kwargs.keys():
+        cmap = cm.jet
+    else:
+        cmap = kwargs['cmap']
+
     def get_chi(B, current, ind):
-        return Grids['{} A'.format(current)]['grid'][ind][find_index(Grids, B, parameter = 'fields', current = 0.0)]
+        return Grids['{} A'.format(current)]['grid'][ind][find_index(Grids, B, parameter = 'fields', current = current)]
 
     currents = get_valid_currents(Grids)
-    f, ax = plt.subplots(1,1)
+  
     
     for j, b in enumerate(B):
-        color = cm.jet((j)/float(len(B)))
-        #color = e21u.Felix_colormap((j)/float(len(B)))
+        color = cmap((j)/float(len(B)))
         points = []
         x = []
         I = 0.
@@ -528,7 +540,16 @@ def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4):
         max_I = max(currents)
         for i, I in enumerate(currents):
             res, ind = find_res(Grids,Grids_zero, T, I, B_min, B_max)
-            points.append((get_chi(b, I, ind)/x0-1)*100)
+            if not 'output' in kwargs.keys():            
+                y = (get_chi(b, I, ind)/x0-1)*100
+                ylab = r'$\Delta\chi$ (%)'
+            elif kwargs['output'] == 'Delta':
+                y = get_chi(b, I, ind)-x0
+                ylab = r'$\Delta\chi$ (Si)'
+            points.append(y)
+            if 'A' in kwargs.keys():
+                A = kwargs['A']
+                I = float(I)/A
             x.append(I)
             plt.title('T = {} K'.format(T))
         #s = UnivariateSpline(x, points)
@@ -536,7 +557,7 @@ def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4):
         #ys = s(xs)
         plt.plot(x, points, '-o', label = '{}'.format(b), color=color)
         #plot(xs, ys)
-    plt.ylabel(r'$\Delta\chi$ (%)')
+    plt.ylabel(ylab)
     plt.xlabel('I (A)')
 
 def plot_anpassung_auto(Grids, Grids_zero, T = 28, current = 0.0, B_min = 0, B_max = 0.55):
@@ -560,11 +581,13 @@ def current_dep(Grids, Grids_zero, T = 28.4, B_min = 0, B_max = 0.55):
     """    
     currents = get_valid_currents(Grids)
     f, ax = plt.subplots(1,1)
-    color = e21u.Felix_colormap(0./float(len(currents)+1))
+    c = e21u.Felix_colormap()
+    color = c(0./float(len(currents)+1))
     #plot(Grids['0.0 A']['fields'], 
     #     find_temperature(Grids, T, 0.0),label = '0', color = color)
     for i, I in enumerate(currents):
-        color = e21u.Felix_colormap((i+1)/float(len(currents)+1))
+        c = e21u.Felix_colormap()
+        color = c((i+1)/float(len(currents)+1))
         res, ind = find_res(Grids, Grids_zero, T, I, B_min, B_max)
         plt.plot(Grids['{} A'.format(I)]['fields'], 
                  Grids['{} A'.format(I)]['grid'][ind],
@@ -580,7 +603,7 @@ def mark_critical_current(I = 0.426, pos = .1):
     f = plt.gcf()
     ax = plt.gca()
     xmin, xmax, ymin, ymax = ax.axis()
-    plt.axvline(x=0.426, ymin=ymin, ymax=ymax, ls = '--', color = 'grey')
+    plt.axvline(x=I, ymin=ymin, ymax=ymax, ls = '--', color = 'grey')
     plt.text(I-(np.abs(xmin-xmax))*0.02, ymin+pos*np.abs(ymin-ymax), '$I_c$')
 
 

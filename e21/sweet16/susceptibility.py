@@ -13,6 +13,7 @@ def _correct_field(field, correction):
 
 # Susceptibility-classes ------------------------------------------------------
 
+    
 
 class Susceptibility(e21.core.Measurement, e21.core.Plottable):
 
@@ -99,6 +100,10 @@ class Susceptibility(e21.core.Measurement, e21.core.Plottable):
     @property
     def mean_temperature(self):
         return np.mean(self.temperature)
+
+    @property
+    def init_temp(self):
+        return self.params['info']['command']['init_temperature']
 
 
 class FieldScan(Susceptibility, e21.core.Plottable):

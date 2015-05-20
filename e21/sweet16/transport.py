@@ -9,7 +9,7 @@ from e21.sweet16.loader import parse_commands
 import numpy as np
 import operator
 import quantities as pq
-from e21.utility import replace
+
 
 #-Transport-classes-------------------------------------------------------
 
