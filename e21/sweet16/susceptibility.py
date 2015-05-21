@@ -88,7 +88,10 @@ class Susceptibility(e21.core.Measurement, e21.core.Plottable):
         try:        
             return self.data['sample_temp_1']
         except KeyError:
-            return self.data['MC_LS372_2']
+            try:
+                return self.data['MC_LS372_1']
+            except KeyError:
+                return 0
 
     def temperature_stability(self):
         """Calculates the offset and standart deviation of the temperature
