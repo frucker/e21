@@ -9,6 +9,24 @@ from operator import itemgetter
 from tempfile import mkstemp
 from shutil import move
 from os import remove, close
+import os
+import pickle
+
+def Calc_Sus_PPMS_SI(input_emu, rho_g_cm3, mass_in_mg, field_in_mT):
+    input_SI = np.array(input_emu)*1e-3
+    rho_SI = rho_g_cm3*1e-3/1e-6
+    field_SI = field_in_mT*1e-3/(4*np.pi*1e-7)
+    mass_SI = mass_in_mg*1e-6
+    output=input_SI*rho_SI/mass_SI/field_SI
+    return output
+
+def Calc_Sus_PPMS_SI_volume(input_emu, volume_in_mm3, field_in_mT):
+    input_SI = np.array(input_emu)*1e-3
+    volume_SI = volume_in_mm3*1e-9
+    field_SI = field_in_mT*1e-3/(4*np.pi*1e-7)
+    output=input_SI/volume_SI/field_SI
+    return output
+
 
 
 def Felix_colormap():
@@ -22,6 +40,11 @@ def Felix_colormap():
                   (0.7, 0.0, 0.0), 
                   (1.0, 1.0, 1.0))}
     cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
+    return cmap
+
+def STT_colormap():
+    cpool = [ '#1b1da3', '#ff0000', '#e52b2b', '#0051ff','#00868b']
+    cmap = matplotlib.colors.ListedColormap(cpool[0:6], 'indexed')
     return cmap
 
 def merge_dicts(*dicts):
@@ -55,14 +78,20 @@ def calibrate(data,scaling):
         if (len(scaling) ==2):
             m = scaling[0]
             b = scaling[1]
+            z = 0
+        elif (len(scaling) == 3):
+            m = scaling[0]
+            b = scaling[1]
+            z = scaling[2]
         else:
             raise ValueError('Scaling must be list of length 2 not {}'.format(len(scaling))) 
     elif type(scaling) is float or int:
         m = scaling
         b = 0
+        z = 0
     else:
         raise ValueError('Scaling must be list of length 2 or float not {}'.format(type(scaling)))  
-    return data*m+b*pq.V
+    return (data+z*pq.V)*m+b*pq.V
 
 def export_FS(data, numbers, path, option = 'susceptibility',
               scailing = 1, t_off = 0):
@@ -446,13 +475,13 @@ def replace(file_path, pattern, subst):
     #Move new file
     move(abs_path, file_path)
 
-def replace_zeros():
+def replace_zeros(only_y = False):
     """ Replaces 0.0 with 0 for Chrisitan.
     
     E.g.::
 
         f, ax = figure()
-        replace_zeros(f)
+        replace_zeros()
 
     :param f: matplotlib figure.
 
@@ -463,16 +492,15 @@ def replace_zeros():
     xlabels = [item.get_text() for item in ax.get_xticklabels()]
     ylabels = [item.get_text() for item in ax.get_yticklabels()]
     for i, j in enumerate(xlabels):
-        if j == u'0.0':
-            xlabels[i] = '0'
-        elif j == u'0.00':
-            xlabels[i] = '0'
+        if not j == '':
+            if float(j) == 0:
+                xlabels[i] = '0'
     for i, j in enumerate(ylabels):
-        if j == u'0.0':
-            ylabels[i] = '0'
-        elif j == u'0.00':
-            ylabels[i] = '0'
-    ax.set_xticklabels(xlabels)
+        if not j == '':
+            if float(j) == 0:
+                ylabels[i] = '0'
+    if not only_y:    
+        ax.set_xticklabels(xlabels)
     ax.set_yticklabels(ylabels)
 
 def replace_zeros_legend():
@@ -527,4 +555,17 @@ def order_measurements(Exp, meas, param = 'temp'):
         
     return meas
 
+def save(Obj, path, name, binary = False):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    with open(path+name, 'wb') as f:
+        if binary:
+            pickle.dump(Obj, f, pickle.HIGHEST_PROTOCOL)
+        else:
+            pickle.dump(Obj, f)
+
+def read(path, name):
+    with open(path+name, 'rb') as f:
+        return pickle.load(f)
+        
 

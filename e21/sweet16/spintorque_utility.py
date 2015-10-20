@@ -5,13 +5,17 @@ from scipy.interpolate import griddata
 import quantities as pq
 import matplotlib.cm as cm
 from pylab import get_cmap
+import os
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.collections import PolyCollection
+from matplotlib.colors import colorConverter
 
 def get_current(Exp, meas):
     """ Returns current of a list of measurement. 
       
     Exception raised if measurements have different currents.
     
-    E.g.::
+    E.g.::plot_grid
         
         path = '/Your_Path/'
         MnSi_T = e21.sweet16.susceptibility.Experiment()
@@ -204,8 +208,8 @@ def plot_grid(Grids, current, vmin = 0, vmax = 1e-6, nbins = 4, **kwargs):
            aspect='auto', vmin=vmin, vmax=vmax, cmap = cmap )
     plt.title('Bsweeps @ I = {}\n'.format(current))
     plt.locator_params(nbins=nbins)
-    plt.xlabel('T (K)')
-    plt.ylabel('B (T)')
+    plt.xlabel('$T$ (K)')
+    plt.ylabel(r'$\mu_0H\,\rm{(T)}$')
     if not 'clabel' in kwargs.keys():
         clabel = "$\chi'_T$"
     else:
@@ -214,8 +218,8 @@ def plot_grid(Grids, current, vmin = 0, vmax = 1e-6, nbins = 4, **kwargs):
         cbin = 4
     else:
         cbin = kwargs['cbin']
-
-    plt.colorbar(label = clabel)
+    if not 'remove_cb' in kwargs.keys():
+        plt.colorbar(label = clabel)
     current_string = str(current).replace('.','_').replace(' ','')
     #savefig(plot_path + 'Interpolation_{}.png'.format(current_string))
 
@@ -500,6 +504,62 @@ def get_valid_currents(Grids):
     currents = sorted(currents)
     return currents
 
+
+
+def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
+              delta = False, **kwargs):
+
+
+    # Possibility to define own color map
+    if not 'cmap' in kwargs.keys():
+        cmap = cm.jet
+    else:
+        cmap = kwargs['cmap']
+    
+    # get all valid currents of measurement set
+    currents = [ float(i.strip('A')) for i in Data[T]['data'].keys()]
+    currents = sorted(currents)
+
+    # Iterate over all given field values
+    for j, b in enumerate(B):
+        
+        # find index of magentic field B
+        field_index = find_index(list(Data[T]['fields']), b)
+
+        # define color map
+        color = cmap((j)/float(len(B)))
+
+        values = [] # data point (chi)
+        x_axis = []  # x-coordinate (j)
+
+        # Get chi_0 (@zero current and given T)
+        x0 = Data[T]['data']['0.0 A'][field_index]
+        x0_im = Data_im[T]['data']['0.0 A'][field_index]
+        
+        # Iterate over currents
+        
+        for i, I in enumerate(currents):
+            x1 = Data[T]['data']['{} A'.format(I)][field_index]
+            x2 = Data_im[T]['data']['{} A'.format(I)][field_index]
+            
+            points, zlab = calculate_output(x0,x0_im,x1,x2, y_out,delta) 
+
+            # Convert current to current density
+            if 'A' in kwargs.keys():
+                A = kwargs['A']
+                I = float(I)/A
+                xlab = r'$\vec{j}$ ($\frac{MA}{m^2}$)'
+            else:
+                xlab = r'$I$ (A)'
+            x_axis.append(I)
+            
+            # make default title
+            values.append(points+(i*offset))        
+        plt.title('T = {} K'.format(T))
+        plt.plot(x_axis, values, '-o', label = '{}'.format(b), color=color)
+    plt.ylabel(zlab)
+    plt.xlabel(xlab)
+
 def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4, **kwargs):
     """ Produces a plot of Chi vs. I. 
         
@@ -518,28 +578,46 @@ def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4, **kwargs):
                           corresponding ind,True returns all residua
 
     """
+    
+    def get_chi(B, current, ind):
+        '''Helper function to get Chi value out of grid
+
+        :param float B: Field Value
+        :param float current: Current Values
+        :param int ind: Index of desired temperature sweep
+
+        '''
+        return Grids['{} A'.format(current)]['grid'][ind][find_index(Grids, B, parameter = 'fields', current = current)]    
+
+    # Possibility to define own color map
     if not 'cmap' in kwargs.keys():
         cmap = cm.jet
     else:
         cmap = kwargs['cmap']
-
-    def get_chi(B, current, ind):
-        return Grids['{} A'.format(current)]['grid'][ind][find_index(Grids, B, parameter = 'fields', current = current)]
-
-    currents = get_valid_currents(Grids)
-  
     
+    # get all valid currents of measurement set
+    currents = get_valid_currents(Grids) 
+
+    # Iterate over all given field values
     for j, b in enumerate(B):
+
+        # define color map
         color = cmap((j)/float(len(B)))
-        points = []
-        x = []
-        I = 0.
-        res, ind = find_res(Grids, Grids_zero,T, I, B_min, B_max)
-        x0 = get_chi(b, I, ind)
+
+        points = [] # data point (chi)
+        x = []  # x-coordinate (j)
+
+        # Get chi_0 (@zero current and given T)
+        res, ind = find_res(Grids, Grids_zero,T, 0., B_min, B_max)
+        x0 = get_chi(b, 0., ind)
         min_I = min(currents)
         max_I = max(currents)
+        
+        # Iterate over currents
         for i, I in enumerate(currents):
             res, ind = find_res(Grids,Grids_zero, T, I, B_min, B_max)
+
+            # Deside if output is in percent or in absolute difference Delta
             if not 'output' in kwargs.keys():            
                 y = (get_chi(b, I, ind)/x0-1)*100
                 ylab = r'$\Delta\chi$ (%)'
@@ -547,16 +625,16 @@ def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4, **kwargs):
                 y = get_chi(b, I, ind)-x0
                 ylab = r'$\Delta\chi$ (Si)'
             points.append(y)
+
+            # Convert current to current density
             if 'A' in kwargs.keys():
                 A = kwargs['A']
                 I = float(I)/A
             x.append(I)
+
+            # make default title
             plt.title('T = {} K'.format(T))
-        #s = UnivariateSpline(x, points)
-        #xs = np.linspace(min_I, max_I, 1000)
-        #ys = s(xs)
         plt.plot(x, points, '-o', label = '{}'.format(b), color=color)
-        #plot(xs, ys)
     plt.ylabel(ylab)
     plt.xlabel('I (A)')
 
@@ -575,23 +653,92 @@ def plot_anpassung_auto(Grids, Grids_zero, T = 28, current = 0.0, B_min = 0, B_m
     plt.xlabel('Magnetic Field (T)')
     plt.ylabel('$\chi$ (a.u.)')
 
-def current_dep(Grids, Grids_zero, T = 28.4, B_min = 0, B_max = 0.55):
+def current_dep(Grids, Grids_zero, T = 28.4, B_min = 0.45, B_max = 0.55, **kwargs):
     """ Muss noch kommentiert werden
 
     """    
-    currents = get_valid_currents(Grids)
-    f, ax = plt.subplots(1,1)
-    c = e21u.Felix_colormap()
+    for i in kwargs.keys():
+        if i not in ['currents', 'cmap', 'output', 'col_label']:
+            raise KeyError('Invalid Key "{}"'.format(i))
+    if 'currents' in kwargs.keys():
+        currents = kwargs['currents']
+    else:    
+        currents = get_valid_currents(Grids)
+    if 'col_label' in kwargs.keys():
+        col_label = kwargs['col_label']
+    else:    
+        col_label = 'Re_Chi'
+    #f, ax = plt.subplots(1,1)
+    if 'cmap' in kwargs.keys():   
+        c = kwargs['cmap'] 
+    else:    
+        c = e21u.Felix_colormap()
     color = c(0./float(len(currents)+1))
     #plot(Grids['0.0 A']['fields'], 
     #     find_temperature(Grids, T, 0.0),label = '0', color = color)
+    data = {}
+    data['fields'] = Grids['{} A'.format(currents[0])]['fields']
+    data['data'] = {}
     for i, I in enumerate(currents):
-        c = e21u.Felix_colormap()
         color = c((i+1)/float(len(currents)+1))
         res, ind = find_res(Grids, Grids_zero, T, I, B_min, B_max)
-        plt.plot(Grids['{} A'.format(I)]['fields'], 
-                 Grids['{} A'.format(I)]['grid'][ind],
-                 label = '{}'.format(currents[i]), color = color)
+        
+        
+        data['data']['{} A'.format(I)]=Grids['{} A'.format(I)]['grid'][ind]
+        if 'output' not in kwargs.keys():
+            plt.plot(Grids['{} A'.format(I)]['fields'], 
+                     Grids['{} A'.format(I)]['grid'][ind],
+                     label = '{}'.format(currents[i]), color = color)
+        else:
+            if kwargs['output'] == False:
+                plt.plot(Grids['{} A'.format(I)]['fields'], 
+                         Grids['{} A'.format(I)]['grid'][ind],
+                         label = '{}'.format(currents[i]), color = color)
+            elif kwargs['output'] is not True:
+                raise ValueError('Output needs to be True or False, not {}'.format(kwargs['output']))
+    if 'output' in kwargs.keys():
+        if kwargs['output'] == True:
+            return data
+            
+
+def current_dep_neu(Data, T = 28.4, **kwargs):
+    """ Muss noch kommentiert werden
+
+    """    
+    for i in kwargs.keys():
+        if i not in ['currents', 'cmap', 'output', 'col_label', 'A']:
+            raise KeyError('Invalid Key "{}"'.format(i))
+    if 'currents' in kwargs.keys():
+        currents = kwargs['currents']
+    else:    
+        currents = Data[T]['data'].keys()
+    if 'col_label' in kwargs.keys():
+        col_label = kwargs['col_label']
+    else:    
+        col_label = 'Re_Chi'
+    #f, ax = plt.subplots(1,1)
+    if 'cmap' in kwargs.keys():   
+        c = kwargs['cmap'] 
+    else:    
+        c = e21u.Felix_colormap()
+    color = c(0./float(len(currents)+1))
+    #plot(Grids['0.0 A']['fields'], 
+    #     find_temperature(Grids, T, 0.0),label = '0', color = color)
+  
+    for i, I in enumerate(sorted(currents)):
+        color = c((i+1)/float(len(currents)+1))
+        if 'A' in kwargs.keys():
+            J = round(float(I.strip(' A'))/kwargs['A']*1e-6,2)
+            label = '{}'.format(J)
+        else:
+            label = '{}'.format(I.strip(' A'))
+            
+        plt.plot(Data[T]['fields'], Data[T]['data'][I], color = color, label = label)
+    if 'A' in kwargs.keys():
+        plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    else:
+        plt.legend(title=r'I (A)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+
 
 def mark_critical_current(I = 0.426, pos = .1):
     """Places a dashed line in plot at I with name Ic
@@ -606,4 +753,260 @@ def mark_critical_current(I = 0.426, pos = .1):
     plt.axvline(x=I, ymin=ymin, ymax=ymax, ls = '--', color = 'grey')
     plt.text(I-(np.abs(xmin-xmax))*0.02, ymin+pos*np.abs(ymin-ymax), '$I_c$')
 
+def calculate_output(x0,x0_im,x1,x2, y_out,delta):
+    x0 = np.array(x0)
+    x0_im = np.array(x0_im)
+    x1 = np.array(x1)
+    x2 = np.array(x2)
+    if delta == False:
+        if y_out == 'real':
+            x = x1
+            points = (x-x0)/x0*100
+            zlab = '\n'+r'$\frac{\Delta \rm{Re}\chi^\perp}{\rm{Re} \chi_0^\perp}$ (%)'
+        elif y_out == 'imag':
+            x = x2
+            points = (x-x0_im)/x0_im*100
+            zlab = '\n'+r'$\frac{\Delta  \rm{Im}  \chi^\perp}{\rm{Im} \chi_0^\perp}$ (%)'
+        elif y_out == 'abs':
+            x = np.sqrt(x1**2 + x2**2)
+            x0_abs = np.sqrt(x0**2+x0_im**2)
+            points = (x-x0_abs)/x0_abs*100
+            zlab = '\n'+r'$\frac{\Delta |\chi^\perp|}{|\chi_0^\perp|}$ (%)'
+        elif y_out == 'phi':
+            x = np.arctan(x1/x2)
+            x0_phi = np.arctan(x0/x0_im)
+            points = (x-x0_phi)/x0_phi*100
+            zlab = '\n'+r'$\frac{\Delta \varphi}{\varphi_0}$ (%)'
+        else:
+            raise ValueError('{} invalid for y_out)'.format(y_out))
+            
+    elif delta == True:
+        if y_out =='real':
+            x = x1
+            points = x-x0
+            zlab = '\n'+r'$\Delta \rm{Re} \chi^\perp$'
+        elif y_out == 'imag':
+            x = x2
+            points = x-x0_im
+            zlab = '\n'+r'$\Delta \rm{Im} \chi^\perp$'
+        elif y_out == 'abs':
+            x = np.sqrt(x1**2 + x2**2)
+            x0_abs = np.sqrt(x0**2+x0_im**2)
+            points = x-x0_abs
+            zlab = '\n'+r'$\Delta$ |$\chi^\perp$|'
+        elif y_out == 'phi':
+            x = np.arctan(x1/x2)
+            x0_phi = np.arctan(x0/x0_im)
+            points = x-x0_phi
+            zlab = '\n'+r'$\Delta \varphi$ (Rad)'
+        else:
+            raise ValueError('{} invalid for y_out)'.format(y_out))
+    else:
+        raise ValueError('delta needs to be true or false, not {}'.format(type(delta)))
+
+    return points, zlab
+
+            
+            
+ 
+
+
+def chi_B(Data, Data_im, T = 28.0, offset = 0, y_out = 'real',
+          plot_3d = False, delta = False, **kwargs):
+    """ Produces a plot of Chi vs. Magnetic Field 
+        
+        Takes a Dictionary containing various grids of data for different
+        currents. Checks which currents are available in grid.
+
+    
+    :param dict Grids: Dictionary, output of :func:`~.make_grid`
+    :param dict Grids_imag: Dictionary, output of :func:`~.make_grid`
+                            usually Grids
+    :param float T: Temperature
+    :param list B: List of Field values at which to evaluate Chi Vs I
+    :param float B_min: Lower boundary of comparison region
+    :param float B_max: Upper boundary of comparison region
+    :param bool full_out: False returns the minimal res and the
+                          corresponding ind,True returns all residua
+
+    """
+    
+ 
+    # Possibility to define own color map
+    if not 'cmap' in kwargs.keys():
+        cmap = cm.jet
+    else:
+        cmap = kwargs['cmap']      
+    
+    # get all valid currents of measurement set
+    if 'currents' in kwargs.keys():
+        currents = kwargs['currents']
+    else:
+        currents = [ float(i.strip('A')) for i in Data[T]['data'].keys()]
+        currents = sorted(currents)
+    points = [] # data points (chi)
+
+    # Get chi_0 (@zero current and given T)
+    x0 = Data[T]['data']['0.0 A']
+    x0_im = Data_im[T]['data']['0.0 A']
+    min_I = min(currents)
+    max_I = max(currents)
+    
+    # For 3D output
+    verts = []
+    cl = []
+
+    # Iterate over currents 
+    for i, I in enumerate(currents):
+        # define color map
+        color = cmap((i)/float(len(currents)))
+        
+        #print x
+        field = Data[T]['fields']
+        #print field
+        x1 = Data[T]['data']['{} A'.format(I)]
+        x2 = Data_im[T]['data']['{} A'.format(I)]
+        xlab = '\n'+r'$\mu_0 H$ (T)'
+        ylab = '\n'+r'$I$ (A)' 
+        points, zlab = calculate_output(x0,x0_im,x1,x2, y_out,delta) 
+        
+        for j, val in enumerate(points):
+            points[j]=points[j]+(i*offset)
+
+        # Convert current to current density
+        if 'A' in kwargs.keys():
+            A = kwargs['A']
+            j = round(float(I)/A*1e-6,2)
+           
+        else:
+            j = I
+
+        if plot_3d == True:
+            points[0], points[-1] = 0, 0
+            verts.append(list(zip(field, points)))
+            cl.append(color)
+        else:
+            # Generate 2D Waterfall
+            # make default title
+            plt.title('T = {} K'.format(T))
+            zeroline = [0+i*offset]*len(field)
+            plt.plot(field, points, '-', label = '{}'.format(j), color = color)
+            #plt.plot(field, zeroline, color = 'g')
+            ax = plt.gca()
+            ax.fill_between(field, points, zeroline, where=points>=zeroline, facecolor='grey', interpolate=True, alpha = 0.3)
+            ax.fill_between(field, points, zeroline, where=points<=zeroline, facecolor='red', interpolate=True, alpha = 0.2)
+            
+            plt.ylabel(zlab)
+            plt.xlabel(xlab)
+            #plt.legend(title = r'$\vec{j} (\frac{MA}{m^2})$')
+            if 'A' in kwargs.keys():
+                plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+                #e21u.replace_zeros_legend()
+                #plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+
+    # Generate 3D Watefall         
+    if plot_3d == True:
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        cc = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
+        zs = [float(i) for i in currents]
+        poly = PolyCollection(verts, facecolor=cl)
+        poly.set_alpha(0.7)
+        ax.add_collection3d(poly, zs=zs, zdir='y')
+        ax.set_xlabel(xlab)
+        if 'XL' in kwargs.keys():
+            ax.set_xlim3d(kwargs['XL'])
+        ax.set_ylabel(ylab)
+        if 'YL' in kwargs.keys():
+            ax.set_ylim3d(kwargs['YL'])
+        ax.set_zlabel('\n'+zlab)
+        if 'ZL' in kwargs.keys():
+            ax.set_zlim3d(kwargs['ZL'])
+
+def chi_T(Data, Data_im, T = [28.0], current = '0.0', offset = 0, y_out = 'real',
+          plot_3d = False, delta = False, **kwargs):
+    
+    # Possibility to define own color map
+    if not 'cmap' in kwargs.keys():
+        cmap = cm.jet
+    else:
+        cmap = kwargs['cmap']      
+    
+    points = [] # data points (chi)
+
+    # Get chi_0 (@zero current and given T)
+
+    I = current
+    # For 3D output
+    verts = []
+    cl = []
+
+    # Iterate over currents 
+    for i, t in enumerate(T):
+        # define color map
+        x0 = Data[t]['data']['0.0 A']
+        x0_im = Data_im[t]['data']['0.0 A']
+        color = cmap((i)/float(len(T)))
+        
+        #print x
+        field = Data[t]['fields']
+        #print field
+        x1 = Data[t]['data']['{} A'.format(I)]
+        x2 = Data_im[t]['data']['{} A'.format(I)]
+        xlab = '\n'+r'$\mu_0 H$ (T)'
+        ylab = '\n'+r'$I$ (A)' 
+        points, zlab = calculate_output(x0,x0_im,x1,x2, y_out,delta) 
+        
+        for j, val in enumerate(points):
+            points[j]=points[j]+(i*offset)
+
+        # Convert current to current density
+        if 'A' in kwargs.keys():
+            A = kwargs['A']
+            j = round(float(I)/A*1e-6,2)
+           
+        else:
+            j = I
+
+        if plot_3d == True:
+            points[0], points[-1] = 0, 0
+            verts.append(list(zip(field, points)))
+            cl.append(color)
+        else:
+            # Generate 2D Waterfall
+            # make default title
+            plt.title('T = {} K'.format(T))
+            zeroline = [0+i*offset]*len(field)
+            plt.plot(field, points, '-', label = '{}'.format(t), color = color)
+            #plt.plot(field, zeroline, color = 'g')
+            ax = plt.gca()
+            ax.fill_between(field, points, zeroline, where=points>=zeroline, facecolor='grey', interpolate=True, alpha = 0.3)
+            ax.fill_between(field, points, zeroline, where=points<=zeroline, facecolor='red', interpolate=True, alpha = 0.2)
+            
+            plt.ylabel(zlab)
+            plt.xlabel(xlab)
+            #plt.legend(title = r'$\vec{j} (\frac{MA}{m^2})$')
+            if 'A' in kwargs.keys():
+                plt.legend(title=r'T (K)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+                #e21u.replace_zeros_legend()
+                #plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+
+    # Generate 3D Watefall         
+    if plot_3d == True:
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        cc = lambda arg: colorConverter.to_rgba(arg, alpha=0.6)
+        zs = [float(i) for i in T]
+        poly = PolyCollection(verts, facecolor=cl)
+        poly.set_alpha(0.7)
+        ax.add_collection3d(poly, zs=zs, zdir='y')
+        ax.set_xlabel(xlab)
+        if 'XL' in kwargs.keys():
+            ax.set_xlim3d(kwargs['XL'])
+        ax.set_ylabel(ylab)
+        if 'YL' in kwargs.keys():
+            ax.set_ylim3d(kwargs['YL'])
+        ax.set_zlabel('\n'+zlab)
+        if 'ZL' in kwargs.keys():
+            ax.set_zlim3d(kwargs['ZL'])
 

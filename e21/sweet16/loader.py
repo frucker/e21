@@ -9,7 +9,6 @@ import matplotlib as mpl
 import quantities as pq
 import numpy as np
 
-
 class Loader(object):
     """A sweet16 file loader.
 
@@ -66,7 +65,9 @@ class Loader(object):
             variables = []
             params = {}
             params[block_title] = {}
+            linenum = 0
             for line in f:
+                linenum = linenum + 1
                 if line.startswith('#'):
                     params, block_title = parse_header(line[1:],
                                                             params,
@@ -84,7 +85,7 @@ class Loader(object):
                     units = ['deg' if u == 'Deg' else u for u in units]
                     units = ['ohm' if u == 'Ohm' else u for u in units]
                 elif line.strip():
-                    row = self.parse_data(line, variables)
+                    row = self.parse_data(line, variables, path, linenum)
                     for key, val in row.iteritems():
                         data[key].append(val)
             # convert python datetime to plottable float
@@ -97,9 +98,10 @@ class Loader(object):
         return data, params
 
     
-    def parse_data(self, line, variables):
+    def parse_data(self, line, variables, path, linenum):
         tokens = line.strip().split('\t')
         row = {key: float(val) for key, val in zip(variables[2:], tokens[2:])}
+        
         # convert date and time to one datetime and insert in dict
         row['datetime'] = dt.datetime.strptime(tokens[0] + tokens[1],
                                                '%d.%m.%Y%H:%M:%S')
@@ -117,6 +119,8 @@ class Loader(object):
             # ignore lines which don't contain the whole data set
             # (i.e. last line after measurement abort)
             elif (len(tokens) != len(variables)):
+                print ('Warning: Variables not same length as'
+                       'Data in file {}, Line: {}'.format(path, linenum))
                 # TODO: show a warning message.
                 return {}
         except KeyError:

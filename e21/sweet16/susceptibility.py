@@ -170,7 +170,7 @@ def check_empty_files(filelist, mode = 'susceptibility'):
     s16 = Loader(mode=mode)
     fl = []
     for n, files in enumerate(filelist):
-        Test = s16(files)
+        Test = s16(files) 
         try:
             if Test.data['datetime'][0]:
                 fl.append(files)
