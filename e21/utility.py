@@ -209,16 +209,27 @@ def measurement_details(Exp):
         s += '</table>'     
         s += '<h3> Lockin Information: </h3>'
         s += '<table class="table table-hover">' 
-        keys = Exp[i].params['lock_in_1'].items()
-        keys_sorted = sorted(keys, key=itemgetter(0))       
-        for j in range(len(keys_sorted)):
-            s += '<tr> <td><strong> {} </strong></td> <td> {} </td>'.format(keys_sorted[j][0],keys_sorted[j][1])
-            if 'lock_in_2' in Exp[i].params.keys():
-                s +='<td> {} </td>'.format(Exp[i].params['lock_in_2'][keys_sorted[j][0]])
-            if 'lock_in_3' in Exp[i].params.keys():
-                s +='<td> {} </td></tr> '.format(Exp[i].params['lock_in_3'][keys_sorted[j][0]])
-            else:
-                s += '</tr>' 
+        try:
+            keys = Exp[i].params['lock_in_1'].items()
+            keys_sorted = sorted(keys, key=itemgetter(0))       
+            for j in range(len(keys_sorted)):
+                s += '<tr> <td><strong> {} </strong></td> <td> {} </td>'.format(keys_sorted[j][0],keys_sorted[j][1])
+                if 'lock_in_2' in Exp[i].params.keys():
+                    s +='<td> {} </td>'.format(Exp[i].params['lock_in_2'][keys_sorted[j][0]])
+                if 'lock_in_3' in Exp[i].params.keys():
+                    s +='<td> {} </td></tr> '.format(Exp[i].params['lock_in_3'][keys_sorted[j][0]])
+                else:
+                    s += '</tr>' 
+        except KeyError:
+            pass
+            
+        s += '</table>'
+        s += '<h3> Temperature and Field Info: </h3>'
+        s += '<table class="table table-hover">' 
+        s += ('<tr> <td><strong> Mean Temperature </strong></td>'
+             ' <td> {} </td></tr>'.format(Exp[i].mean_temperature))
+        s += ('<tr> <td><strong> Mean Field </strong></td>'
+             ' <td> {} </td></tr>'.format(Exp[i].mean_field))
         s += '</table>'
         s += '<h3> Command File: </h3>'
         s += '<table class="table table-hover">'
