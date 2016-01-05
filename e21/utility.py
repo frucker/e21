@@ -548,7 +548,7 @@ def order_measurements(Exp, meas, param = 'temp'):
        
     """
     
-    val = []
+    val = []    
     if param == 'temp':
         for j, i in enumerate(meas):
             T = np.round(Exp[i].mean_temperature,2)
