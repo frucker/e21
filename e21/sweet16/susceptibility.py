@@ -108,7 +108,23 @@ class Susceptibility(e21.core.Measurement, e21.core.Plottable):
     def init_temp(self):
         return self.params['info']['command']['init_temperature']
 
+    @property
+    def angle(self):
+        try:
+            return self.data['angle']
+        except KeyError:
+            # If not present in Data, return array of length of measurement
+            # with Angle 0.
+            return [0*pq.deg]*len(self)
 
+    @property
+    def mean_angle(self):
+        try:
+            return round(np.median(self.data['anlge']),2)
+        except KeyError:
+            return [0*pq.deg]
+
+        
 class FieldScan(Susceptibility, e21.core.Plottable):
 
     def plot(self, y='real', x='field', axes=None,

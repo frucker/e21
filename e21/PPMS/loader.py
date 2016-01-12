@@ -33,9 +33,8 @@ class Loader(object):
         except KeyError:
             return Measurement(data, params)
 
-    path = '/home/felix/Documents/Doktorarbeit/Messdaten/PPMS/Co-OFZ86-2-3/Data/'
 
-    def parse(path):
+    def parse(self, path):
             """
             A PPMS Data Parser. 
             
@@ -74,9 +73,11 @@ class Loader(object):
 
                     data[k] = val
             
+            # Generate Parameter Dict to be able to execute loader            
             parameter = ['info']
-            params = {k: [] for k in parameter}
+            params = {k: {} for k in parameter}
             params['info']['mode'] = 'BSWEEP'
+            params['general']={}
                        
             return data, params
 

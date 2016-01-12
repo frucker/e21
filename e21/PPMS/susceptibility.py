@@ -4,7 +4,7 @@
 import e21.core
 from e21.core import lookup
 import numpy as np
-from e21.sweet16 import Loader
+from e21.PPMS import Loader
 import quantities as pq
 
 
@@ -18,7 +18,7 @@ class Susceptibility(e21.core.Measurement, e21.core.Plottable):
 
     @property
     def real(self):
-        return self.data['LI1_CH2']*1e6
+        return self.data['LI1_CH2']
 
     @property
     def imag(self):
@@ -188,7 +188,7 @@ def check_empty_files(filelist):
     for n, files in enumerate(filelist):
         Test = s16(files)
         try:
-            if Test.data['control_temp'][0]:
+            if Test.data['Temperature (K)'][0]:
                 fl.append(files)
         except IndexError:
             print 'file empty: {}'.format(files)

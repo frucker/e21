@@ -75,6 +75,10 @@ class Measurement(object):
 
     def __getattr__(self, item):
         return self.data[item]
+    
+    def __len__(self):
+        key = self.data.keys()[0]
+        return len(self.data[key])
 
 
 class Experiment(object):

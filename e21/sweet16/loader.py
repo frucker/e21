@@ -99,6 +99,7 @@ class Loader(object):
 
     
     def parse_data(self, line, variables, path, linenum):
+        warning = ''
         tokens = line.strip().split('\t')
         row = {key: float(val) for key, val in zip(variables[2:], tokens[2:])}
         
@@ -116,13 +117,12 @@ class Loader(object):
             elif row['sample_temp_1'] == 100.:
                 return {}
         
-            # ignore lines which don't contain the whole data set
-            # (i.e. last line after measurement abort)
+            # check if number of data headers fits to number of data columns
+            # (happens e.g. at last line after measurement abort)
             elif (len(tokens) != len(variables)):
-                print ('Warning: Variables not same length as'
-                       'Data in file {}, Line: {}'.format(path, linenum))
-                # TODO: show a warning message.
-                return {}
+                while len(tokens) < len(variables):
+                    tokens.append(np.NaN)
+            # TODO: Should raise a warning (per file) when inserting NaNs 
         except KeyError:
             pass
         return row
@@ -152,12 +152,15 @@ def parse_commands(arguments):
         args.append(arguments.split('\t')[i] + command_line_units[i])
     modes = {'1': 'BSWEEP', '2': 'TSWEEP', '3': 'CONST', '4': 'BSTEP',
              '6': 'TSTEP', 'Tramp': 'TSWEEP', 'Bramp': 'BSWEEP',
-             '7': 'ASWEEP', '8':'FSWEEP'}
+             '7': 'ASWEEP', '8':'FSWEEP','Bstep':'BSTEP'}
     # Parse sensitivities
     sens = {'0':'2e-9 V','00': '2e-9 V', '01': '5e-9 V', '02': '1e-8 V',
             '03': '2e-8 V', '04': '5e-8 V', '05': '1e-7 V',
             '06': '2e-7 V', '07': '5e-7 V', '08': '1e-6 V',
-            '09': '2e-6 V', '10': '5e-6 V', '11': '1e-5 V',
+            '09': '2e-6 V', '0':'2e-9 V','1': '2e-9 V', '2': '1e-8 V',
+            '3': '2e-8 V', '4': '5e-8 V', '5': '1e-7 V',
+            '6': '2e-7 V', '7': '5e-7 V', '8': '1e-6 V',
+            '9': '2e-6 V', '10': '5e-6 V', '11': '1e-5 V',
             '12': '2e-5 V', '13': '5e-5 V', '14': '1e-4 V',
             '15': '2e-4 V', '16': '5e-4 V', '17': '1e-3 V',
             '18': '2e-3 V', '19': '5e-3 V', '20': '0.01 V',
