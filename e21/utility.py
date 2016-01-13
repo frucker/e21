@@ -4,13 +4,46 @@ import quantities as pq
 import matplotlib
 import matplotlib.pyplot as plt
 from IPython.display import display, HTML
-import e21.sweet16
 from operator import itemgetter
 from tempfile import mkstemp
 from shutil import move
 from os import remove, close
 import os
 import pickle
+import sys, time
+from IPython.core.display import clear_output
+
+
+class ProgressBar:
+    def __init__(self, iterations):
+        self.iterations = iterations
+        self.prog_bar = '[]'
+        self.fill_char = '*'
+        self.width = 40
+        self.__update_amount(0)
+        self.animate = self.animate_ipython
+
+    def animate_ipython(self, iter):
+        print '\r', self,
+        sys.stdout.flush()
+        self.update_iteration(iter + 1)
+
+    def update_iteration(self, elapsed_iter):
+        self.__update_amount((elapsed_iter / float(self.iterations)) * 100.0)
+        self.prog_bar += '  %d of %s imported' % (elapsed_iter, self.iterations)
+
+    def __update_amount(self, new_amount):
+        percent_done = int(round((new_amount / 100.0) * 100.0))
+        all_full = self.width - 2
+        num_hashes = int(round((percent_done / 100.0) * all_full))
+        self.prog_bar = '[' + self.fill_char * num_hashes + ' ' * (all_full - num_hashes) + ']'
+        pct_place = (len(self.prog_bar) / 2) - len(str(percent_done))
+        pct_string = '%d%%' % percent_done
+        self.prog_bar = self.prog_bar[0:pct_place] + \
+            (pct_string + self.prog_bar[pct_place + len(pct_string):])
+
+    def __str__(self):
+        return str(self.prog_bar)
 
 def Calc_Sus_PPMS_SI(input_emu, rho_g_cm3, mass_in_mg, field_in_mT):
     input_SI = np.array(input_emu)*1e-3
@@ -236,231 +269,211 @@ def measurement_details(Exp):
         keys = Exp[i].params['info']['command'].items()
         keys_sorted = sorted(keys, key=itemgetter(0))
         for j in range(len(keys_sorted)):
-            s += '<tr> <td><strong> {} </strong></td> <td> {} </td></tr>'.format(keys_sorted[j][0],keys_sorted[j][1])
-   
-        
+            s += '<tr> <td><strong> {} </strong></td> <td> {} </td></tr>'.format(keys_sorted[j][0],keys_sorted[j][1])      
         s = display(HTML(s))
     return g
 
 def symmetrize(Meas, Meas2):
-        """ symmetrize transport data. 
+    """ symmetrize transport data. 
 
-        input:
-            Meas: transport measurement class, upsweep
-            Meas2:  transport measurement class, downsweep
-        
-        output:
-            list, symmetrized data        
+    input:
+        Meas: transport measurement class, upsweep
+        Meas2:  transport measurement class, downsweep
+    
+    output:
+        list, symmetrized data        
 
-        """
+    """
 
-        dat = Meas.res
-        rev = Meas2.res
-        data = []
-        for i in range(len(dat)):
-            data.append(float(dat[i]+rev[i]))
-        data = data*pq.ohm*pq.m
-        return 0.5*data
+    dat = Meas.res
+    rev = Meas2.res
+    data = []
+    for i in range(len(dat)):
+        data.append(float(dat[i]+rev[i]))
+    data = data*pq.ohm*pq.m
+    return 0.5*data
 
 def antisymmetrize(Meas, Meas2):
-        """ symmetrize transport data. 
+    """ symmetrize transport data. 
 
-        input:
-            Meas: transport measurement class, upsweep
-            Meas2:  transport measurement class, downsweep
-        
-        output:
-            list, symmetrized data        
+    input:
+        Meas: transport measurement class, upsweep
+        Meas2:  transport measurement class, downsweep
+    
+    output:
+        list, symmetrized data        
 
-        """
+    """
 
-        dat = Meas.hall
-        rev = Meas2.hall
-        data = []
-        for i in range(len(dat)):
-            data.append(float(dat[i]-rev[i]))
-        data = data*pq.ohm*pq.m
-        return -1*0.5*data
+    dat = Meas.hall
+    rev = Meas2.hall
+    data = []
+    for i in range(len(dat)):
+        data.append(float(dat[i]-rev[i]))
+    data = data*pq.ohm*pq.m
+    return -1*0.5*data
 
 def MakeOverview(Exp, *args):
-        """
-        Overview over all measurements including every type of measurement
-        (so far B/T Sweeps)
+    """
+    Overview over all measurements including every type of measurement
+    (so far B/T Sweeps)
 
-        args options append a coulmn with the
-        corresponding measurement property:
+    args options append a coulmn with the
+    corresponding measurement property:
 
-                files, current, needle valve
-        """
-        # Check measurement Type
-        if (isinstance(Exp, e21.sweet16.susceptibility.Experiment)):
-            experiment = 'susceptibility'
-            Tscan = e21.sweet16.susceptibility.TemperatureScan
-            Bscan = e21.sweet16.susceptibility.FieldScan
-        elif (isinstance(Exp, e21.sweet16.transport.Experiment)):
-            experiment = 'transport'
-            Tscan = e21.sweet16.transport.TemperatureScan
-            Bscan = e21.sweet16.transport.FieldScan
+            files, current, needle valve
+
+    """
+    if Exp[0].experiment_type == 'susceptibility':
+        experiment = 'susceptibility'
+    elif Exp[0].experiment_type == 'transport':
+        experiment = 'transport'
+    elif Exp[0].experiment_type == 'miraHe3':
+        experiment = 'freaky Mira experiment'
+    else:
+        experiment = 'unknown'
+
+    # Create Table Header
+    html_table = '<h1> {} - Measurement Overview </h1>' .format(
+        str(Exp[0].sample).decode('utf-8', 'ignore')) 
+    html_table += '<strong> Sample: </strong> {} <br>'.format(
+        Exp[0].sample).decode('utf-8', 'ignore')
+    html_table += ('<strong> Measurement Option:'
+                  '</strong> {} <br> <br>'.format(experiment))
+    html_table += '<table class="table table-hover">'
+    html_table += ('<tr> <th> Number </th> <th> Sweep Type </th> <th>'
+                   'Start </th> <th> Stop </th> <th> T / B </th> <th>'
+                   'B_init </th> <th> T_init </th><th> sweep </th>')
+    
+    for argument in args:
+        html_table += '<th> {} </th>'.format(argument)
+    html_table += '</tr>'
+    for num in range(len(Exp)):
+        if Exp[num].sweep_type in ['Tsweep','Tscan', 'TSWEEP', 'TSTEP']:
+            html_table = T_scan(Exp, num, html_table)
+        elif Exp[num].sweep_type in ['Bsweep','Bscan','BSWEEP','BSTEP']:
+            html_table = B_scan(Exp, num, html_table)
         else:
-            experiment = 'not defined'
-            Tscan = e21.sweet16.transport.TemperatureScan
-            Bscan = e21.sweet16.transport.FieldScan
+            html_table = A_scan(Exp, num, html_table)              
+        if 'reserve' in args:
+            try:
+                html_table += '<td> {} </td>'.format(
+                    Exp[num].params['lock_in_1']['dyn_reserve'])
+            except KeyError:    
+                html_table += '<td> {} </td>'
 
-        # Create Table Header
-        html_table = '<h1> {} - Measurement Overview </h1>' .format(
-            str(Exp[0].params['info']['sample']).decode('utf-8', 'ignore')) 
-        html_table += '<strong> Sample: </strong> {} <br>'.format(
-            Exp[0].params['info']['sample']).decode('utf-8', 'ignore')
-        html_table += ('<strong> Measurement Option:'
-                      '</strong> {} <br> <br>'.format(experiment))
-        html_table += '<table class="table table-hover">'
-        html_table += ('<tr> <th> Number </th> <th> Sweep Type </th> <th>'
-                       'Start </th> <th> Stop </th> <th> T / B </th> <th>'
-                       'B_init </th> <th> T_init </th><th> Ampl </th><th>'
-                       'dropping res </th><th> sweep </th>')
         if 'angle' in args:
-            html_table += '<th> Angle </th>'
-        if 'current' in args:
-            html_table += '<th> Current </th>'
-        if 'NV' in args:
-            html_table += '<th> Needle Valve </th>'
-        if 'filename' in args:
-            html_table += '<th> Filename </th>'
-        else:
-            html_table += '</tr>'
-        for num in range(len(Exp)):
-            if (isinstance(Exp[num], Tscan)):
-                T_init = float(np.round(Exp[num].temperature[0], 6))
-                T_final = float(
-                    np.round(Exp[num].temperature[-1], 6))
-                B_field = float(
-                    np.round(np.median(Exp[num].data['B_field']), 3))
-                sigma = float(np.round(np.std(Exp[num].data['B_field']), 3))
-                html_table += ('<tr> <td>{}</td> <td> Tsweep </td>'
-                               '<td> {} K </td>'
-                               '<td> {} K </td>'
-                               '<td> {}+-{} T </td>'
-                               '<td> {} </td>'
-                               '<td> {} </td>'
-                               '<td> {} </td>'
-                               '<td> {} k&Omega; </td>'
-                               '<td> {} </td>').format(
-                                    num,
-                                    T_init,
-                                    T_final,
-                                    B_field,
-                                    sigma,
-                                    Exp[num].params['info']['command']['init_field'],
-                                    Exp[num].params['info']['command']['init_temperature'],
-                                    Exp[num].params['general']['amplification'],
-                                    Exp[num].params['general']['dropping_resistance'],
-                                    Exp[num].params['info']['command']['target_temperature_rate'])
-                if 'reserve' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].params['lock_in_1']['dyn_reserve'])
-                if 'angle' in args:
-                    html_table += '<td> {} </td>'.format(
-                        round(Exp[num].data['angle'][0], 2))
-                if 'current' in args:
-                    html_table += '<td> {} </td>'.format(Exp[num].mean_current)
-                if 'NV' in args:
-                    html_table += '<td> {} </td>'.format(Exp[num].NV)             
-                if 'filename' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].params['general']['filename'].split('/')[-1])
-                html_table += '</tr>'   
+            try:
+                html_table += '<td> {} </td>'.format(Exp[num].mean_angle)
+            except KeyError:    
+                html_table += '<td> {} </td>'
 
-            elif (isinstance(Exp[num], Bscan)):
-                B_init = float(np.round(Exp[num].data['B_field'][0], 6))
-                B_final = float(np.round(Exp[num].data['B_field'][-1], 6))
-                Temp = float(
-                    np.round(np.median(Exp[num].temperature), 3))
-                sigma = float(
-                    np.round(np.std(Exp[num].temperature), 3))
-                html_table += ('<tr> <td>{}</td> <td> Field </td>'
-                               '<td> {} T </td>'
-                               '<td> {} T </td>'
-                               '<td> {}+-{} K </td>'
-                               '<td> {} </td>'
-                               '<td> {} </td>'
-                               '<td> {} </td>'
-                               '<td> {} k&Omega; </td>'
-                               '<td> {} </td>').format(
-                                    num,
-                                    B_init,
-                                    B_final,
-                                    Temp,
-                                    sigma,
-                                    Exp[num].params['info']['command']['init_field'],
-                                    Exp[num].params['info']['command']['init_temperature'],
-                                    Exp[num].params['general']['amplification'],
-                                    Exp[num].params['general']['dropping_resistance'],
-                                    Exp[num].params['info']['command']['target_field_rate'])
-                if 'reserve' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].params['lock_in_1']['dyn_reserve'])
-                if 'angle' in args:
-                    html_table += '<td> {} </td>'.format(
-                        round(
-                            Exp[num].data['angle'][0],
-                            2))
-                if 'current' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].mean_current)
-                if 'NV' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].NV)
-                if 'filename' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].params['general']['filename'].split('/')[-1])
-                html_table += '</tr>'   
-            else:
-                B_init = float(np.round(Exp[num].data['B_field'][0], 6))
-                B_final = float(np.round(Exp[num].data['B_field'][-1], 6))
-                Temp = float(
-                    np.round(np.median(Exp[num].temperature), 3))
-                sigma = float(
-                    np.round(np.std(Exp[num].temperature), 3))
-                html_table += ('<tr> <td>{}</td> <td> {} </td>'
-                               '<td> {} T </td>'
-                               '<td> {} T </td>'
-                               '<td> {}+-{} K </td>'
-                               '<td> {} </td>'
-                               '<td> {} </td>'
-                               '<td> {} </td>'
-                               '<td> {} k&Omega; </td>'
-                               '<td> {} </td>').format(
-                                    num,
-                                    Exp[num].params['info']['command']['mode'],
-                                    B_init,
-                                    B_final,
-                                    Temp,
-                                    sigma,
-                                    Exp[num].params['info']['command']['init_field'],
-                                    Exp[num].params['info']['command']['init_temperature'],
-                                    Exp[num].params['general']['amplification'],
-                                    Exp[num].params['general']['dropping_resistance'],
-                                    Exp[num].params['info']['command']['target_field_rate'])
-                if 'reserve' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].params['lock_in_1']['dyn_reserve'])
-                if 'angle' in args:
-                    html_table += '<td> {} </td>'.format(
-                        round(
-                            Exp[num].data['angle'][0],
-                            2))
-                if 'current' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].mean_current)
-                if 'NV' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].NV)
-                if 'filename' in args:
-                    html_table += '<td> {} </td>'.format(
-                        Exp[num].params['general']['filename'].split('/')[-1])
-                html_table += '</tr>' 
-        html_table += '</table>'
-        return html_table
+        if 'current' in args:
+            try:
+                html_table += '<td> {} </td>'.format(Exp[num].mean_current)
+            except KeyError:    
+                html_table += '<td> {} </td>'
+
+        if 'NV' in args:
+            try:
+                html_table += '<td> {} </td>'.format(Exp[num].NV)
+            except KeyError:    
+                html_table += '<td> {} </td>'
+
+        if 'filename' in args:
+            try:
+                html_table += '<td> {} </td>'.format(Exp[num].filename)
+            except KeyError:    
+                html_table += '<td> {} </td>'
+
+        if 'dropping_resistance' in args:
+            try:
+                html_table += '<td> {} </td>'.format(Exp[num].dropping_resistance)
+            except KeyError:    
+                html_table += '<td> {} </td>'
+
+
+        if 'amplification' in args:
+            try:
+                html_table += '<td> {} </td>'.format(Exp[num].amplification)
+            except KeyError:    
+                html_table += '<td> {} </td>'
+
+
+    
+        html_table += '</tr>'   
+    html_table += '</table>'
+    return html_table
+
+def T_scan(Exp, num, html_table):
+    T_init = float(np.round(Exp[num].init_temperature, 6))
+    T_final = float(
+        np.round(Exp[num].temperature[-1], 6))
+    B_field = Exp[num].mean_field                    
+    sigma = float(np.round(np.std(Exp[num].field), 3))
+    html_table += ('<tr> <td>{}</td> <td> Tsweep </td>'
+                   '<td> {} K </td>'
+                   '<td> {} K </td>'
+                   '<td> {}+-{} T </td>'
+                   '<td> {} </td>'
+                   '<td> {} </td>'
+                   '<td> {} </td>').format(
+                        num,
+                        T_init,
+                        T_final,
+                        B_field,
+                        sigma,
+                        Exp[num].init_field,
+                        Exp[num].init_temperature,
+                        Exp[num].target_temperature_rate)
+    return html_table
+
+def B_scan(Exp, num, html_table):
+    B_init = float(np.round(Exp[num].field[0], 6))
+    B_final = float(np.round(Exp[num].field[-1], 6))
+    Temp = float(
+        np.round(np.median(Exp[num].temperature), 3))
+    sigma = float(
+        np.round(np.std(Exp[num].temperature), 3))
+    html_table += ('<tr> <td>{}</td> <td> Field </td>'
+                   '<td> {} T </td>'
+                   '<td> {} T </td>'
+                   '<td> {}+-{} K </td>'
+                   '<td> {} </td>'
+                   '<td> {} </td>'
+                   '<td> {} </td>').format(
+                        num,
+                        B_init,
+                        B_final,
+                        Temp,
+                        sigma,
+                        Exp[num].init_field,
+                        Exp[num].init_temperature,
+                        Exp[num].target_field_rate)
+    return html_table
+
+def A_scan(Exp, num, html_table):
+    B_init = float(np.round(Exp[num].mean_field, 6))
+    B_final = float(np.round(Exp[num].mean_field, 6))
+    Temp = float(
+        np.round(np.median(Exp[num].temperature), 3))
+    sigma = float(
+        np.round(np.std(Exp[num].temperature), 3))
+    html_table += ('<tr> <td>{}</td> <td> {} </td>'
+                   '<td>  </td>'
+                   '<td>  </td>'
+                   '<td> {}+-{} K </td>'
+                   '<td> {} </td>'
+                   '<td> {} </td>'
+                   '<td> {} </td>').format(
+                        num,
+                        Exp[num].sweep_type,
+                        Temp,
+                        sigma,
+                        Exp[num].init_field,
+                        Exp[num].init_temperature,
+                        Exp[num].target_field_rate)
+    return html_table
 
 def replace(file_path, pattern, subst):
     ''' Replace string in file

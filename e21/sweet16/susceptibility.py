@@ -2,10 +2,12 @@
 #
 # e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.
 import e21.core
+from e21.sweet16.core import Sweet16
 from e21.core import lookup
 import numpy as np
 from e21.sweet16 import Loader
 import quantities as pq
+from e21.utility import ProgressBar
 
 
 def _correct_field(field, correction):
@@ -13,9 +15,19 @@ def _correct_field(field, correction):
 
 # Susceptibility-classes ------------------------------------------------------
 
-    
+class Susceptibility(Sweet16):
 
-class Susceptibility(e21.core.Measurement, e21.core.Plottable):
+    @property
+    def experiment_type(self):
+        return 'susceptibility'
+
+    @property
+    def amplification(self):
+        return self.params['general']['amplification']
+
+    @property
+    def dropping_resistance(self):
+        return self.params['general']['dropping_resistance']
 
     @property
     def real(self):
@@ -26,103 +38,9 @@ class Susceptibility(e21.core.Measurement, e21.core.Plottable):
         return self.data['LI1_CH1']
 
     @property
-    def angle(self):
-        try:
-            return self.data['angle']
-        except KeyError:
-            return 0. * pq.deg
-
-    @property
-    def NV(self):
-        return self.params['info']['command']['needle_valve_percentage']
-
-    @property
-    def time(self):
-        return self.data['datetime']
-
-    @property
-    def heater(self):
-        return self.data['heater']
-
-    @property
-    def needle_valve(self):
-        return self.data['needle_valve']
-
-    @property
     def chi(self):
         """Calculates the susceptibility of the X signal."""
         raise NotImplementedError()
-
-    @property
-    def field(self):
-        return self.data['B_field']
-
-    @property
-    def mean_field(self):
-        return np.mean(self.field)
-
-    @property
-    def mean_current(self):
-        return np.round(np.mean(self.data['current']), 2)
-
-    @property
-    def field_corrected(self):
-        """
-        Correction for Remanent Field offset during Magnetic Field Sweeps.
-
-        """
-        if float(self.params['info']['command']['target_field_rate']) == 0.05:
-            return _correct_field(self.field, 0.03)
-        elif float(self.params['info']['command']['target_field_rate']) == 0.02:
-            return _correct_field(self.field, 0.01)
-        else:
-            return self.field
-
-    @property
-    def target_temperature(self):
-        # NOTE: The sweet 16 uses control_temp as the name for the target temp.
-        return self.data['control_temp']
-
-    @property
-    def temperature(self):
-        try:        
-            return self.data['sample_temp_1']
-        except KeyError:
-            try:
-                return self.data['MC_LS372_1']
-            except KeyError:
-                return 0
-
-    def temperature_stability(self):
-        """Calculates the offset and standart deviation of the temperature
-        from the target value.
-        """
-        dT = self.temperature - self.target_temperature
-        return np.mean(dT), np.std(dT)
-
-    @property
-    def mean_temperature(self):
-        return np.mean(self.temperature)
-
-    @property
-    def init_temp(self):
-        return self.params['info']['command']['init_temperature']
-
-    @property
-    def angle(self):
-        try:
-            return self.data['angle']
-        except KeyError:
-            # If not present in Data, return array of length of measurement
-            # with Angle 0.
-            return [0*pq.deg]*len(self)
-
-    @property
-    def mean_angle(self):
-        try:
-            return round(np.median(self.data['anlge']),2)
-        except KeyError:
-            return [0*pq.deg]
 
         
 class FieldScan(Susceptibility, e21.core.Plottable):
@@ -237,10 +155,11 @@ class Experiment(e21.core.Experiment):
 
             filelist: list of measurement files
         """
+        p = ProgressBar(len(filelist))
         s16 = Loader(mode='susceptibility')
 
         meas_len = len(self._measurements)
-        filelist = check_empty_files(filelist)
+        #filelist = check_empty_files(filelist)
         testfile = s16(filelist[0])
 
         if 'dropping_resistance' not in testfile.params['general'].keys():
@@ -250,6 +169,7 @@ class Experiment(e21.core.Experiment):
             amplification = float(raw_input('Amplification: '))
 
         for n, files in enumerate(filelist):
+            p.animate(n+1)
             index = n + meas_len
 
             self._measurements[index] = s16(files)
@@ -267,4 +187,85 @@ class Experiment(e21.core.Experiment):
             else:
                 self._measurements[index].params['general'][
                     'dropping_resistance'] = dropping_resistance
+
+def measurement_details(Exp):
+    '''
+    returns a function g(i) which can be used with ipython.widges.interact
+
+    input parameters:
+
+        Exp: e21 Experiment class dicitonary
+
+    output:
+    
+        g(i): function that displays a HTML table containing comprehensive
+              measurement information on Measurement Exp[i]
+
+    ''' 
+
+
+    def g(i = 0):
+        s = '<h2> Measurement Details for Measurement Number {}</h2>'.format(i)
+        s += '<h3> General information: </h3>'
+        s += '<table class="table table-hover">'
+        s += ('<tr> <td><strong> Date </strong></td>'
+             ' <td> {} </td></tr>'.format(Exp[i].params['info']['date']))
+        s += ('<tr> <td><strong> Sample </strong></td>'
+             '<td> {} </td></tr>'.format(Exp[i].params['info']['sample']))
+        s += ('<tr> <td><strong> Time </strong></td>'
+             '<td> {} </td></tr>'.format(Exp[i].params['info']['time']))
+        s += ('<tr> <td><strong> User </strong></td>'
+             '<td> {} </td></tr>'.format(Exp[i].params['info']['user']))
+        s += ('<tr> <td><strong> Mode </strong></td>'
+             '<td> {} </td></tr>'.format(Exp[i].params['mode']))
+        s += ('<tr> <td><strong> Amplification </strong></td> <td> {} </td>'
+             '</tr>'.format(Exp[i].params['general']['amplification']))
+        s += ('<tr> <td><strong> Dropping Resistance </strong></td> <td>'
+             ' {} k$\Omega$ </td></tr>'.format(
+                 Exp[i].params['general']['dropping_resistance']))
+        s += ('<tr> <td><strong> Filename </strong></td> <td> {} </td>'
+             '</tr>'.format(Exp[i].params['general']['filename']))
+        try: 
+            if Exp[i].params['general']['contact_distance']:
+                s += ('<tr> <td><strong> Contact Distance </strong></td>'
+                     '<td> {} </td></tr>'.format(Exp[i].params['general']['contact_distance']))
+                s += ('<tr> <td><strong> Sample Thickness </strong></td>'
+                     '<td> {} </td></tr>'.format(Exp[i].params['general']['sample_thickness']))
+                s += ('<tr> <td><strong> Sample Width </strong></td> <td> {} </td>'
+                     '</tr>'.format(Exp[i].params['general']['sample_width']))
+        except:
+            pass
+        s += '</table>'     
+        s += '<h3> Lockin Information: </h3>'
+        s += '<table class="table table-hover">' 
+        try:
+            keys = Exp[i].params['lock_in_1'].items()
+            keys_sorted = sorted(keys, key=itemgetter(0))       
+            for j in range(len(keys_sorted)):
+                s += '<tr> <td><strong> {} </strong></td> <td> {} </td>'.format(keys_sorted[j][0],keys_sorted[j][1])
+                if 'lock_in_2' in Exp[i].params.keys():
+                    s +='<td> {} </td>'.format(Exp[i].params['lock_in_2'][keys_sorted[j][0]])
+                if 'lock_in_3' in Exp[i].params.keys():
+                    s +='<td> {} </td></tr> '.format(Exp[i].params['lock_in_3'][keys_sorted[j][0]])
+                else:
+                    s += '</tr>' 
+        except KeyError:
+            pass
+            
+        s += '</table>'
+        s += '<h3> Temperature and Field Info: </h3>'
+        s += '<table class="table table-hover">' 
+        s += ('<tr> <td><strong> Mean Temperature </strong></td>'
+             ' <td> {} </td></tr>'.format(Exp[i].mean_temperature))
+        s += ('<tr> <td><strong> Mean Field </strong></td>'
+             ' <td> {} </td></tr>'.format(Exp[i].mean_field))
+        s += '</table>'
+        s += '<h3> Command File: </h3>'
+        s += '<table class="table table-hover">'
+        keys = Exp[i].params['info']['command'].items()
+        keys_sorted = sorted(keys, key=itemgetter(0))
+        for j in range(len(keys_sorted)):
+            s += '<tr> <td><strong> {} </strong></td> <td> {} </td></tr>'.format(keys_sorted[j][0],keys_sorted[j][1])      
+        s = display(HTML(s))
+    return g
 

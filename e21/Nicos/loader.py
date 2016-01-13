@@ -62,7 +62,7 @@ class Loader(object):
             for line in f:
                 linenum = linenum + 1
                 if line.startswith('### NICOS data file'):
-                    block_title = 'NICOS data file'
+                    block_title = 'general'
                     params[block_title] = {}
                     params[block_title]['date'] = line.split(' at ')[1]
                 elif line.startswith('###'):
@@ -85,6 +85,7 @@ class Loader(object):
                 pass 
         except UnboundLocalError:
             data={}
+        params = self.check_params(params)
 
         return data, params
 
@@ -92,7 +93,12 @@ class Loader(object):
         '''
 
         '''
-        return line.strip('###').lstrip()
+        key = line.strip('###').lstrip()
+        if key.startswith('Device positions and sample environment state'):
+            key = 'devices'
+        elif key.startswith('Devices'):
+            key = 'error'
+        return key
     def parse_units(self,line, params):
         try:
             if params['Scan data']['devices']:
@@ -106,7 +112,8 @@ class Loader(object):
         '''
         key = line.split(':')[0]
         key = key.strip('#').strip()
-        value = line.split(':')[1]
+        #customize params dict for easier access
+        value = ':'.join(line.split(':')[1:])
         return key, value
 
     def parse_data(self,line, variables):
@@ -118,3 +125,23 @@ class Loader(object):
                 tokens[i] = np.NaN
         row = {key: float(val) for key, val in zip(variables, tokens)}
         return row
+    
+    def check_params(self, params):
+        try:
+            if 'sample' not in params['info']:
+                params['info']['sample'] = 'No sample'
+        except KeyError:
+            params['info'] = {}
+            params['info']['sample'] = 'No sample'
+        return params
+
+
+
+
+
+
+
+
+
+
+

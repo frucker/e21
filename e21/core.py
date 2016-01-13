@@ -75,11 +75,19 @@ class Measurement(object):
 
     def __getattr__(self, item):
         return self.data[item]
+
+    def __dir__(self):
+        return self.keys()
+
+
+    def _repr_html_(self):
+        return "<h1>" + self.text + "</h1>"
+
     
     def __len__(self):
         key = self.data.keys()[0]
         return len(self.data[key])
-
+    
 
 class Experiment(object):
     """Minimal implementation of a experiment class."""
@@ -88,6 +96,9 @@ class Experiment(object):
         
     def __getitem__(self, item):
         return self._measurements[item]
+    
+    def __dir__(self):
+        return self.keys()
 
     def __setitem__(self, item, value):
         self._measurements[item] = value

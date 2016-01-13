@@ -4,20 +4,23 @@
 import e21.core
 from e21.core import lookup
 from e21.sweet16 import Loader
+from e21.PPMS.core import PPMS
 import numpy as np
 import operator
 import quantities as pq
 
 #-Transport-classes-------------------------------------------------------
 
-class Transport(e21.core.Measurement, e21.core.Plottable):
+# Not functional?!!
+
+class Transport(PPMS):
     
     @property
-    def real(self):
+    def X(self):
         return self.data['LI1_CH1']
     
     @property
-    def imag(self):
+    def Y(self):
         return self.data['LI1_CH2']
     
     @property
@@ -283,78 +286,7 @@ class Experiment(e21.core.Experiment):
             if not 'sample_thickness' in self._measurements[index].params['general'].keys():
                 self._measurements[index].params['general']['sample_thickness'] = sample_thickness
 
-    def MakeOverview(self, **kw):    
-        """
-        Overview over all measurements including every type of measurement (so far B/T Sweeps)
-        KW options:
-
-                files: if true append column indicating paths of measurement files
-
-        """
-        
-        html_table = '<table border = "1">'
-        #html_table += '<tr><h1> %s - Measurement Overview </h1></tr>'%str(self[0].params['info']['sample']) #Create Table Header 
-        #html_table += '<strong> Sample: </strong> {} <br>'.format(self[0].params['info']['sample']) 
-        html_table += '<strong> Contact Distance: </strong> {}<br>'.format(self[0].contact_distance)
-        html_table += '<strong> Measurement Option: </strong> Transport <br> <br> '
-        html_table += '<p style="color:blue;margin-left:20px;">This is a paragraph.</p>  '
-        html_table += '<table>'
-        html_table += ('<tr> <th> Number </th> <th> Sweep Type </th> <th> Start </th> <th> Stop </th> <th> T / B </th> <th> B_init </th> <th> T_init </th>'
-                      '<th> Amplification </th><th> dropping_resistance </th><th> filepath </th><th> reserve </th></tr>')
     
-        for num in range(len(self)):
-                       
-           
-            if (type(self[num]) == e21.sweet16.transport.TemperatureScan):
-                T_init = float(np.round(self[num].data['sample_temp_1'][0],6))
-                T_final = float(np.round(self[num].data['sample_temp_1'][-1],6))
-                B_field = float(np.round(np.median(self[num].data['B_field']),3))
-                sigma = float(np.round(np.std(self[num].data['B_field']),3))
-                html_table += ('<tr> <td>{}</td> <td> Tsweep </td>'
-                                    '<td> {} K </td>' 
-                                    '<td> {} K </td>' 
-                                    '<td> {}+-{} T </td>'
-                                    '<td> {} T </td>'
-                                    '<td> {} K </td>'
-                                    '<td> {} </td>'
-                                    '<td> {} k&Omega; </td>'
-                                    '<td> {} </td>'
-                                    '<td> {} </td>'
-                                    '</tr>').format(num,
-                                    T_init,T_final,B_field,sigma, 
-                                    self[num].params['info']['command']['init_field'],
-                                    self[num].params['info']['command']['init_temperature'],
-                                    self[num].params['general']['amplification'],
-                                    self[num].params['general']['dropping_resistance'],
-                                    self[num].params['general']['filename'],
-                                    self[num].params['lock_in_1']['dyn_reserve'])
-
-            elif (type(self[num]) == e21.sweet16.transport.FieldScan):   
-                B_init = float(np.round(self[num].data['B_field'][0],6))
-                B_final = float(np.round(self[num].data['B_field'][-1],6))
-                Temp = float(np.round(np.median(self[num].data['sample_temp_1']),3))               
-                sigma = float(np.round(np.std(self[num].data['sample_temp_1']),3))
-                html_table += ('<tr> <td>{}</td> <td> Field </td>'
-                                    '<td> {} </td>' 
-                                    '<td> {} </td>' 
-                                    '<td> {}+-{} K </td>'
-                                    '<td> {} T </td>'
-                                    '<td> {} K </td>'
-                                    '<td> {} </td>'
-                                    '<td> {} k&Omega; </td>'
-                                    '<td> {} </td>'
-                                    '</tr>').format(num,
-                                    B_init,B_final,Temp,sigma, 
-                                    self[num].params['info']['command']['init_field'],
-                                    self[num].params['info']['command']['init_temperature'],
-                                    self[num].params['general']['amplification'],
-                                    self[num].params['general']['dropping_resistance'],
-                                    self[num].params['lock_in_1']['dyn_reserve'])
-                    
-        html_table += '</table>'
-        return html_table
-
-
 
 
 

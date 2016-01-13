@@ -78,6 +78,8 @@ class Loader(object):
             params = {k: {} for k in parameter}
             params['info']['mode'] = 'BSWEEP'
             params['general']={}
+            params['info']['filename'] = path.split('/')[-1]
+            params['info']['filepath'] = path
                        
             return data, params
 
