@@ -85,8 +85,6 @@ class Loader(object):
                 pass 
         except UnboundLocalError:
             data={}
-        params = self.check_params(params)
-
         return data, params
 
     def parse_title(self,line):
@@ -99,6 +97,7 @@ class Loader(object):
         elif key.startswith('Devices'):
             key = 'error'
         return key
+
     def parse_units(self,line, params):
         try:
             if params['Scan data']['devices']:
@@ -126,14 +125,7 @@ class Loader(object):
         row = {key: float(val) for key, val in zip(variables, tokens)}
         return row
     
-    def check_params(self, params):
-        try:
-            if 'sample' not in params['info']:
-                params['info']['sample'] = 'No sample'
-        except KeyError:
-            params['info'] = {}
-            params['info']['sample'] = 'No sample'
-        return params
+
 
 
 

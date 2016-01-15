@@ -14,7 +14,10 @@ class Mira(e21.core.Measurement, e21.core.Plottable):
         try:        
             return self.data['dct2'] 
         except KeyError: 
-            return [float(self.params['devices']['dct2_value'].strip('V\n'))*pq.V]*len(self)
+            try:
+                return [float(self.params['devices']['dct2_value'].strip('V\n'))*pq.V]*len(self)
+            except KeyError:
+                return [0*pq.T]*len(self)
     
     @property
     def mean_field(self):
@@ -52,7 +55,7 @@ class Mira(e21.core.Measurement, e21.core.Plottable):
 
     @property
     def init_field(self):
-        return float(self.params['devices']['dct2_value'].strip('V\n'))*pq.V
+        return self.field[0]
 
     @property
     def init_temperature(self):
@@ -65,7 +68,7 @@ class Mira(e21.core.Measurement, e21.core.Plottable):
             typ = info[0].strip()
             if typ == 'sweep':
                 sweep = info[1].split(',')[0]
-                if sweep in['dct_2']:
+                if sweep in['dct2']:
                     return 'Bsweep'
             elif typ == 'qscan':
                 return 'Qscan'         
