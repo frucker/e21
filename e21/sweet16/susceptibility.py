@@ -155,12 +155,13 @@ class Experiment(e21.core.Experiment):
 
             filelist: list of measurement files
         """
-        p = ProgressBar(len(filelist))
+        
         s16 = Loader(mode='susceptibility')
 
         meas_len = len(self._measurements)
-        #filelist = check_empty_files(filelist)
+        filelist = check_empty_files(filelist)
         testfile = s16(filelist[0])
+        p = ProgressBar(len(filelist))
 
         if 'dropping_resistance' not in testfile.params['general'].keys():
             dropping_resistance = float(

@@ -3,6 +3,7 @@
 # e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.
 import e21.core
 from e21.core import lookup
+from e21.sweet16.core import Sweet16
 from e21.sweet16 import Loader
 from e21.sweet16.loader import parse_header
 from e21.sweet16.loader import parse_commands
@@ -13,7 +14,11 @@ import quantities as pq
 
 #-Transport-classes-------------------------------------------------------
 
-class Transport(e21.core.Measurement, e21.core.Plottable):
+class Transport(Sweet16):
+
+    @property
+    def experiment_type(self):
+        return 'transport'
     
     @property
     def real(self):
@@ -102,7 +107,7 @@ class Transport(e21.core.Measurement, e21.core.Plottable):
 
     @property
     def dropping_resistance(self):
-        return float(self.params['general']['dropping_resistance'])
+        return float(self.params['general']['dropping_resistance'].strip('kOhm'))
 
     @property
     def excitation_amplitude(self):
