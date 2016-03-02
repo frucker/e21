@@ -7,6 +7,7 @@ from IPython.display import display, HTML
 from operator import itemgetter
 from tempfile import mkstemp
 from shutil import move
+from collections import Mapping
 from os import remove, close
 import os
 import pickle
@@ -398,12 +399,23 @@ def MakeOverview(Exp, *args):
                 html_table += '<td> {} </td>'.format(Exp[num].amplification)
             except KeyError:    
                 html_table += '<td> {} </td>'
-
+        for k in args:
+            if k not in ['reserve', 'angle', 'current', 'NV', 'filename', 'dropping_resistance', 'amplification']:
+                html_table += '<td> {} </td>'.format(list(findkey(Exp[num].params, k))[0])
+            
 
     
         html_table += '</tr>'   
     html_table += '</table>'
     return html_table
+
+def findkey(d, name):
+    if isinstance(d, Mapping):
+        if name in d:
+            yield d[name]
+        for it in d.values():
+            for found in findkey(it, name):
+                yield found
 
 def T_scan(Exp, num, html_table):
     T_init = float(np.round(Exp[num].init_temperature, 6))

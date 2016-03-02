@@ -143,10 +143,10 @@ def parse_commands(arguments):
                     'target_field_rate', 'lockin1_sensitivity',
                     'lockin2_sensitivity', 'delay', 'needle_valve_const',
                     'needle_valve_percentage', 'steps', 'target_current',
-                    'current_rate', 'init_angle', 'target_angle']
+                    'current_rate', 'init_angle', 'target_angle', 'K6221 current', 'k6221 frequency', 'k6221 offset']
     command_line_units = ['', ' K', ' K/min', ' K', ' K/min', ' T',
                           ' T/min', ' T', ' T/min', '', '', ' min',
-                          '', ' %', '', ' A', ' A/min', ' Deg', ' Deg']
+                          '', ' %', '', ' A', ' A/min', ' Deg', ' Deg',' A',' Hz',' A']
     args = []
     for i in range(len(arguments.split('\t'))):
         args.append(arguments.split('\t')[i] + command_line_units[i])
