@@ -180,7 +180,10 @@ class Experiment(e21.core.Experiment):
                 self._measurements[index].params['general'][
                     'amplification'] = amplification
             if 'current' not in self._measurements[index].data.keys():
-                self._measurements[index].data['current'] = 0
+                if 'k2440_current' in self._measurements[index].data.keys():
+                    self._measurements[index].data['current'] = self._measurements[index].data['k2440_current']
+                else:
+                    self._measurements[index].data['current'] = 0 
             if 'dropping_resistance' in self._measurements[
                     index].params['general'].keys():
                 self._measurements[index].params['general']['dropping_resistance'] = float(

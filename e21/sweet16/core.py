@@ -41,12 +41,15 @@ class Sweet16(e21.core.Measurement, e21.core.Plottable):
     @property
     def temperature(self):
         try:        
-            return self.data['sample_temp_1']
+            return self.data['LS340_temp']
         except KeyError:
-            try:
-                return self.data['MC_LS372_1']
-            except KeyError:
-                return 0
+            try: 
+                return self.data['sample_temp_1']
+            except KeyError:     
+                try:
+                    return self.data['MC_LS372_1']
+                except KeyError:
+                    return 0
       
 
     @property
@@ -90,8 +93,7 @@ class Sweet16(e21.core.Measurement, e21.core.Plottable):
 
     @property
     def mean_current(self):
-        return np.round(np.mean(self.data['current']), 2)
-
+        return np.round(np.mean(self.data['current']), 3)
     @property
     def field_corrected(self):
         """

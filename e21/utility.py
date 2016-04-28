@@ -325,6 +325,7 @@ def MakeOverview(Exp, *args):
             files, current, needle valve
 
     """
+    print args
     if Exp[0].experiment_type == 'susceptibility':
         experiment = 'susceptibility'
     elif Exp[0].experiment_type == 'transport':
@@ -401,8 +402,14 @@ def MakeOverview(Exp, *args):
                 html_table += '<td> {} </td>'
         for k in args:
             if k not in ['reserve', 'angle', 'current', 'NV', 'filename', 'dropping_resistance', 'amplification']:
-                html_table += '<td> {} </td>'.format(list(findkey(Exp[num].params, k))[0])
-            
+                try:
+                    html_table += '<td> {} </td>'.format(list(findkey(Exp[num].params, k))[0])
+                except IndexError:
+                    print Warning('{} not found in parameters'.format(k))
+                    try:
+                        html_table += '<td> {} </td>'.format(list(findkey(Exp[num].data, k))[0])
+                    except IndexError:
+                        raise Warning('{} not found in data either'.format(k))
 
     
         html_table += '</tr>'   
@@ -586,7 +593,13 @@ def order_measurements(Exp, meas, param = 'temp'):
             val.append((B,i))
         meas = sorted(val, key=lambda x: x[0])  
         meas = [meas[i][1] for i in range(len(meas))]#
-    else:
+    elif param == 'current':
+        for j, i in enumerate(meas):
+            I = np.round(Exp[i].mean_current,3)
+            val.append((I,i))
+        meas = sorted(val, key=lambda x: x[0])  
+        meas = [meas[i][1] for i in range(len(meas))]#
+    else:       
         raise NotImplementedError('Method not implemented yet: {}'.format(param))
         
     return meas

@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.collections import PolyCollection
 from matplotlib.colors import colorConverter
 
-def get_current(Exp, meas):
+def get_current(Exp, meas, tol = 0.01):
     """ Returns current of a list of measurement. 
       
     Exception raised if measurements have different currents.
@@ -25,21 +25,24 @@ def get_current(Exp, meas):
     
     :param dict Exp: sweet16 Experiment class dictionary
     :param list meas: list of numbers of desired measurements
+    :param float tol: Tolerance in which all currents have to be equal
     
-    :raises: ValueError, Measuremetns don't have the same current
+    :raises: ValueError, Measuremetns don't have the same current within tol
     
     :return (float, str): current of measurements as float and string, (e.g. '0.0 A')
+                          returns '0.0 A' if current atrribute not available
     
     """
+    # check if measurements given
     if len(meas)==0:
         raise ValueError('No measurements given')
     
     try:
-        #get current
+        #get current of first measurement in meas
         current = abs(Exp[meas[0]].mean_current)
-        # format string
+        # format into string
         current_string = str(current).replace('.','_').replace(' ','')
-        # check consitency
+        # check if all measurements have the same current within a tolerance
         for i, j in enumerate(meas):
             if (Exp[j].mean_current-current) > 0.01:
                 raise ValueError("Current of measurement number {} not " 
@@ -222,6 +225,7 @@ def plot_grid(Grids, current, vmin = 0, vmax = 1e-6, nbins = 4, **kwargs):
         plt.colorbar(label = clabel)
     current_string = str(current).replace('.','_').replace(' ','')
     #savefig(plot_path + 'Interpolation_{}.png'.format(current_string))
+
 
 def plot_data(Exp, meas = [], data = 'real', scaling = -1, N = 400j, nbins = 4,
               legopts = [], **kwargs):
@@ -515,6 +519,11 @@ def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
         cmap = cm.jet
     else:
         cmap = kwargs['cmap']
+
+    if 'fontsize' in kwargs.keys():
+        fsize = kwargs['fontsize']
+    else:
+        fsize = 18.
     
     # get all valid currents of measurement set
     currents = [ float(i.strip('A')) for i in Data[T]['data'].keys()]
@@ -701,12 +710,12 @@ def current_dep(Grids, Grids_zero, T = 28.4, B_min = 0.45, B_max = 0.55, **kwarg
             return data
             
 
-def current_dep_neu(Data, T = 28.4, **kwargs):
+def current_dep_neu(Data, T = 28.4, leg = True, **kwargs):
     """ Muss noch kommentiert werden
 
     """    
     for i in kwargs.keys():
-        if i not in ['currents', 'cmap', 'output', 'col_label', 'A']:
+        if i not in ['currents', 'cmap', 'output', 'col_label', 'A', 'color']:
             raise KeyError('Invalid Key "{}"'.format(i))
     if 'currents' in kwargs.keys():
         currents = kwargs['currents']
@@ -726,7 +735,10 @@ def current_dep_neu(Data, T = 28.4, **kwargs):
     #     find_temperature(Grids, T, 0.0),label = '0', color = color)
   
     for i, I in enumerate(sorted(currents)):
-        color = c((i+1)/float(len(currents)+1))
+        if 'color' in kwargs.keys():
+            color = c(kwargs['color'])
+        else: 
+            color = c((i+1)/float(len(currents)+1))
         if 'A' in kwargs.keys():
             J = round(float(I.strip(' A'))/kwargs['A']*1e-6,2)
             label = '{}'.format(J)
@@ -734,11 +746,13 @@ def current_dep_neu(Data, T = 28.4, **kwargs):
             label = '{}'.format(I.strip(' A'))
             
         plt.plot(Data[T]['fields'], Data[T]['data'][I], color = color, label = label)
-    if 'A' in kwargs.keys():
-        plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-    else:
-        plt.legend(title=r'I (A)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-
+    if leg == True:    
+        if 'A' in kwargs.keys():    
+            l = plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+            return l
+        else:
+            l = plt.legend(title=r'I (A)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+            return l
 
 def mark_critical_current(I = 0.426, pos = .1):
     """Places a dashed line in plot at I with name Ic
