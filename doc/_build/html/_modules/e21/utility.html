@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>e21.utility &mdash; E21 0.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="E21 0.1.0dev documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          E21</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.0dev</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="simple">
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../e21.html">e21 package</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for e21.utility</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">itertools</span> <span class="kn">as</span> <span class="nn">it</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">quantities</span> <span class="kn">as</span> <span class="nn">pq</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">mkstemp</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">move</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">remove</span><span class="p">,</span> <span class="n">close</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+
+
+<div class="viewcode-block" id="ProgressBar"><a class="viewcode-back" href="../../e21.html#e21.utility.ProgressBar">[docs]</a><span class="k">class</span> <span class="nc">ProgressBar</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterations</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prog_bar</span> <span class="o">=</span> <span class="s1">&#39;[]&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fill_char</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">40</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update_amount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">animate_ipython</span>
+
+<div class="viewcode-block" id="ProgressBar.animate_ipython"><a class="viewcode-back" href="../../e21.html#e21.utility.ProgressBar.animate_ipython">[docs]</a>    <span class="k">def</span> <span class="nf">animate_ipython</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_iteration</span><span class="p">(</span><span class="nb">iter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ProgressBar.update_iteration"><a class="viewcode-back" href="../../e21.html#e21.utility.ProgressBar.update_iteration">[docs]</a>    <span class="k">def</span> <span class="nf">update_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed_iter</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__update_amount</span><span class="p">((</span><span class="n">elapsed_iter</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterations</span><span class="p">))</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prog_bar</span> <span class="o">+=</span> <span class="s1">&#39;  </span><span class="si">%d</span><span class="s1"> of </span><span class="si">%s</span><span class="s1"> imported&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">elapsed_iter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterations</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__update_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_amount</span><span class="p">):</span>
+        <span class="n">percent_done</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">new_amount</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">))</span>
+        <span class="n">all_full</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">2</span>
+        <span class="n">num_hashes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">percent_done</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">all_full</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prog_bar</span> <span class="o">=</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_char</span> <span class="o">*</span> <span class="n">num_hashes</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="p">(</span><span class="n">all_full</span> <span class="o">-</span> <span class="n">num_hashes</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
+        <span class="n">pct_place</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prog_bar</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">percent_done</span><span class="p">))</span>
+        <span class="n">pct_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">percent_done</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prog_bar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prog_bar</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pct_place</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="p">(</span><span class="n">pct_string</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">prog_bar</span><span class="p">[</span><span class="n">pct_place</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">pct_string</span><span class="p">):])</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prog_bar</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Calc_Sus_PPMS_SI"><a class="viewcode-back" href="../../e21.html#e21.utility.Calc_Sus_PPMS_SI">[docs]</a><span class="k">def</span> <span class="nf">Calc_Sus_PPMS_SI</span><span class="p">(</span><span class="n">input_emu</span><span class="p">,</span> <span class="n">rho_g_cm3</span><span class="p">,</span> <span class="n">mass_in_mg</span><span class="p">,</span> <span class="n">field_in_mT</span><span class="p">):</span>
+    <span class="n">input_SI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">input_emu</span><span class="p">)</span><span class="o">*</span><span class="mf">1e-3</span>
+    <span class="n">rho_SI</span> <span class="o">=</span> <span class="n">rho_g_cm3</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">/</span><span class="mf">1e-6</span>
+    <span class="n">field_SI</span> <span class="o">=</span> <span class="n">field_in_mT</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">1e-7</span><span class="p">)</span>
+    <span class="n">mass_SI</span> <span class="o">=</span> <span class="n">mass_in_mg</span><span class="o">*</span><span class="mf">1e-6</span>
+    <span class="n">output</span><span class="o">=</span><span class="n">input_SI</span><span class="o">*</span><span class="n">rho_SI</span><span class="o">/</span><span class="n">mass_SI</span><span class="o">/</span><span class="n">field_SI</span>
+    <span class="k">return</span> <span class="n">output</span></div>
+
+<div class="viewcode-block" id="Calc_Sus_PPMS_SI_volume"><a class="viewcode-back" href="../../e21.html#e21.utility.Calc_Sus_PPMS_SI_volume">[docs]</a><span class="k">def</span> <span class="nf">Calc_Sus_PPMS_SI_volume</span><span class="p">(</span><span class="n">input_emu</span><span class="p">,</span> <span class="n">volume_in_mm3</span><span class="p">,</span> <span class="n">field_in_mT</span><span class="p">):</span>
+    <span class="n">input_SI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">input_emu</span><span class="p">)</span><span class="o">*</span><span class="mf">1e-3</span>
+    <span class="n">volume_SI</span> <span class="o">=</span> <span class="n">volume_in_mm3</span><span class="o">*</span><span class="mf">1e-9</span>
+    <span class="n">field_SI</span> <span class="o">=</span> <span class="n">field_in_mT</span><span class="o">*</span><span class="mf">1e-3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">1e-7</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">=</span><span class="n">input_SI</span><span class="o">/</span><span class="n">volume_SI</span><span class="o">/</span><span class="n">field_SI</span>
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+
+<div class="viewcode-block" id="Felix_colormap"><a class="viewcode-back" href="../../e21.html#e21.utility.Felix_colormap">[docs]</a><span class="k">def</span> <span class="nf">Felix_colormap</span><span class="p">():</span>
+    <span class="n">cdict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                     <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                     <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">)),</span>
+         <span class="s1">&#39;green&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+                   <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                   <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)),</span>
+         <span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> 
+                  <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))}</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="p">(</span><span class="s1">&#39;my_colormap&#39;</span><span class="p">,</span><span class="n">cdict</span><span class="p">,</span><span class="mi">256</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cmap</span></div>
+
+<div class="viewcode-block" id="STT_colormap"><a class="viewcode-back" href="../../e21.html#e21.utility.STT_colormap">[docs]</a><span class="k">def</span> <span class="nf">STT_colormap</span><span class="p">():</span>
+    <span class="n">cpool</span> <span class="o">=</span> <span class="p">[</span> <span class="s1">&#39;#1b1da3&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff0000&#39;</span><span class="p">,</span> <span class="s1">&#39;#e52b2b&#39;</span><span class="p">,</span> <span class="s1">&#39;#0051ff&#39;</span><span class="p">,</span><span class="s1">&#39;#00868b&#39;</span><span class="p">]</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">cpool</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="s1">&#39;indexed&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cmap</span></div>
+
+<div class="viewcode-block" id="merge_dicts"><a class="viewcode-back" href="../../e21.html#e21.utility.merge_dicts">[docs]</a><span class="k">def</span> <span class="nf">merge_dicts</span><span class="p">(</span><span class="o">*</span><span class="n">dicts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Merges multiple dicts together.</span>
+<span class="sd">    </span>
+<span class="sd">    ::</span>
+<span class="sd">        &gt;&gt;&gt; x = dict(a=1, b=1)</span>
+<span class="sd">        &gt;&gt;&gt; y = dict(b=2)</span>
+<span class="sd">        &gt;&gt;&gt; merge_dicts(x, y, {&#39;c&#39;: 1})</span>
+<span class="sd">        {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: 1}</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dicts</span><span class="p">]))</span></div>
+
+
+
+<div class="viewcode-block" id="correct_temp"><a class="viewcode-back" href="../../e21.html#e21.utility.correct_temp">[docs]</a><span class="k">def</span> <span class="nf">correct_temp</span><span class="p">(</span><span class="n">temps</span><span class="p">,</span><span class="n">T</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    correct temperatures (temps) for constant offset (T)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">temps</span><span class="o">+</span><span class="n">T</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">K</span></div>
+    
+<div class="viewcode-block" id="calibrate"><a class="viewcode-back" href="../../e21.html#e21.utility.calibrate">[docs]</a><span class="k">def</span> <span class="nf">calibrate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">scaling</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    calibrate data by multiplying a scaling factor</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">scaling</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scaling</span><span class="p">)</span> <span class="o">==</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">scaling</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">scaling</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scaling</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">scaling</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">scaling</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">scaling</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Scaling must be list of length 2 not {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scaling</span><span class="p">)))</span> 
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">scaling</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">scaling</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Scaling must be list of length 2 or float not {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">scaling</span><span class="p">)))</span>  
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">+</span><span class="n">z</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">V</span><span class="p">)</span><span class="o">*</span><span class="n">m</span><span class="o">+</span><span class="n">b</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">V</span></div>
+
+<div class="viewcode-block" id="export_FS"><a class="viewcode-back" href="../../e21.html#e21.utility.export_FS">[docs]</a><span class="k">def</span> <span class="nf">export_FS</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">numbers</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">option</span> <span class="o">=</span> <span class="s1">&#39;susceptibility&#39;</span><span class="p">,</span>
+              <span class="n">scailing</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t_off</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export Field Sweeps to txt files. </span>
+<span class="sd">    Outputfiles are stored in &#39;path&#39; directory.</span>
+
+<span class="sd">    Options: </span>
+
+<span class="sd">        Susceptibility: - One .txt file for each FS, </span>
+<span class="sd">                          named after mean temperature: &quot;FSxxxxK&quot;</span>
+<span class="sd">                          Temperature given in 4 digits:  4.38 K  --&gt; 0483</span>
+<span class="sd">                                                          12.80 K --&gt; 1280    </span>
+<span class="sd">                                                          320.1 K --&gt; 3201</span>
+<span class="sd">                          File header: Temperature Field SUS SUSIM</span>
+<span class="sd">                        - One .txt file containing all FS, horizontally stacked</span>
+
+<span class="sd">    Input parameters:</span>
+
+<span class="sd">        data:       Experiment/Susceptibility Class Data Set</span>
+<span class="sd">        numbers:    list of desired measurements for output</span>
+<span class="sd">        path:       output folder (must exist)</span>
+
+<span class="sd">    optional:        </span>
+
+<span class="sd">        options:    - &#39;susceptibility&#39; (default) for susceptiblity measurements    </span>
+<span class="sd">        scailing:   - scailing number to calibrate susceptibility</span>
+<span class="sd">        t_off:      - temperature offset    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">option</span> <span class="o">==</span> <span class="s1">&#39;susceptibility&#39;</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="s1">&#39;{:0&gt;4d}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                   <span class="nb">int</span><span class="p">(</span><span class="n">correct_temp</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_temperature</span><span class="p">,</span><span class="n">t_off</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">))[:</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;FS{}K.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temp</span><span class="p">),</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Temperature</span><span class="se">\t</span><span class="s1">Field</span><span class="se">\t</span><span class="s1">SUS</span><span class="se">\t</span><span class="s1">SUSIM</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)):</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;{}</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                         <span class="nb">float</span><span class="p">(</span><span class="n">correct_temp</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">t_off</span><span class="p">)),</span>
+                         <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">]),</span> 
+                         <span class="nb">float</span><span class="p">(</span><span class="n">calibrate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">scailing</span><span class="p">)),</span>
+                         <span class="nb">float</span><span class="p">(</span><span class="n">calibrate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">scailing</span><span class="p">))))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;FS_gesamt.txt&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Temperature</span><span class="se">\t</span><span class="s1">Field</span><span class="se">\t</span><span class="s1">SUS</span><span class="se">\t</span><span class="s1">SUSIM</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">temps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">sus</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">susim</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">correct_temp</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span><span class="n">t_off</span><span class="p">)</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">field</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">,</span><span class="n">scailing</span><span class="p">)</span>
+            <span class="n">SI</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span><span class="n">scailing</span><span class="p">)</span>
+            <span class="n">temps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">temps</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">fields</span><span class="p">,</span> <span class="n">B</span><span class="p">])</span>
+            <span class="n">sus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">sus</span><span class="p">,</span> <span class="n">S</span><span class="p">])</span>
+            <span class="n">susim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">susim</span><span class="p">,</span> <span class="n">SI</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">)):</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;{}</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">sus</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="n">susim</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;{} option not implemented yet. Do nothing&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">option</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="measurement_details"><a class="viewcode-back" href="../../e21.html#e21.utility.measurement_details">[docs]</a><span class="k">def</span> <span class="nf">measurement_details</span><span class="p">(</span><span class="n">Exp</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    returns a function g(i) which can be used with ipython.widges.interact</span>
+
+<span class="sd">    input parameters:</span>
+
+<span class="sd">        Exp: e21 Experiment class dicitonary</span>
+
+<span class="sd">    output:</span>
+<span class="sd">    </span>
+<span class="sd">        g(i): function that displays a HTML table containing comprehensive</span>
+<span class="sd">              measurement information on Measurement Exp[i]</span>
+
+<span class="sd">    &#39;&#39;&#39;</span> 
+
+
+    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&lt;h2&gt; Measurement Details for Measurement Number {}&lt;/h2&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt; General information: &lt;/h3&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Date &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39; &lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Sample &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;sample&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Time &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; User &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;user&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Mode &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Amplification &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;amplification&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Dropping Resistance &lt;/strong&gt;&lt;/td&gt; &lt;td&gt;&#39;</span>
+             <span class="s1">&#39; {} k$\Omega$ &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                 <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;dropping_resistance&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Filename &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;filename&#39;</span><span class="p">]))</span>
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="k">if</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;contact_distance&#39;</span><span class="p">]:</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Contact Distance &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+                     <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;contact_distance&#39;</span><span class="p">]))</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Sample Thickness &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+                     <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;sample_thickness&#39;</span><span class="p">]))</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Sample Width &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                     <span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;sample_width&#39;</span><span class="p">]))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>     
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt; Lockin Information: &lt;/h3&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span> 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;lock_in_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="n">keys_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>       
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keys_sorted</span><span class="p">)):</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; {} &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="s1">&#39;lock_in_2&#39;</span> <span class="ow">in</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">s</span> <span class="o">+=</span><span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;lock_in_2&#39;</span><span class="p">][</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="k">if</span> <span class="s1">&#39;lock_in_3&#39;</span> <span class="ow">in</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">s</span> <span class="o">+=</span><span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt; &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;lock_in_3&#39;</span><span class="p">][</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/tr&gt;&#39;</span> 
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+            
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt; Temperature and Field Info: &lt;/h3&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span> 
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Mean Temperature &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39; &lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_temperature</span><span class="p">))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Mean Field &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39; &lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_field</span><span class="p">))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt; Command File: &lt;/h3&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;command&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="n">keys_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keys_sorted</span><span class="p">)):</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; {} &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>      
+        <span class="n">s</span> <span class="o">=</span> <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">g</span></div>
+
+<div class="viewcode-block" id="symmetrize"><a class="viewcode-back" href="../../e21.html#e21.utility.symmetrize">[docs]</a><span class="k">def</span> <span class="nf">symmetrize</span><span class="p">(</span><span class="n">Meas</span><span class="p">,</span> <span class="n">Meas2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; symmetrize transport data. </span>
+
+<span class="sd">    input:</span>
+<span class="sd">        Meas: transport measurement class, upsweep</span>
+<span class="sd">        Meas2:  transport measurement class, downsweep</span>
+<span class="sd">    </span>
+<span class="sd">    output:</span>
+<span class="sd">        list, symmetrized data        </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dat</span> <span class="o">=</span> <span class="n">Meas</span><span class="o">.</span><span class="n">res</span>
+    <span class="n">rev</span> <span class="o">=</span> <span class="n">Meas2</span><span class="o">.</span><span class="n">res</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dat</span><span class="p">)):</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">rev</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">ohm</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">m</span>
+    <span class="k">return</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">data</span></div>
+
+<div class="viewcode-block" id="antisymmetrize"><a class="viewcode-back" href="../../e21.html#e21.utility.antisymmetrize">[docs]</a><span class="k">def</span> <span class="nf">antisymmetrize</span><span class="p">(</span><span class="n">Meas</span><span class="p">,</span> <span class="n">Meas2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; symmetrize transport data. </span>
+
+<span class="sd">    input:</span>
+<span class="sd">        Meas: transport measurement class, upsweep</span>
+<span class="sd">        Meas2:  transport measurement class, downsweep</span>
+<span class="sd">    </span>
+<span class="sd">    output:</span>
+<span class="sd">        list, symmetrized data        </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dat</span> <span class="o">=</span> <span class="n">Meas</span><span class="o">.</span><span class="n">hall</span>
+    <span class="n">rev</span> <span class="o">=</span> <span class="n">Meas2</span><span class="o">.</span><span class="n">hall</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dat</span><span class="p">)):</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">rev</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">ohm</span><span class="o">*</span><span class="n">pq</span><span class="o">.</span><span class="n">m</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="mf">0.5</span><span class="o">*</span><span class="n">data</span></div>
+
+<div class="viewcode-block" id="MakeOverview"><a class="viewcode-back" href="../../e21.html#e21.utility.MakeOverview">[docs]</a><span class="k">def</span> <span class="nf">MakeOverview</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Overview over all measurements including every type of measurement</span>
+<span class="sd">    (so far B/T Sweeps)</span>
+
+<span class="sd">    args options append a coulmn with the</span>
+<span class="sd">    corresponding measurement property:</span>
+
+<span class="sd">            files, current, needle valve</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">print</span> <span class="n">args</span>
+    <span class="k">if</span> <span class="n">Exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">experiment_type</span> <span class="o">==</span> <span class="s1">&#39;susceptibility&#39;</span><span class="p">:</span>
+        <span class="n">experiment</span> <span class="o">=</span> <span class="s1">&#39;susceptibility&#39;</span>
+    <span class="k">elif</span> <span class="n">Exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">experiment_type</span> <span class="o">==</span> <span class="s1">&#39;transport&#39;</span><span class="p">:</span>
+        <span class="n">experiment</span> <span class="o">=</span> <span class="s1">&#39;transport&#39;</span>
+    <span class="k">elif</span> <span class="n">Exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">experiment_type</span> <span class="o">==</span> <span class="s1">&#39;miraHe3&#39;</span><span class="p">:</span>
+        <span class="n">experiment</span> <span class="o">=</span> <span class="s1">&#39;freaky Mira experiment&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">experiment</span> <span class="o">=</span> <span class="s1">&#39;unknown&#39;</span>
+
+    <span class="c1"># Create Table Header</span>
+    <span class="n">html_table</span> <span class="o">=</span> <span class="s1">&#39;&lt;h1&gt; {} - Measurement Overview &lt;/h1&gt;&#39;</span> <span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">))</span> 
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;strong&gt; Sample: &lt;/strong&gt; {} &lt;br&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">Exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;strong&gt; Measurement Option:&#39;</span>
+                  <span class="s1">&#39;&lt;/strong&gt; {} &lt;br&gt; &lt;br&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">experiment</span><span class="p">))</span>
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span>
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;th&gt; Number &lt;/th&gt; &lt;th&gt; Sweep Type &lt;/th&gt; &lt;th&gt;&#39;</span>
+                   <span class="s1">&#39;Start &lt;/th&gt; &lt;th&gt; Stop &lt;/th&gt; &lt;th&gt; T / B &lt;/th&gt; &lt;th&gt;&#39;</span>
+                   <span class="s1">&#39;B_init &lt;/th&gt; &lt;th&gt; T_init &lt;/th&gt;&lt;th&gt; sweep &lt;/th&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">argument</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;th&gt; {} &lt;/th&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">argument</span><span class="p">)</span>
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/tr&gt;&#39;</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Exp</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">sweep_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Tsweep&#39;</span><span class="p">,</span><span class="s1">&#39;Tscan&#39;</span><span class="p">,</span> <span class="s1">&#39;TSWEEP&#39;</span><span class="p">,</span> <span class="s1">&#39;TSTEP&#39;</span><span class="p">]:</span>
+            <span class="n">html_table</span> <span class="o">=</span> <span class="n">T_scan</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">html_table</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">sweep_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Bsweep&#39;</span><span class="p">,</span><span class="s1">&#39;Bscan&#39;</span><span class="p">,</span><span class="s1">&#39;BSWEEP&#39;</span><span class="p">,</span><span class="s1">&#39;BSTEP&#39;</span><span class="p">]:</span>
+            <span class="n">html_table</span> <span class="o">=</span> <span class="n">B_scan</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">html_table</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">html_table</span> <span class="o">=</span> <span class="n">A_scan</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">html_table</span><span class="p">)</span>              
+        <span class="k">if</span> <span class="s1">&#39;reserve&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;lock_in_1&#39;</span><span class="p">][</span><span class="s1">&#39;dyn_reserve&#39;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+
+        <span class="k">if</span> <span class="s1">&#39;angle&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">mean_angle</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+
+        <span class="k">if</span> <span class="s1">&#39;current&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">mean_current</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+
+        <span class="k">if</span> <span class="s1">&#39;NV&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">NV</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+
+        <span class="k">if</span> <span class="s1">&#39;filename&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dropping_resistance&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">dropping_resistance</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+
+
+        <span class="k">if</span> <span class="s1">&#39;amplification&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">amplification</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    
+                <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;reserve&#39;</span><span class="p">,</span> <span class="s1">&#39;angle&#39;</span><span class="p">,</span> <span class="s1">&#39;current&#39;</span><span class="p">,</span> <span class="s1">&#39;NV&#39;</span><span class="p">,</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="s1">&#39;dropping_resistance&#39;</span><span class="p">,</span> <span class="s1">&#39;amplification&#39;</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">findkey</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">k</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="ne">Warning</span><span class="p">(</span><span class="s1">&#39;{} not found in parameters&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">findkey</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s1">&#39;{} not found in data either&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+
+    
+        <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/tr&gt;&#39;</span>   
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>
+    <span class="k">return</span> <span class="n">html_table</span></div>
+
+<div class="viewcode-block" id="findkey"><a class="viewcode-back" href="../../e21.html#e21.utility.findkey">[docs]</a><span class="k">def</span> <span class="nf">findkey</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">d</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">findkey</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">found</span></div>
+
+<div class="viewcode-block" id="T_scan"><a class="viewcode-back" href="../../e21.html#e21.utility.T_scan">[docs]</a><span class="k">def</span> <span class="nf">T_scan</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">html_table</span><span class="p">):</span>
+    <span class="n">T_init</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">init_temperature</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">T_final</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">B_field</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">mean_field</span>                    
+    <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;{}&lt;/td&gt; &lt;td&gt; Tsweep &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} K &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} K &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {}+-{} T &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">num</span><span class="p">,</span>
+                        <span class="n">T_init</span><span class="p">,</span>
+                        <span class="n">T_final</span><span class="p">,</span>
+                        <span class="n">B_field</span><span class="p">,</span>
+                        <span class="n">sigma</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">init_field</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">init_temperature</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">target_temperature_rate</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">html_table</span></div>
+
+<div class="viewcode-block" id="B_scan"><a class="viewcode-back" href="../../e21.html#e21.utility.B_scan">[docs]</a><span class="k">def</span> <span class="nf">B_scan</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">html_table</span><span class="p">):</span>
+    <span class="n">B_init</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">B_final</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">Temp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;{}&lt;/td&gt; &lt;td&gt; Field &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} T &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} T &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {}+-{} K &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">num</span><span class="p">,</span>
+                        <span class="n">B_init</span><span class="p">,</span>
+                        <span class="n">B_final</span><span class="p">,</span>
+                        <span class="n">Temp</span><span class="p">,</span>
+                        <span class="n">sigma</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">init_field</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">init_temperature</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">target_field_rate</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">html_table</span></div>
+
+<div class="viewcode-block" id="A_scan"><a class="viewcode-back" href="../../e21.html#e21.utility.A_scan">[docs]</a><span class="k">def</span> <span class="nf">A_scan</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">html_table</span><span class="p">):</span>
+    <span class="n">B_init</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">mean_field</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">B_final</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">mean_field</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">Temp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">temperature</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;{}&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt;  &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt;  &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {}+-{} K &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                   <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">num</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">sweep_type</span><span class="p">,</span>
+                        <span class="n">Temp</span><span class="p">,</span>
+                        <span class="n">sigma</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">init_field</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">init_temperature</span><span class="p">,</span>
+                        <span class="n">Exp</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">target_field_rate</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">html_table</span></div>
+
+<div class="viewcode-block" id="replace"><a class="viewcode-back" href="../../e21.html#e21.utility.replace">[docs]</a><span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">subst</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Replace string in file</span>
+
+<span class="sd">    input: </span>
+<span class="sd">        file_path:  str, file path</span>
+<span class="sd">        pattern:    str, pattern to be replaced</span>
+<span class="sd">        subst:      str, substitution</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#Create temp file</span>
+    <span class="n">fh</span><span class="p">,</span> <span class="n">abs_path</span> <span class="o">=</span> <span class="n">mkstemp</span><span class="p">()</span>
+    <span class="n">new_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">abs_path</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">old_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">old_file</span><span class="p">:</span>
+        <span class="n">new_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">subst</span><span class="p">))</span>
+    <span class="c1">#close temp file</span>
+    <span class="n">new_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">close</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+    <span class="n">old_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="c1">#Remove original file</span>
+    <span class="n">remove</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="c1">#Move new file</span>
+    <span class="n">move</span><span class="p">(</span><span class="n">abs_path</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="replace_zeros"><a class="viewcode-back" href="../../e21.html#e21.utility.replace_zeros">[docs]</a><span class="k">def</span> <span class="nf">replace_zeros</span><span class="p">(</span><span class="n">only_y</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Replaces 0.0 with 0 for Chrisitan.</span>
+<span class="sd">    </span>
+<span class="sd">    E.g.::</span>
+
+<span class="sd">        f, ax = figure()</span>
+<span class="sd">        replace_zeros()</span>
+
+<span class="sd">    :param f: matplotlib figure.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">xlabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">()]</span>
+    <span class="n">ylabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">()]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xlabels</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">j</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">xlabels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ylabels</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">j</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">only_y</span><span class="p">:</span>    
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">xlabels</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">ylabels</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="replace_zeros_legend"><a class="viewcode-back" href="../../e21.html#e21.utility.replace_zeros_legend">[docs]</a><span class="k">def</span> <span class="nf">replace_zeros_legend</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Replaces 0.0 with 0 for Chrisitan in legends</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">lin</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">lines</span>
+    <span class="n">lab</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">get_label</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lin</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lab</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="s1">&#39;0.0&#39;</span><span class="p">:</span>
+            <span class="n">lab</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lin</span><span class="p">,</span> <span class="n">lab</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lin</span><span class="p">,</span> <span class="n">lab</span></div>
+
+<div class="viewcode-block" id="order_measurements"><a class="viewcode-back" href="../../e21.html#e21.utility.order_measurements">[docs]</a><span class="k">def</span> <span class="nf">order_measurements</span><span class="p">(</span><span class="n">Exp</span><span class="p">,</span> <span class="n">meas</span><span class="p">,</span> <span class="n">param</span> <span class="o">=</span> <span class="s1">&#39;temp&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Orders a list of measurements after a given parameter ascending</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    E.g.::</span>
+<span class="sd">    </span>
+<span class="sd">        path = &#39;/Your_Path/&#39;</span>
+<span class="sd">        MnSi_T = e21.sweet16.susceptibility.Experiment()</span>
+<span class="sd">        MnSi_T.add_measurements(sorted(glob.glob(path+&#39;*.dat&#39;), key=os.path.getmtime))</span>
+<span class="sd">        meas = [0,1,2,3]</span>
+<span class="sd">        order_measurements(MnSi_T, meas, param = &#39;temp&#39;)</span>
+<span class="sd">    </span>
+<span class="sd">    :param dict Exp: Sweet 16 Experiment class dictionary</span>
+<span class="sd">    :param list meas: List of measurements</span>
+<span class="sd">    :param str param: parameter to sort after:</span>
+<span class="sd">                      * &#39;temp&#39; = temperature, </span>
+<span class="sd">    </span>
+<span class="sd">    :raises: NotImplementedError if given order parameter not implemented  </span>
+<span class="sd">       </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">val</span> <span class="o">=</span> <span class="p">[]</span>    
+    <span class="k">if</span> <span class="n">param</span> <span class="o">==</span> <span class="s1">&#39;temp&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meas</span><span class="p">):</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_temperature</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">val</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">meas</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  
+        <span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="n">meas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="p">))]</span><span class="c1">#</span>
+    <span class="k">elif</span> <span class="n">param</span> <span class="o">==</span> <span class="s1">&#39;field&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meas</span><span class="p">):</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_field</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">val</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">meas</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  
+        <span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="n">meas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="p">))]</span><span class="c1">#</span>
+    <span class="k">elif</span> <span class="n">param</span> <span class="o">==</span> <span class="s1">&#39;current&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meas</span><span class="p">):</span>
+            <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_current</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">val</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">I</span><span class="p">,</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">meas</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  
+        <span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="n">meas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">meas</span><span class="p">))]</span><span class="c1">#</span>
+    <span class="k">else</span><span class="p">:</span>       
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Method not implemented yet: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="p">))</span>
+        
+    <span class="k">return</span> <span class="n">meas</span></div>
+
+<div class="viewcode-block" id="save"><a class="viewcode-back" href="../../e21.html#e21.utility.save">[docs]</a><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">Obj</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">binary</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">binary</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">Obj</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">Obj</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../e21.html#e21.utility.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+        
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Felix.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

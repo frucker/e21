@@ -1,0 +1,30 @@
+e21.Nicos.Mira package
+======================
+
+Submodules
+----------
+
+e21.Nicos.Mira.core module
+--------------------------
+
+.. automodule:: e21.Nicos.Mira.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.Nicos.Mira.miraHe3 module
+-----------------------------
+
+.. automodule:: e21.Nicos.Mira.miraHe3
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: e21.Nicos.Mira
+    :members:
+    :undoc-members:
+    :show-inheritance:

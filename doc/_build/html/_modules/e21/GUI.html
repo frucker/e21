@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>e21.GUI &mdash; E21 0.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="E21 0.1.0dev documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          E21</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.0dev</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="simple">
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../e21.html">e21 package</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <h1>Source code for e21.GUI</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tkMessageBox</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">tkMessageBox</span>
+<span class="kn">from</span> <span class="nn">Tkinter</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">ttk</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="save_obj"><a class="viewcode-back" href="../../e21.html#e21.GUI.save_obj">[docs]</a><span class="k">def</span> <span class="nf">save_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="load_obj"><a class="viewcode-back" href="../../e21.html#e21.GUI.load_obj">[docs]</a><span class="k">def</span> <span class="nf">load_obj</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../e21.html#e21.GUI.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s1">&#39;Test&#39;</span></div>
+
+
+
+    
+<div class="viewcode-block" id="runwidget"><a class="viewcode-back" href="../../e21.html#e21.GUI.runwidget">[docs]</a><span class="k">def</span> <span class="nf">runwidget</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">Variables</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">Tk</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Fuckit&#39;</span><span class="p">)</span>
+    
+    <span class="n">t</span> <span class="o">=</span> <span class="n">ButtonWidget</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">row2</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">cols</span> <span class="o">=</span> <span class="n">cols</span> <span class="o">+</span><span class="mi">1</span> 
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">key2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
+                <span class="n">Variables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key2</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">Variables</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">row2</span> <span class="o">=</span> <span class="n">row2</span> <span class="o">+</span><span class="mi">1</span>
+                    <span class="n">Label</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">key</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="n">cols</span><span class="p">)</span>
+                    <span class="n">Variable</span> <span class="o">=</span> <span class="n">IntVar</span><span class="p">()</span>
+                    <span class="n">C1</span> <span class="o">=</span> <span class="n">Checkbutton</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">key2</span><span class="p">,</span> <span class="n">variable</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">,</span>
+                                                 <span class="n">onvalue</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">offvalue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">C1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span> <span class="o">=</span> <span class="n">row2</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="n">cols</span> <span class="p">,</span> <span class="n">sticky</span> <span class="o">=</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+                    <span class="n">Variables</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">key2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Variable</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span><span class="mi">1</span>
+            <span class="n">Variable</span> <span class="o">=</span> <span class="n">IntVar</span><span class="p">()</span>
+            <span class="n">C1</span> <span class="o">=</span> <span class="n">Checkbutton</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">key</span><span class="p">,</span> <span class="n">variable</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">,</span> 
+                                         <span class="n">onvalue</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">offvalue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">C1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">sticky</span> <span class="o">=</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">Variables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">Variable</span>
+    <span class="n">Label</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Toplevel&#39;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">Variables</span></div>
+    
+<div class="viewcode-block" id="ButtonWidget"><a class="viewcode-back" href="../../e21.html#e21.GUI.ButtonWidget">[docs]</a><span class="k">class</span> <span class="nc">ButtonWidget</span><span class="p">(</span><span class="n">Frame</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span><span class="s2">&quot;Done!&quot;</span><span class="p">,</span> <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_close</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="c1">#scrollbar = Scrollbar(self)</span>
+        <span class="c1">#scrollbar.pack(side=RIGHT, fill=Y)</span>
+    <span class="k">def</span> <span class="nf">_close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="SelectionWidget"><a class="viewcode-back" href="../../e21.html#e21.GUI.SelectionWidget">[docs]</a><span class="k">class</span> <span class="nc">SelectionWidget</span><span class="p">(</span><span class="n">Frame</span><span class="p">):</span>  
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">flashCardText</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Please Choose&#39;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">B1</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span><span class="s2">&quot;New!&quot;</span><span class="p">,</span> <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">B2</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span><span class="s2">&quot;Old!&quot;</span><span class="p">,</span> <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">old</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">B3</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span><span class="s2">&quot;Edit Old!&quot;</span><span class="p">,</span> <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edit_old</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<div class="viewcode-block" id="SelectionWidget.new"><a class="viewcode-back" href="../../e21.html#e21.GUI.SelectionWidget.new">[docs]</a>    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close</span><span class="p">()</span>
+        <span class="n">runwidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span></div>
+<div class="viewcode-block" id="SelectionWidget.old"><a class="viewcode-back" href="../../e21.html#e21.GUI.SelectionWidget.old">[docs]</a>    <span class="k">def</span> <span class="nf">old</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close</span><span class="p">()</span>
+        <span class="n">runwidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span></div>
+<div class="viewcode-block" id="SelectionWidget.edit_old"><a class="viewcode-back" href="../../e21.html#e21.GUI.SelectionWidget.edit_old">[docs]</a>    <span class="k">def</span> <span class="nf">edit_old</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close</span><span class="p">()</span>
+        <span class="n">runwidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span></div>
+        
+        
+        
+    <span class="k">def</span> <span class="nf">_close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span></div>
+        
+
+<div class="viewcode-block" id="overview"><a class="viewcode-back" href="../../e21.html#e21.GUI.overview">[docs]</a><span class="k">def</span> <span class="nf">overview</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">Variables</span> <span class="o">=</span> <span class="n">load_obj</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">Tk</span><span class="p">()</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Fuckit&#39;</span><span class="p">)</span>
+        
+        <span class="n">t</span> <span class="o">=</span> <span class="n">SelectionWidget</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">test</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="n">Variables</span> <span class="o">=</span> <span class="n">runwidget</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> 
+    <span class="k">for</span> <span class="n">keys</span> <span class="ow">in</span> <span class="n">Variables</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">Variables</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span> <span class="o">=</span> <span class="n">Variables</span><span class="p">[</span><span class="n">keys</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">Variables</span></div>
+
+
+
+
+    
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Felix.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

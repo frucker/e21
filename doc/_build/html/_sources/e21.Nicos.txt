@@ -1,0 +1,30 @@
+e21.Nicos package
+=================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    e21.Nicos.Dryo
+    e21.Nicos.Mira
+
+Submodules
+----------
+
+e21.Nicos.loader module
+-----------------------
+
+.. automodule:: e21.Nicos.loader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: e21.Nicos
+    :members:
+    :undoc-members:
+    :show-inheritance:

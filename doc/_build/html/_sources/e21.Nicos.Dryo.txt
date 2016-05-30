@@ -1,0 +1,30 @@
+e21.Nicos.Dryo package
+======================
+
+Submodules
+----------
+
+e21.Nicos.Dryo.core module
+--------------------------
+
+.. automodule:: e21.Nicos.Dryo.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+e21.Nicos.Dryo.susceptibility module
+------------------------------------
+
+.. automodule:: e21.Nicos.Dryo.susceptibility
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: e21.Nicos.Dryo
+    :members:
+    :undoc-members:
+    :show-inheritance:
