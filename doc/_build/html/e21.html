@@ -25,13 +25,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="E21 0.1.0dev documentation" href="index.html" />
-    <link rel="next" title="e21.PPMS package" href="e21.PPMS.html" />
+    <link rel="next" title="e21.Nicos package" href="e21.Nicos.html" />
     <link rel="prev" title="Welcome to E21’s documentation!" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -39,7 +39,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -70,7 +70,7 @@
       aria-labelledby="dLabelGlobalToc"><ul class="simple">
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">e21 package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">e21 package</a></li>
 </ul>
 </ul>
 </li>
@@ -87,9 +87,10 @@
 <li><a class="reference internal" href="#">e21 package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-e21.GUI">e21.GUI module</a></li>
 <li><a class="reference internal" href="#module-e21.core">e21.core module</a></li>
 <li><a class="reference internal" href="#module-e21.filter">e21.filter module</a></li>
-<li><a class="reference internal" href="#e21-utility-module">e21.utility module</a></li>
+<li><a class="reference internal" href="#module-e21.utility">e21.utility module</a></li>
 <li><a class="reference internal" href="#module-e21.vsm">e21.vsm module</a></li>
 <li><a class="reference internal" href="#module-e21">Module contents</a></li>
 </ul>
@@ -103,11 +104,11 @@
               
                 
   <li>
-    <a href="index.html" title="Previous Chapter: Welcome to E21’s documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Welcome to E21’s...</span>
+    <a href="index.html" title="Previous Chapter: Welcome to E21’s documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Welcome to E2...</span>
     </a>
   </li>
   <li>
-    <a href="e21.PPMS.html" title="Next Chapter: e21.PPMS package"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">e21.PPMS package &raquo;</span>
+    <a href="e21.Nicos.html" title="Next Chapter: e21.Nicos package"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">e21.Nicos pac... &raquo;</span>
     </a>
   </li>
               
@@ -147,17 +148,41 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="e21.Nicos.html">e21.Nicos package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="e21.Nicos.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="e21.Nicos.Dryo.html">e21.Nicos.Dryo package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="e21.Nicos.Dryo.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="e21.Nicos.Dryo.html#module-e21.Nicos.Dryo.core">e21.Nicos.Dryo.core module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="e21.Nicos.Dryo.html#module-e21.Nicos.Dryo.susceptibility">e21.Nicos.Dryo.susceptibility module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="e21.Nicos.Dryo.html#module-e21.Nicos.Dryo">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="e21.Nicos.Mira.html">e21.Nicos.Mira package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="e21.Nicos.Mira.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="e21.Nicos.Mira.html#module-e21.Nicos.Mira.core">e21.Nicos.Mira.core module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="e21.Nicos.Mira.html#module-e21.Nicos.Mira.miraHe3">e21.Nicos.Mira.miraHe3 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="e21.Nicos.Mira.html#module-e21.Nicos.Mira">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="e21.Nicos.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.Nicos.html#module-e21.Nicos.loader">e21.Nicos.loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.Nicos.html#module-e21.Nicos">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="e21.PPMS.html">e21.PPMS package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#e21-ppms-acms-module">e21.PPMS.ACMS module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#e21-ppms-loader-module">e21.PPMS.loader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#e21-ppms-susceptibility-module">e21.PPMS.susceptibility module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#e21-ppms-transport-module">e21.PPMS.transport module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#module-e21.PPMS.core">e21.PPMS.core module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#module-e21.PPMS.loader">e21.PPMS.loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#module-e21.PPMS.susceptibility">e21.PPMS.susceptibility module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#module-e21.PPMS.transport">e21.PPMS.transport module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.PPMS.html#module-e21.PPMS">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="e21.sweet16.html">e21.sweet16 package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16.core">e21.sweet16.core module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16.loader">e21.sweet16.loader module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16.spintorque_utility">e21.sweet16.spintorque_utility module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="e21.sweet16.html#module-e21.sweet16.susceptibility">e21.sweet16.susceptibility module</a></li>
@@ -171,37 +196,85 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-e21.GUI">
+<span id="e21-gui-module"></span><h2>e21.GUI module<a class="headerlink" href="#module-e21.GUI" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.GUI.ButtonWidget">
+<em class="property">class </em><code class="descclassname">e21.GUI.</code><code class="descname">ButtonWidget</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#ButtonWidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.ButtonWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">ttk.Frame</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.GUI.SelectionWidget">
+<em class="property">class </em><code class="descclassname">e21.GUI.</code><code class="descname">SelectionWidget</code><span class="sig-paren">(</span><em>parent</em>, <em>params</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#SelectionWidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.SelectionWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">ttk.Frame</span></code></p>
+<dl class="method">
+<dt id="e21.GUI.SelectionWidget.edit_old">
+<code class="descname">edit_old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#SelectionWidget.edit_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.SelectionWidget.edit_old" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.GUI.SelectionWidget.new">
+<code class="descname">new</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#SelectionWidget.new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.SelectionWidget.new" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.GUI.SelectionWidget.old">
+<code class="descname">old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#SelectionWidget.old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.SelectionWidget.old" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.GUI.load_obj">
+<code class="descclassname">e21.GUI.</code><code class="descname">load_obj</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#load_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.load_obj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.GUI.overview">
+<code class="descclassname">e21.GUI.</code><code class="descname">overview</code><span class="sig-paren">(</span><em>params</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#overview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.overview" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.GUI.runwidget">
+<code class="descclassname">e21.GUI.</code><code class="descname">runwidget</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#runwidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.runwidget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.GUI.save_obj">
+<code class="descclassname">e21.GUI.</code><code class="descname">save_obj</code><span class="sig-paren">(</span><em>obj</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#save_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.save_obj" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.GUI.test">
+<code class="descclassname">e21.GUI.</code><code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/GUI.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.GUI.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-e21.core">
 <span id="e21-core-module"></span><h2>e21.core module<a class="headerlink" href="#module-e21.core" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="e21.core.Experiment">
-<em class="property">class </em><tt class="descclassname">e21.core.</tt><tt class="descname">Experiment</tt><big>(</big><em>measurements={}</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Experiment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">e21.core.</code><code class="descname">Experiment</code><span class="sig-paren">(</span><em>measurements={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/core.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Minimal implementation of a experiment class.</p>
-<dl class="method">
-<dt id="e21.core.Experiment.add_measurements">
-<tt class="descname">add_measurements</tt><big>(</big><em>filelist</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#Experiment.add_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Experiment.add_measurements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds measurements to Experiment</p>
-<p>filelist: list of measurement files</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="e21.core.Measurement">
-<em class="property">class </em><tt class="descclassname">e21.core.</tt><tt class="descname">Measurement</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#Measurement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Measurement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">e21.core.</code><code class="descname">Measurement</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/core.html#Measurement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Measurement base class.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="e21.core.Plottable">
-<em class="property">class </em><tt class="descclassname">e21.core.</tt><tt class="descname">Plottable</tt><a class="reference internal" href="_modules/e21/core.html#Plottable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Plottable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">e21.core.</code><code class="descname">Plottable</code><a class="reference internal" href="_modules/e21/core.html#Plottable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Plottable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Mixin class providing a generic plot function.</p>
 <dl class="method">
 <dt id="e21.core.Plottable.plot">
-<tt class="descname">plot</tt><big>(</big><em>y</em>, <em>x</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#Plottable.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Plottable.plot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>y</em>, <em>x</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/core.html#Plottable.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.Plottable.plot" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -216,12 +289,12 @@
 
 <dl class="function">
 <dt id="e21.core.init_mpl">
-<tt class="descclassname">e21.core.</tt><tt class="descname">init_mpl</tt><big>(</big><em>nbins=7, steps=[1, 2, 3, 5, 10]</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#init_mpl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.init_mpl" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">e21.core.</code><code class="descname">init_mpl</code><span class="sig-paren">(</span><em>nbins=4, steps=[1, 2, 3, 5, 10]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/core.html#init_mpl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.init_mpl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="e21.core.lookup">
-<tt class="descclassname">e21.core.</tt><tt class="descname">lookup</tt><big>(</big><em>obj</em>, <em>name</em><big>)</big><a class="reference internal" href="_modules/e21/core.html#lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.lookup" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">e21.core.</code><code class="descname">lookup</code><span class="sig-paren">(</span><em>obj</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/core.html#lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.core.lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function to provide function and string lookup of attributes.</p>
 <dl class="docutils">
 <dt>E.g.::</dt>
@@ -243,7 +316,7 @@ myvalue
 <span id="e21-filter-module"></span><h2>e21.filter module<a class="headerlink" href="#module-e21.filter" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="e21.filter.savitzky_golay">
-<tt class="descclassname">e21.filter.</tt><tt class="descname">savitzky_golay</tt><big>(</big><em>y</em>, <em>window_size</em>, <em>order</em>, <em>deriv=0</em>, <em>rate=1</em><big>)</big><a class="reference internal" href="_modules/e21/filter.html#savitzky_golay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.filter.savitzky_golay" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">e21.filter.</code><code class="descname">savitzky_golay</code><span class="sig-paren">(</span><em>y</em>, <em>window_size</em>, <em>order</em>, <em>deriv=0</em>, <em>rate=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/filter.html#savitzky_golay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.filter.savitzky_golay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smooth (and optionally differentiate) data with a Savitzky-Golay filter.
 The Savitzky-Golay filter removes high frequency noise from data.
 It has the advantage of preserving the original shape and
@@ -255,17 +328,17 @@ y : array_like, shape (N,)</p>
 <blockquote>
 <div>the values of the time history of the signal.</div></blockquote>
 <dl class="docutils">
-<dt>window_size <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>the length of the window. Must be an odd integer number.</dd>
-<dt>order <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>the order of the polynomial used in the filtering.
+<dt>window_size</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>the length of the window. Must be an odd integer number.</dd>
+<dt>order</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>the order of the polynomial used in the filtering.
 Must be less then <cite>window_size</cite> - 1.</dd>
 <dt>deriv: int</dt>
 <dd>the order of the derivative to compute (default = 0 means only smoothing)</dd>
 </dl>
 <dl class="docutils">
-<dt>ys <span class="classifier-delimiter">:</span> <span class="classifier">ndarray, shape (N)</span></dt>
-<dd>the smoothed signal (or it&#8217;s n-th derivative).</dd>
+<dt>ys</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">ndarray, shape (N)</span><dd>the smoothed signal (or it&#8217;s n-th derivative).</dd>
 </dl>
 <p>The Savitzky-Golay is a type of low-pass filter, particularly
 suited for smoothing noisy data. The main idea behind this
@@ -300,18 +373,267 @@ Cambridge University Press ISBN-13: 9780521880688</td></tr>
 </dd></dl>
 
 </div>
-<div class="section" id="e21-utility-module">
-<h2>e21.utility module<a class="headerlink" href="#e21-utility-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-e21.utility">
+<span id="e21-utility-module"></span><h2>e21.utility module<a class="headerlink" href="#module-e21.utility" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="e21.utility.A_scan">
+<code class="descclassname">e21.utility.</code><code class="descname">A_scan</code><span class="sig-paren">(</span><em>Exp</em>, <em>num</em>, <em>html_table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#A_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.A_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.B_scan">
+<code class="descclassname">e21.utility.</code><code class="descname">B_scan</code><span class="sig-paren">(</span><em>Exp</em>, <em>num</em>, <em>html_table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#B_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.B_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.Calc_Sus_PPMS_SI">
+<code class="descclassname">e21.utility.</code><code class="descname">Calc_Sus_PPMS_SI</code><span class="sig-paren">(</span><em>input_emu</em>, <em>rho_g_cm3</em>, <em>mass_in_mg</em>, <em>field_in_mT</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#Calc_Sus_PPMS_SI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.Calc_Sus_PPMS_SI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.Calc_Sus_PPMS_SI_volume">
+<code class="descclassname">e21.utility.</code><code class="descname">Calc_Sus_PPMS_SI_volume</code><span class="sig-paren">(</span><em>input_emu</em>, <em>volume_in_mm3</em>, <em>field_in_mT</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#Calc_Sus_PPMS_SI_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.Calc_Sus_PPMS_SI_volume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.Felix_colormap">
+<code class="descclassname">e21.utility.</code><code class="descname">Felix_colormap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#Felix_colormap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.Felix_colormap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.MakeOverview">
+<code class="descclassname">e21.utility.</code><code class="descname">MakeOverview</code><span class="sig-paren">(</span><em>Exp</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#MakeOverview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.MakeOverview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overview over all measurements including every type of measurement
+(so far B/T Sweeps)</p>
+<p>args options append a coulmn with the
+corresponding measurement property:</p>
+<blockquote>
+<div>files, current, needle valve</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.utility.ProgressBar">
+<em class="property">class </em><code class="descclassname">e21.utility.</code><code class="descname">ProgressBar</code><span class="sig-paren">(</span><em>iterations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#ProgressBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.ProgressBar" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="e21.utility.ProgressBar.animate_ipython">
+<code class="descname">animate_ipython</code><span class="sig-paren">(</span><em>iter</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#ProgressBar.animate_ipython"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.ProgressBar.animate_ipython" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.utility.ProgressBar.update_iteration">
+<code class="descname">update_iteration</code><span class="sig-paren">(</span><em>elapsed_iter</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#ProgressBar.update_iteration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.ProgressBar.update_iteration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.STT_colormap">
+<code class="descclassname">e21.utility.</code><code class="descname">STT_colormap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#STT_colormap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.STT_colormap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.T_scan">
+<code class="descclassname">e21.utility.</code><code class="descname">T_scan</code><span class="sig-paren">(</span><em>Exp</em>, <em>num</em>, <em>html_table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#T_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.T_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.antisymmetrize">
+<code class="descclassname">e21.utility.</code><code class="descname">antisymmetrize</code><span class="sig-paren">(</span><em>Meas</em>, <em>Meas2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#antisymmetrize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.antisymmetrize" title="Permalink to this definition">¶</a></dt>
+<dd><p>symmetrize transport data.</p>
+<dl class="docutils">
+<dt>input:</dt>
+<dd>Meas: transport measurement class, upsweep
+Meas2:  transport measurement class, downsweep</dd>
+<dt>output:</dt>
+<dd>list, symmetrized data</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.calibrate">
+<code class="descclassname">e21.utility.</code><code class="descname">calibrate</code><span class="sig-paren">(</span><em>data</em>, <em>scaling</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#calibrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.calibrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>calibrate data by multiplying a scaling factor</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.correct_temp">
+<code class="descclassname">e21.utility.</code><code class="descname">correct_temp</code><span class="sig-paren">(</span><em>temps</em>, <em>T</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#correct_temp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.correct_temp" title="Permalink to this definition">¶</a></dt>
+<dd><p>correct temperatures (temps) for constant offset (T)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.export_FS">
+<code class="descclassname">e21.utility.</code><code class="descname">export_FS</code><span class="sig-paren">(</span><em>data</em>, <em>numbers</em>, <em>path</em>, <em>option='susceptibility'</em>, <em>scailing=1</em>, <em>t_off=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#export_FS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.export_FS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export Field Sweeps to txt files. 
+Outputfiles are stored in &#8216;path&#8217; directory.</p>
+<p>Options:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Susceptibility: - One .txt file for each FS, </dt>
+<dd><blockquote class="first">
+<div><p>named after mean temperature: &#8220;FSxxxxK&#8221;
+Temperature given in 4 digits:  4.38 K  &#8211;&gt; 0483</p>
+<blockquote>
+<div>12.80 K &#8211;&gt; 1280    
+320.1 K &#8211;&gt; 3201</div></blockquote>
+<p>File header: Temperature Field SUS SUSIM</p>
+</div></blockquote>
+<ul class="last simple">
+<li>One .txt file containing all FS, horizontally stacked</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<p>Input parameters:</p>
+<blockquote>
+<div>data:       Experiment/Susceptibility Class Data Set
+numbers:    list of desired measurements for output
+path:       output folder (must exist)</div></blockquote>
+<p>optional:</p>
+<blockquote>
+<div>options:    - &#8216;susceptibility&#8217; (default) for susceptiblity measurements    
+scailing:   - scailing number to calibrate susceptibility
+t_off:      - temperature offset</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.findkey">
+<code class="descclassname">e21.utility.</code><code class="descname">findkey</code><span class="sig-paren">(</span><em>d</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#findkey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.findkey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.measurement_details">
+<code class="descclassname">e21.utility.</code><code class="descname">measurement_details</code><span class="sig-paren">(</span><em>Exp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#measurement_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.measurement_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a function g(i) which can be used with ipython.widges.interact</p>
+<p>input parameters:</p>
+<blockquote>
+<div>Exp: e21 Experiment class dicitonary</div></blockquote>
+<p>output:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>g(i): function that displays a HTML table containing comprehensive</dt>
+<dd>measurement information on Measurement Exp[i]</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.merge_dicts">
+<code class="descclassname">e21.utility.</code><code class="descname">merge_dicts</code><span class="sig-paren">(</span><em>*dicts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#merge_dicts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.merge_dicts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges multiple dicts together.</p>
+<dl class="docutils">
+<dt>::</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">merge_dicts</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="go">{&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: 1}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.order_measurements">
+<code class="descclassname">e21.utility.</code><code class="descname">order_measurements</code><span class="sig-paren">(</span><em>Exp</em>, <em>meas</em>, <em>param='temp'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#order_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.order_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Orders a list of measurements after a given parameter ascending</p>
+<p>E.g.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/Your_Path/&#39;</span>
+<span class="n">MnSi_T</span> <span class="o">=</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">Experiment</span><span class="p">()</span>
+<span class="n">MnSi_T</span><span class="o">.</span><span class="n">add_measurements</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;*.dat&#39;</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">))</span>
+<span class="n">meas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">order_measurements</span><span class="p">(</span><span class="n">MnSi_T</span><span class="p">,</span> <span class="n">meas</span><span class="p">,</span> <span class="n">param</span> <span class="o">=</span> <span class="s1">&#39;temp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Exp</strong> (<em>dict</em>) &#8211; Sweet 16 Experiment class dictionary</li>
+<li><strong>meas</strong> (<em>list</em>) &#8211; List of measurements</li>
+<li><strong>param</strong> (<em>str</em>) &#8211; parameter to sort after:
+* &#8216;temp&#8217; = temperature,</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">NotImplementedError if given order parameter not implemented</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.read">
+<code class="descclassname">e21.utility.</code><code class="descname">read</code><span class="sig-paren">(</span><em>path</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.replace">
+<code class="descclassname">e21.utility.</code><code class="descname">replace</code><span class="sig-paren">(</span><em>file_path</em>, <em>pattern</em>, <em>subst</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace string in file</p>
+<dl class="docutils">
+<dt>input: </dt>
+<dd>file_path:  str, file path
+pattern:    str, pattern to be replaced
+subst:      str, substitution</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.replace_zeros">
+<code class="descclassname">e21.utility.</code><code class="descname">replace_zeros</code><span class="sig-paren">(</span><em>only_y=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#replace_zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.replace_zeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces 0.0 with 0 for Chrisitan.</p>
+<p>E.g.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
+<span class="n">replace_zeros</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; matplotlib figure.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.replace_zeros_legend">
+<code class="descclassname">e21.utility.</code><code class="descname">replace_zeros_legend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#replace_zeros_legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.replace_zeros_legend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces 0.0 with 0 for Chrisitan in legends</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.save">
+<code class="descclassname">e21.utility.</code><code class="descname">save</code><span class="sig-paren">(</span><em>Obj</em>, <em>path</em>, <em>name</em>, <em>binary=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.utility.symmetrize">
+<code class="descclassname">e21.utility.</code><code class="descname">symmetrize</code><span class="sig-paren">(</span><em>Meas</em>, <em>Meas2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/utility.html#symmetrize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.utility.symmetrize" title="Permalink to this definition">¶</a></dt>
+<dd><p>symmetrize transport data.</p>
+<dl class="docutils">
+<dt>input:</dt>
+<dd>Meas: transport measurement class, upsweep
+Meas2:  transport measurement class, downsweep</dd>
+<dt>output:</dt>
+<dd>list, symmetrized data</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-e21.vsm">
 <span id="e21-vsm-module"></span><h2>e21.vsm module<a class="headerlink" href="#module-e21.vsm" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="e21.vsm.FieldScan">
-<em class="property">class </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">FieldScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#FieldScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.FieldScan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#e21.vsm.Magnetisation" title="e21.vsm.Magnetisation"><tt class="xref py py-class docutils literal"><span class="pre">e21.vsm.Magnetisation</span></tt></a>, <a class="reference internal" href="#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<em class="property">class </em><code class="descclassname">e21.vsm.</code><code class="descname">FieldScan</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#FieldScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.FieldScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.vsm.Magnetisation" title="e21.vsm.Magnetisation"><code class="xref py py-class docutils literal"><span class="pre">e21.vsm.Magnetisation</span></code></a>, <a class="reference internal" href="#e21.core.Plottable" title="e21.core.Plottable"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></code></a></p>
 <dl class="method">
 <dt id="e21.vsm.FieldScan.plot">
-<tt class="descname">plot</tt><big>(</big><em>y='m'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#FieldScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.FieldScan.plot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>y='m'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#FieldScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.FieldScan.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A default implementation for a generic fieldscan plot.</p>
 </dd></dl>
 
@@ -319,11 +641,11 @@ Cambridge University Press ISBN-13: 9780521880688</td></tr>
 
 <dl class="class">
 <dt id="e21.vsm.Loader">
-<em class="property">class </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">Loader</tt><big>(</big><em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Loader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<em class="property">class </em><code class="descclassname">e21.vsm.</code><code class="descname">Loader</code><span class="sig-paren">(</span><em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="e21.vsm.Loader.parse">
-<tt class="descname">parse</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Loader.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Loader.parse" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parse</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#Loader.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Loader.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Importer for VSM datafiles.</p>
 <p>The VSM files have the following syntax:</p>
 <blockquote>
@@ -343,65 +665,65 @@ possible. The datetime has the following syntax:
 
 <dl class="class">
 <dt id="e21.vsm.Magnetisation">
-<em class="property">class </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">Magnetisation</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#e21.core.Measurement" title="e21.core.Measurement"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Measurement</span></tt></a></p>
+<em class="property">class </em><code class="descclassname">e21.vsm.</code><code class="descname">Magnetisation</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.core.Measurement" title="e21.core.Measurement"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Measurement</span></code></a></p>
 <dl class="attribute">
 <dt id="e21.vsm.Magnetisation.control_temperature">
-<tt class="descname">control_temperature</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.control_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.control_temperature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">control_temperature</code><a class="headerlink" href="#e21.vsm.Magnetisation.control_temperature" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="e21.vsm.Magnetisation.field">
-<tt class="descname">field</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.field" title="Permalink to this definition">¶</a></dt>
+<code class="descname">field</code><a class="headerlink" href="#e21.vsm.Magnetisation.field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="e21.vsm.Magnetisation.m">
-<tt class="descname">m</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.m" title="Permalink to this definition">¶</a></dt>
+<code class="descname">m</code><a class="headerlink" href="#e21.vsm.Magnetisation.m" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the magnetic moment of the X signal.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="e21.vsm.Magnetisation.target_temperature">
-<tt class="descname">target_temperature</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.target_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.target_temperature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">target_temperature</code><a class="headerlink" href="#e21.vsm.Magnetisation.target_temperature" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="e21.vsm.Magnetisation.temperature">
-<tt class="descname">temperature</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.temperature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">temperature</code><a class="headerlink" href="#e21.vsm.Magnetisation.temperature" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="e21.vsm.Magnetisation.temperature_stability">
-<tt class="descname">temperature_stability</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.temperature_stability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.temperature_stability" title="Permalink to this definition">¶</a></dt>
+<code class="descname">temperature_stability</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.temperature_stability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.temperature_stability" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="e21.vsm.Magnetisation.x">
-<tt class="descname">x</tt><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.x" title="Permalink to this definition">¶</a></dt>
+<code class="descname">x</code><a class="headerlink" href="#e21.vsm.Magnetisation.x" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="e21.vsm.Magnetisation.y">
-<tt class="descname">y</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.y" title="Permalink to this definition">¶</a></dt>
+<code class="descname">y</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#Magnetisation.y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.Magnetisation.y" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="exception">
 <dt id="e21.vsm.ParsingError">
-<em class="property">exception </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">ParsingError</tt><a class="reference internal" href="_modules/e21/vsm.html#ParsingError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.ParsingError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<em class="property">exception </em><code class="descclassname">e21.vsm.</code><code class="descname">ParsingError</code><a class="reference internal" href="_modules/e21/vsm.html#ParsingError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.ParsingError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
 <p>Raised by the Loader classes when a parsing error occures.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="e21.vsm.TemperatureScan">
-<em class="property">class </em><tt class="descclassname">e21.vsm.</tt><tt class="descname">TemperatureScan</tt><big>(</big><em>data</em>, <em>params</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#TemperatureScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.TemperatureScan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#e21.vsm.Magnetisation" title="e21.vsm.Magnetisation"><tt class="xref py py-class docutils literal"><span class="pre">e21.vsm.Magnetisation</span></tt></a>, <a class="reference internal" href="#e21.core.Plottable" title="e21.core.Plottable"><tt class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></tt></a></p>
+<em class="property">class </em><code class="descclassname">e21.vsm.</code><code class="descname">TemperatureScan</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#TemperatureScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.TemperatureScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.vsm.Magnetisation" title="e21.vsm.Magnetisation"><code class="xref py py-class docutils literal"><span class="pre">e21.vsm.Magnetisation</span></code></a>, <a class="reference internal" href="#e21.core.Plottable" title="e21.core.Plottable"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></code></a></p>
 <dl class="method">
 <dt id="e21.vsm.TemperatureScan.plot">
-<tt class="descname">plot</tt><big>(</big><em>y='m'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/e21/vsm.html#TemperatureScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.TemperatureScan.plot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>y='m'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/vsm.html#TemperatureScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.vsm.TemperatureScan.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A default implementation for a generic fieldscan plot.</p>
 </dd></dl>
 
@@ -426,7 +748,7 @@ possible. The datetime has the following syntax:
     </p>
     <p>
         &copy; Copyright 2015, Felix.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

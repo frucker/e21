@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
@@ -38,7 +38,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -117,76 +117,75 @@
     <div class="col-md-12">
       
   <h1>Source code for e21.core</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="c">#</span>
-<span class="c"># e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.</span>
 <span class="kn">import</span> <span class="nn">collections</span>
-
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.ticker</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">pl</span>
-<span class="c">#import seaborn as sns</span>
+<span class="c1">#import seaborn as sns</span>
 <span class="kn">import</span> <span class="nn">e21.core</span>
 
-<span class="c"># colors taken from bootstrap</span>
+<span class="c1"># colors taken from bootstrap</span>
 <span class="n">COLORS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;black&#39;</span><span class="p">:</span> <span class="s">&#39;#000000&#39;</span><span class="p">,</span>
-    <span class="s">&#39;darker gray&#39;</span><span class="p">:</span> <span class="s">&#39;#222222&#39;</span><span class="p">,</span>
-    <span class="s">&#39;dark gray&#39;</span><span class="p">:</span> <span class="s">&#39;#333333&#39;</span><span class="p">,</span>  <span class="c">#text color</span>
-    <span class="s">&#39;gray&#39;</span><span class="p">:</span> <span class="s">&#39;#555555&#39;</span><span class="p">,</span>
-    <span class="s">&#39;light gray&#39;</span><span class="p">:</span> <span class="s">&#39;#999999&#39;</span><span class="p">,</span>
-    <span class="s">&#39;lighter gray&#39;</span><span class="p">:</span> <span class="s">&#39;#eeeeee&#39;</span><span class="p">,</span>
-    <span class="s">&#39;white&#39;</span><span class="p">:</span> <span class="s">&#39;#ffffff&#39;</span><span class="p">,</span>
-    <span class="s">&#39;blue&#39;</span><span class="p">:</span> <span class="s">&#39;#049cdb&#39;</span><span class="p">,</span>
-    <span class="s">&#39;dark blue&#39;</span><span class="p">:</span> <span class="s">&#39;#0064cd&#39;</span><span class="p">,</span>
-    <span class="s">&#39;light blue&#39;</span><span class="p">:</span> <span class="s">&#39;#3a87ad&#39;</span><span class="p">,</span>
-    <span class="s">&#39;lighter blue&#39;</span><span class="p">:</span> <span class="s">&#39;#d9edf7&#39;</span><span class="p">,</span>
-    <span class="s">&#39;green&#39;</span><span class="p">:</span> <span class="s">&#39;#46a546&#39;</span><span class="p">,</span>
-    <span class="s">&#39;light green&#39;</span><span class="p">:</span> <span class="s">&#39;#468847&#39;</span><span class="p">,</span>
-    <span class="s">&#39;lighter green&#39;</span><span class="p">:</span> <span class="s">&#39;#dff0d8&#39;</span><span class="p">,</span>
-    <span class="s">&#39;red&#39;</span><span class="p">:</span> <span class="s">&#39;#9d261d&#39;</span><span class="p">,</span>
-    <span class="s">&#39;light red&#39;</span><span class="p">:</span> <span class="s">&#39;#b94a48&#39;</span><span class="p">,</span>
-    <span class="s">&#39;lighter red&#39;</span><span class="p">:</span> <span class="s">&#39;#f2dede&#39;</span><span class="p">,</span>
-    <span class="s">&#39;yellow&#39;</span><span class="p">:</span> <span class="s">&#39;#ffc40d&#39;</span><span class="p">,</span>
-    <span class="s">&#39;light yellow&#39;</span><span class="p">:</span> <span class="s">&#39;#fcf8e3&#39;</span><span class="p">,</span>
-    <span class="s">&#39;orange&#39;</span><span class="p">:</span> <span class="s">&#39;#f89406&#39;</span><span class="p">,</span>
-    <span class="s">&#39;pink&#39;</span><span class="p">:</span> <span class="s">&#39;#c3325f&#39;</span><span class="p">,</span>
-    <span class="s">&#39;purple&#39;</span><span class="p">:</span> <span class="s">&#39;#7a43b6&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;black&#39;</span><span class="p">:</span> <span class="s1">&#39;#000000&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;darker gray&#39;</span><span class="p">:</span> <span class="s1">&#39;#222222&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;dark gray&#39;</span><span class="p">:</span> <span class="s1">&#39;#333333&#39;</span><span class="p">,</span>  <span class="c1">#text color</span>
+    <span class="s1">&#39;gray&#39;</span><span class="p">:</span> <span class="s1">&#39;#555555&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;light gray&#39;</span><span class="p">:</span> <span class="s1">&#39;#999999&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;lighter gray&#39;</span><span class="p">:</span> <span class="s1">&#39;#eeeeee&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;white&#39;</span><span class="p">:</span> <span class="s1">&#39;#ffffff&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="s1">&#39;#049cdb&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;dark blue&#39;</span><span class="p">:</span> <span class="s1">&#39;#0064cd&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;light blue&#39;</span><span class="p">:</span> <span class="s1">&#39;#3a87ad&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;lighter blue&#39;</span><span class="p">:</span> <span class="s1">&#39;#d9edf7&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;green&#39;</span><span class="p">:</span> <span class="s1">&#39;#46a546&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;light green&#39;</span><span class="p">:</span> <span class="s1">&#39;#468847&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;lighter green&#39;</span><span class="p">:</span> <span class="s1">&#39;#dff0d8&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="s1">&#39;#9d261d&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;light red&#39;</span><span class="p">:</span> <span class="s1">&#39;#b94a48&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;lighter red&#39;</span><span class="p">:</span> <span class="s1">&#39;#f2dede&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;yellow&#39;</span><span class="p">:</span> <span class="s1">&#39;#ffc40d&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;light yellow&#39;</span><span class="p">:</span> <span class="s1">&#39;#fcf8e3&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;orange&#39;</span><span class="p">:</span> <span class="s1">&#39;#f89406&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pink&#39;</span><span class="p">:</span> <span class="s1">&#39;#c3325f&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;purple&#39;</span><span class="p">:</span> <span class="s1">&#39;#7a43b6&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">RC</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;lines.linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="s">&#39;lines.linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="s">&#39;axes.edgecolor&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;dark gray&#39;</span><span class="p">],</span>
-    <span class="s">&#39;axes.labelsize&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
-    <span class="s">&#39;axes.linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="s">&#39;grid.color&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;dark gray&#39;</span><span class="p">],</span>
-    <span class="s">&#39;grid.linewidth&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s">&#39;xtick.major.width&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
-    <span class="s">&#39;xtick.color&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;dark gray&#39;</span><span class="p">],</span>
-    <span class="s">&#39;xtick.labelsize&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
-    <span class="s">&#39;ytick.major.width&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
-    <span class="s">&#39;ytick.labelsize&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
-    <span class="s">&#39;ytick.color&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;dark gray&#39;</span><span class="p">],</span>
-    <span class="s">&#39;axes.color_cycle&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;light blue&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;green&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;light red&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;yellow&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;pink&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;black&#39;</span><span class="p">]),</span>
-    <span class="s">&#39;axes.labelcolor&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s">&#39;dark gray&#39;</span><span class="p">],</span>
-    <span class="s">&#39;axes.grid&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-    <span class="s">&#39;legend.fontsize&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
-    <span class="s">&#39;figure.figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-    <span class="s">&#39;legend.fancybox&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> 
+    <span class="s1">&#39;lines.linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;lines.linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;axes.edgecolor&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;dark gray&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;axes.labelsize&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+    <span class="s1">&#39;axes.linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;grid.color&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;dark gray&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;grid.linewidth&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;xtick.major.width&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+    <span class="s1">&#39;xtick.color&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;dark gray&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+    <span class="s1">&#39;ytick.major.width&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+    <span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+    <span class="s1">&#39;ytick.color&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;dark gray&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;axes.color_cycle&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;light blue&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;green&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;light red&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;yellow&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;pink&#39;</span><span class="p">],</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;axes.labelcolor&#39;</span><span class="p">:</span> <span class="n">COLORS</span><span class="p">[</span><span class="s1">&#39;dark gray&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;axes.grid&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="s1">&#39;legend.fontsize&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+    <span class="s1">&#39;figure.figsize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="s1">&#39;legend.fancybox&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> 
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="init_mpl"><a class="viewcode-back" href="../../e21.html#e21.core.init_mpl">[docs]</a><span class="k">def</span> <span class="nf">init_mpl</span><span class="p">(</span><span class="n">nbins</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]):</span>
+<div class="viewcode-block" id="init_mpl"><a class="viewcode-back" href="../../e21.html#e21.core.init_mpl">[docs]</a><span class="k">def</span> <span class="nf">init_mpl</span><span class="p">(</span><span class="n">nbins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]):</span>
     <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">RC</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="n">this</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">AutoLocator</span><span class="p">,</span> <span class="n">this</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
               <span class="n">nbins</span><span class="o">=</span><span class="n">nbins</span><span class="p">,</span>
-              <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span> <span class="c">#, prune = &#39;lower&#39;)</span>
-    <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">AutoLocator</span><span class="o">.</span><span class="n">__init__</span> <span class="o">=</span> <span class="n">init</span>   
-    <span class="c">#sns.set_style(&quot;whitegrid&quot;,RC)</span>
-    <span class="c">#sns.set(font=&quot;Arial&quot;)</span>
+              <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">AutoLocator</span><span class="o">.</span><span class="n">__init__</span> <span class="o">=</span> <span class="n">init</span></div>
+    <span class="c1">#sns.set_style(&quot;whitegrid&quot;,RC)</span>
+    <span class="c1">#sns.set(font=&quot;Arial&quot;)</span>
 
-<span class="c">#-Measurement-classes----------------------------------------------------------</span></div>
+<span class="c1">#-Measurement-classes----------------------------------------------------------</span>
 <div class="viewcode-block" id="Measurement"><a class="viewcode-back" href="../../e21.html#e21.core.Measurement">[docs]</a><span class="k">class</span> <span class="nc">Measurement</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Measurement base class.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
@@ -196,7 +195,19 @@
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
 
-</div>
+    <span class="k">def</span> <span class="nf">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;h1&gt;&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/h1&gt;&quot;</span>
+
+    
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span></div>
+    
+
 <div class="viewcode-block" id="Experiment"><a class="viewcode-back" href="../../e21.html#e21.core.Experiment">[docs]</a><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Minimal implementation of a experiment class.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="o">=</span><span class="p">{}):</span>
@@ -204,6 +215,9 @@
         
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
@@ -212,45 +226,9 @@
         <span class="k">del</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">)</span>
-	
-<div class="viewcode-block" id="Experiment.add_measurements"><a class="viewcode-back" href="../../e21.html#e21.core.Experiment.add_measurements">[docs]</a>    <span class="k">def</span> <span class="nf">add_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filelist</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Adds measurements to Experiment</span>
-
-<span class="sd">            filelist: list of measurement files</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">s16</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">()</span>
-
-        <span class="n">meas_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">)</span>
-        <span class="n">filelist</span> <span class="o">=</span> <span class="n">check_empty_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">)</span>
-        <span class="n">testfile</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="s">&#39;dropping_resistance&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">dropping_resistance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Dropping Resistance [kOhms]: &#39;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="s">&#39;amplification&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">amplification</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Amplification: &#39;</span><span class="p">))</span>
-
-        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
-            <span class="n">index</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">meas_len</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
-            <span class="k">if</span> <span class="s">&#39;amplification&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span>
-                    <span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span>
-                    <span class="s">&#39;amplification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplification</span>
-            <span class="k">if</span> <span class="s">&#39;current&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;current&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">if</span> <span class="s">&#39;dropping_resistance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span>
-                    <span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;kOhm&#39;</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span>
-                    <span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dropping_resistance</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">)</span></div>
     
-<span class="c">#-Plottable-classes------------------------------------------------------------</span></div></div>
+<span class="c1">#-Plottable-classes------------------------------------------------------------</span>
 <div class="viewcode-block" id="Plottable"><a class="viewcode-back" href="../../e21.html#e21.core.Plottable">[docs]</a><span class="k">class</span> <span class="nc">Plottable</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Mixin class providing a generic plot function.&quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Plottable.plot"><a class="viewcode-back" href="../../e21.html#e21.core.Plottable.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
@@ -260,18 +238,11 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">axes</span><span class="p">:</span>
             <span class="n">f</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="n">subplot_kw</span><span class="p">,</span> <span class="o">**</span><span class="n">fig_kw</span><span class="p">)</span>
-        <span class="c">#xticks = axes.get_xticklabels()</span>
-        <span class="c">#print &#39;Text = {}&#39;.format(xticks[0].get_text())</span>
-        <span class="c">#for n, i in enumerate(xticks):</span>
-        <span class="c">#    if (float(i.get_text()) == 0.0):</span>
-        <span class="c">#        xticks[n] = int(0)</span>
-        <span class="c">#        print i, n </span>
-        <span class="c">#axes.set_xticklabels(xticks)  </span>
         <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="n">pl</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">axes</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">axes</span>
+        <span class="k">return</span> <span class="n">axes</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">axes</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="lookup"><a class="viewcode-back" href="../../e21.html#e21.core.lookup">[docs]</a><span class="k">def</span> <span class="nf">lookup</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Helper function to provide function and string lookup of attributes.</span>
 
@@ -292,9 +263,9 @@
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">name</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="n">name</span></div>
 
-<span class="c">#init_mpl()</span></div>
+<span class="n">init_mpl</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -309,7 +280,7 @@
     </p>
     <p>
         &copy; Copyright 2015, Felix.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

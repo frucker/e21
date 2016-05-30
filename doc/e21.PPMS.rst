@@ -4,10 +4,10 @@ e21.PPMS package
 Submodules
 ----------
 
-e21.PPMS.ACMS module
+e21.PPMS.core module
 --------------------
 
-.. automodule:: e21.PPMS.ACMS
+.. automodule:: e21.PPMS.core
     :members:
     :undoc-members:
     :show-inheritance:

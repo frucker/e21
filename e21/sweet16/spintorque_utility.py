@@ -2,6 +2,7 @@ import e21.utility as e21u
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
+import scipy.constants as spc
 import quantities as pq
 import matplotlib.cm as cm
 from pylab import get_cmap
@@ -77,7 +78,7 @@ def lookup(obj, name):
     else:
         raise ValueError('No valid data')
 
-def make_grid(Exp, meas = [],data = 'temperature', min_y = 0, max_y = 0.6,
+def make_grid(Exp, meas = [],data = 'real', min_y = 0, max_y = 0.6,
               scaling = [-1,0], N = 400j, **kwargs):
     
     """ Creates an extended grid for 2D plotting of Data.
@@ -106,6 +107,12 @@ def make_grid(Exp, meas = [],data = 'temperature', min_y = 0, max_y = 0.6,
     :param float max_y: max field value
     :param list scaling: scaling factors m, b (m*x+ b) of data
     :param complex N: Gridsize (NxN)
+
+    :Kwargs:
+
+        * min_x (*float*) - Lower x limit
+        * max_x (*float*) - Upper x limit
+
             
     :return (dict, str): Returns a dictionary containing:
 
@@ -143,9 +150,9 @@ def make_grid(Exp, meas = [],data = 'temperature', min_y = 0, max_y = 0.6,
     # values
     values = []
     for i in meas: 
-        x1 = Exp[i].temperature[0::1]
-        y1 = Exp[i].field[0::1]
-        val = e21u.calibrate(lookup(Exp[i],data), scaling)[0::1]
+        x1 = [Exp[i].mean_temperature]*len(Exp[i].field)
+        y1 = Exp[i].field
+        val = e21u.calibrate(lookup(Exp[i],data), scaling)
         x = np.hstack((x,x1))
         y = np.hstack((y,y1))
         values = np.hstack((values, val))
@@ -157,7 +164,7 @@ def make_grid(Exp, meas = [],data = 'temperature', min_y = 0, max_y = 0.6,
     scale = np.array([xscale, yscale])
     punkte = np.vstack((x,y)).T
     grid = griddata(punkte/scale, values, (grid_x/xscale, grid_y/yscale),
-                    method = 'linear', fill_value = 0)
+                    method = 'linear', fill_value = np.nan)
     
     Grd['temps'] = np.linspace(min_x, max_x, int(N.imag))
     Grd['grid'] = grid
@@ -189,8 +196,15 @@ def plot_grid(Grids, current, vmin = 0, vmax = 1e-6, nbins = 4, **kwargs):
     :param float vmin: min susceptiblity value
     :param float vamx: max susceptiblity value
     :param float nbins: number of bins
-    
+
+    :Kwargs:
+
+        * cmap (*callable*) - Colormap instance
+        * clabel (*str*) - Colorbar label
+        * cbin (*int*) - Number of bins on colorbar
+        * remove_cb (*bool*) - If True, removes colorbar 
     """
+
     # get grid information
     grid = Grids['{}'.format(current)]['grid']
     temps = Grids['{}'.format(current)]['temps']
@@ -248,19 +262,21 @@ def plot_data(Exp, meas = [], data = 'real', scaling = -1, N = 400j, nbins = 4,
     :param float scaling: Scales the susceptibility with the factor scaling
     :param complex N: Gridsize of corresponding grid
     :param int nbins: Number of bins in plot
-    :param dict legopts: Valid options are:
+    :param str legopts: 
 
                 * 'small': Small legend (min and max value) within plot
                 * 'short': Smmall legend (min, max) outside of plot
                 * 'remove': no legend
-    :param dict kwargs: Valid kwargs are:
+        
+    :Kwargs:
 
-                * min_x: float, minimal field value
-                * max_x: float, maximum field value
+                * cmap (*callable*) - Colormap instance
+                * min_x (*float*) -  minimum field value
+                * max_x (*float*) -  maximum field value
               
     """
     
-    # get temperature boundaries
+    # get temperature boundaries if not given
     if not 'min_x' in kwargs.keys():
         min_x = min([min(Exp[i].field) for i in meas])
         #min_x = min_x + 0.05*min_x
@@ -273,14 +289,17 @@ def plot_data(Exp, meas = [], data = 'real', scaling = -1, N = 400j, nbins = 4,
     else:
         max_x = kwargs['max_x']
     
-    current, current_string = get_current(Exp, meas)
+    # Define Color Map
+    if not 'cmap' in kwargs.keys():
+        cmap = cm.jet
+    else:
+        cmap = kwargs['cmap']  
     
     # Order Measuerments after Temperature
     meas = e21u.order_measurements(Exp, meas, param = 'temp')
     ax = plt.gca()
     for j, i in enumerate(meas):
-        c = e21u.Felix_colormap()
-        color = c(j/float(len(meas)))
+        color = cmap(j/float(len(meas)))
         T = Exp[i].init_temp.strip('K')
         mT = round(Exp[i].mean_temperature,2)
         Exp[i].plot(y = e21u.calibrate(lookup(Exp[i],data), scaling),color=color, 
@@ -308,41 +327,6 @@ def plot_data(Exp, meas = [], data = 'real', scaling = -1, N = 400j, nbins = 4,
     if 'remove' in legopts:
         l.remove()
 
-def plot_interpolated_sweeps(Grids, current, N = 400j):
-    """Plots interpolated sweeps
-       
-    E.g.::
-    
-        path = '/Your_Path/'
-        MnSi_T = e21.sweet16.susceptibility.Experiment()
-        MnSi_T.add_measurements(sorted(glob.glob(path+'*.dat'),
-                                       key=os.path.getmtime))
-        meas = [0,1,2,3]
-        g, c = make_grid(MnSi_T, meas)
-        Grids[c] = g
-        plot_interpolated_sweeps(Grids, c)
-    
-    :param dict Grids: Dicitonary containing a grid of data as well as x 
-                       and y axis values (result of make_grid)
-    :param float current: Current for which the grid should be plotted.
-    :param complex N: Gridsize (NxN)
-    
-    """
-    grid = Grids['{} A'.format(current)]['grid'] 
-    temps = Grids['{} A'.format(current)]['temps']
-    fields = Grids['{} A'.format(current)]['fields']
-    plt.figure()
-    plt.figsize(16,10)
-    n = int(N.imag)
-    steps = int(n/80)
-    nmb = range(0,n,steps)[2:-4]
-    for j, i in enumerate(nmb):
-        c = e21u.Felix_colormap()
-        color = c(j/float(n/steps))
-        plt.plot(fields,grid[i], color = color)
-        plt.xlabel('B (T)')
-        plt.ylabel('U ($\mu$V)')
-
 def get_current_meas(Exp, current):
     """Returns a list of measurement numbers with given current.
        
@@ -356,6 +340,7 @@ def get_current_meas(Exp, current):
            
     :param dict Exp: Sweet 16 Experiment class
     :param float current: Current
+    :rtype list:
     :return (list): List of measurements
         
     """
@@ -363,12 +348,11 @@ def get_current_meas(Exp, current):
     meas = []
     for i in range(len(Exp)):
         if Exp[i].mean_current == current :
-
             meas.append(i)
     return meas
 
 def find_index(Grids,value, parameter = 'fields', current = 0):
-    """Returns the index closest to the given field at a given 
+    """Returns the index closest to the given parameter value at a given 
     current in a given Grid
        
     E.g.::
@@ -422,7 +406,7 @@ def find_sweep(Grids, value, parameter = 'fields', current = 0):
     num = find_index(Grids, value, parameter, current)
     return Grids['{} A'.format(current)]['grid'][num]
 
-def find_res(Grids, Grids_zero, T=28, current=0.0, B_min = 0,
+def find_res(Grids_zero, T=28, current=0.0, B_min = 0,
              B_max = 0.55, full_out=False):
     """Finds residuum of two curves. 
     
@@ -463,7 +447,8 @@ def find_res(Grids, Grids_zero, T=28, current=0.0, B_min = 0,
     for i in range(len(Grids_zero['{} A'.format(current)]['grid'])):
         y2 = Grids_zero['{} A'.format(current)]['grid'][i][I0:I1]
         res = np.sum((y1-y2)**2)
-        residua.append((res,i))
+        if not np.isnan(res):
+            residua.append((res,i))
     if full_out:
         return min(residua, key=lambda x: x[0]), residua
     return min(residua, key=lambda x: x[0])  
@@ -481,7 +466,7 @@ def get_temperature_shift(Grids, Grids_zero, I=0.0, T = 28, B_min = 0.49, B_max 
     
     """
     
-    res, ind = find_res(Grids, Grids_zero, T=T, current=I, B_min=B_min, B_max=B_max)
+    res, ind = find_res(Grids_zero, T=T, current=I, B_min=B_min, B_max=B_max)
     T0 = Grids['{} A'.format(I)]['temps'][ind]
     return T*pq.K-T0
 
@@ -501,6 +486,10 @@ def get_all_Tshifts(Grids, Grids_zero, I = [], T = 28, B_min = 0.49, B_max = 0.5
 def get_valid_currents(Grids):
     """ Returns all valid currents in Grids
 
+    :param dict Grids: Dictionary, outputof :func:`~.make_grid`
+    :rtype list:
+    :return list currents: List of valid currents in Grid
+
     """
     
     currents = Grids.keys()
@@ -509,22 +498,50 @@ def get_valid_currents(Grids):
     return currents
 
 
+def make_Data_dict(Grids, Grids_imag, T_min = 27.9, T_max = 28.9, n = 21, B_min = 0.50, B_max = 0.65):
+    """To be commented """
+
+    data = {}
+    data_imag = {}
+    for T in np.linspace(T_min,T_max,n):
+        data[round(T,2)], data_imag[round(T,2)] = current_dep_utility(Grids, Grids_imag, T = T, B_min = B_min, B_max = B_max, output=True)
+         
+    return data, data_imag
+
 
 def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
               delta = False, **kwargs):
 
+    """ Produces a plot of Chi vs. I. 
+        
+        Takes a Dictionary containing various grids of data for different
+        currents. Checks which currents are available in grid.
+
+    
+    :param dict Data: Dictionary, output of :func:`~.make_grid`
+    :param dict Data_im: Dictionary, output of :func:`~.make_grid`
+                            usually Grids
+    :param float T: Temperature
+    :param list B: List of Field values at which to evaluate Chi Vs I
+    :param float B_min: Lower boundary of comparison region
+    :param float B_max: Upper boundary of comparison region
+    :param bool full_out: False returns the minimal res and the
+                          corresponding ind,True returns all residua
+
+    :Kwargs:
+        
+            * cmap (*callbale*) - Matplotlib colormap instance
+            * A (*float*) - Sample cross section
+            *
+
+    """
 
     # Possibility to define own color map
     if not 'cmap' in kwargs.keys():
         cmap = cm.jet
     else:
         cmap = kwargs['cmap']
-
-    if 'fontsize' in kwargs.keys():
-        fsize = kwargs['fontsize']
-    else:
-        fsize = 18.
-    
+   
     # get all valid currents of measurement set
     currents = [ float(i.strip('A')) for i in Data[T]['data'].keys()]
     currents = sorted(currents)
@@ -566,6 +583,224 @@ def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
             values.append(points+(i*offset))        
         plt.title('T = {} K'.format(T))
         plt.plot(x_axis, values, '-o', label = '{}'.format(b), color=color)
+    plt.ylabel(zlab)
+    plt.xlabel(xlab)
+
+def chi_I_middle(Data, Data_im, T_range = 0.2, T = 28.0, B = [0.2],
+                 B_range = 0.2, offset = 0, y_out = 'real',
+                 delta = False, **kwargs):
+
+    """ Produces a plot of Chi vs. I. 
+        
+        Takes a Dictionary containing various grids of data for different
+        currents. Checks which currents are available in grid.
+
+    
+    :param dict Data: Dictionary, output of :func:`~.make_grid`
+    :param dict Data_im: Dictionary, output of :func:`~.make_grid`
+                            usually Grids
+    :param float T: Temperature
+    :param list B: List of Field values at which to evaluate Chi Vs I
+    :param float B_min: Lower boundary of comparison region
+    :param float B_max: Upper boundary of comparison region
+    :param bool full_out: False returns the minimal res and the
+                          corresponding ind,True returns all residua
+
+    :Kwargs:
+        
+            * cmap (*callbale*) - Matplotlib colormap instance
+            * A (*float*) - Sample cross section
+            *
+
+    """
+    def find_temp_values(Data, T, T_range):
+        temps = []
+        for i in Data:
+            if T-T_range < i < T+T_range:
+                temps.append(i)
+        return temps
+
+    
+    if not 'amps' in kwargs.keys():
+        amps = Data.keys()
+        amps = sorted(amps)
+    else:
+        amps = kwargs['amps']
+            
+    # Possibility to define own color map
+    if not 'cmap' in kwargs.keys():
+        cmap = cm.jet
+    else:
+        cmap = kwargs['cmap']
+
+    # Store original Data
+    _Data = Data
+    _Data_im = Data_im 
+    
+    for j2, b in enumerate(B):
+        # Iterate over all given amplitude values
+        for j, amp in enumerate(amps):
+            Data = _Data[amp]
+            Data_im = _Data_im[amp]
+        
+            # get all valid currents of measurement set
+            currents = [ float(i.strip('A')) for i in Data[T]['data'].keys()]
+            currents = sorted(currents)
+            
+            # find index of magentic field B
+            #field_index = find_index(list(Data[T]['fields']), b)
+
+            # find field index of lower limit
+            field_low = find_index(list(Data[T]['fields']), b-B_range)
+
+            # find field index of upper limit
+            field_high = find_index(list(Data[T]['fields']), b+B_range)
+            
+            # define color map
+            if 'ldata' in kwargs.keys():
+                if kwargs['ldata'] == 'fields':
+                    color = cmap((j2)/float(len(B)))
+            else:
+                color = cmap((j)/float(len(amps)))
+
+            values = [] # data point (chi)
+            x_axis = []  # x-coordinate (j)
+
+            # Get chi_0 (@zero current and given T)
+            
+     
+            # Iterate over currents
+            for i, I in enumerate(currents):
+                val = [] 
+                for T in find_temp_values(Data, T, T_range):
+                    points = []
+                    for field_index in range(field_low,field_high+1):
+                        x0 = Data[T]['data']['0.0 A'][field_index]
+                        x0_im = Data_im[T]['data']['0.0 A'][field_index]
+                        x1 = Data[T]['data']['{} A'.format(I)][field_index]
+                        x2 = Data_im[T]['data']['{} A'.format(I)][field_index]
+                        
+                        p, zlab = calculate_output(x0,x0_im,x1,x2, y_out,delta) 
+
+                        # Convert current to current density
+
+                    
+                        
+                        points.append(p)
+                    # make default title
+                    val.append(np.mean(points)+(i*offset))    
+                if 'A' in kwargs.keys():
+                    A = kwargs['A']
+                    I = float(I)/A
+                    xlab = r'$\vec{j}$ ($\frac{MA}{m^2}$)'  
+                else:
+                    xlab = r'$I$ (A)'
+
+                x_axis.append(I)
+
+                values.append(np.mean(val))  
+            plt.title('T = {} K'.format(T))
+            if 'ldata' in kwargs.keys():
+                if kwargs['ldata'] == 'fields':
+                    lab = b
+            else:
+                lab = amp
+            plt.plot(x_axis, values, '-o', label = '{}'.format(lab), color=color)
+    plt.ylabel(zlab)
+    plt.xlabel(xlab)
+
+def chi_I_Amp(Data, Data_im,  T = 28.0, B = 0.2, offset = 0, y_out = 'real',
+              delta = False, med = 5, **kwargs):
+
+    """ Produces a plot of Chi vs. I. 
+        
+        Takes a Dictionary containing various grids of data for different
+        currents. Checks which currents are available in grid.
+
+    
+    :param dict Data: Dictionary, output of :func:`~.make_grid`
+    :param dict Data_im: Dictionary, output of :func:`~.make_grid`
+                            usually Grids
+    :param float T: Temperature
+    :param list B: List of Field values at which to evaluate Chi Vs I
+    :param float B_min: Lower boundary of comparison region
+    :param float B_max: Upper boundary of comparison region
+    :param bool full_out: False returns the minimal res and the
+                          corresponding ind,True returns all residua
+    :param int med: Option to compute median of certain index range in B-Field 
+                    direction before subtraction in order to minimize noise
+                    influence
+    :Kwargs:
+        
+            * cmap (*callbale*) - Matplotlib colormap instance
+            * A (*float*) - Sample cross section
+            * amps (list) - List of amplitudes
+
+    """
+    def calculate_field_sus(I):
+        '''
+        Calculates the excitation field of the susceptometer (peak to peak). Retruns magnetic field
+        '''
+        return round(1000*I*1162/11.6e-3*spc.mu_0,2)
+
+    # Possibility to define own color map
+    if not 'cmap' in kwargs.keys():
+        cmap = cm.jet
+    else:
+        cmap = kwargs['cmap']
+
+    if not 'amps' in kwargs.keys():
+        amps = Data.keys()
+        amps = sorted(amps)
+    else:
+        amps = kwargs['amps']
+
+    # Store original Data
+    _Data = Data
+    _Data_im = Data_im
+
+    # Iterate over all given field values
+    for j, amp in enumerate(amps):
+        Data = _Data[amp]
+        Data_im = _Data_im[amp]
+        # get all valid currents of measurement set
+        currents = [ float(i.strip('A')) for i in Data[T]['data'].keys()]
+        currents = sorted(currents)
+
+        # find index of magentic field B
+        field_index = find_index(list(Data[T]['fields']), B)
+
+        # define color map
+        color = cmap((j)/float(len(amps)))
+
+        values = [] # data point (chi)
+        x_axis = []  # x-coordinate (j)
+
+        # Get chi_0 (@zero current and given T)
+        x0 = np.median(Data[T]['data']['0.0 A'][(field_index-med):(field_index+med):])
+        x0_im = np.median(Data_im[T]['data']['0.0 A'][field_index-med:field_index+med:])
+        
+        # Iterate over currents
+        
+        for i, I in enumerate(currents):
+            x1 =np.median(Data[T]['data']['{} A'.format(I)][field_index-med:field_index+med:])
+            x2 = np.median(Data_im[T]['data']['{} A'.format(I)][field_index-med:field_index+med:])
+            
+            points, zlab = calculate_output(x0,x0_im,x1,x2, y_out,delta) 
+
+            # Convert current to current density
+            if 'A' in kwargs.keys():
+                A = kwargs['A']
+                I = float(I)/A
+                xlab = r'$\vec{j}$ ($\frac{MA}{m^2}$)'
+            else:
+                xlab = r'$I$ (A)'
+            x_axis.append(I)
+            
+            # make default title
+            values.append(points+(i*offset))        
+        plt.title('T = {} K'.format(T))
+        plt.plot(x_axis, values, '-o', label = '{}'.format(calculate_field_sus(amp)), color=color)
     plt.ylabel(zlab)
     plt.xlabel(xlab)
 
@@ -617,14 +852,14 @@ def chi_I(Grids, Grids_zero, T, B=[0.2], B_min=0.3, B_max=0.4, **kwargs):
         x = []  # x-coordinate (j)
 
         # Get chi_0 (@zero current and given T)
-        res, ind = find_res(Grids, Grids_zero,T, 0., B_min, B_max)
+        res, ind = find_res(Grids_zero,T, 0., B_min, B_max)
         x0 = get_chi(b, 0., ind)
         min_I = min(currents)
         max_I = max(currents)
         
         # Iterate over currents
         for i, I in enumerate(currents):
-            res, ind = find_res(Grids,Grids_zero, T, I, B_min, B_max)
+            res, ind = find_res(Grids_zero, T, I, B_min, B_max)
 
             # Deside if output is in percent or in absolute difference Delta
             if not 'output' in kwargs.keys():            
@@ -654,7 +889,7 @@ def plot_anpassung_auto(Grids, Grids_zero, T = 28, current = 0.0, B_min = 0, B_m
     f, ax = plt.subplots(1,1)
     plt.plot(Grids['0.0 A']['fields'], find_sweep(Grids, T, parameter = 'temps',
              current = 0.0),label = '0 A')
-    res, ind = find_res(Grids, Grids_zero, T, current=current, B_min=B_min,
+    res, ind = find_res(Grids_zero, T, current=current, B_min=B_min,
                         B_max=B_max)
     plt.plot(Grids['{} A'.format(current)]['fields'], 
              Grids['{} A'.format(current)]['grid'][ind],
@@ -690,7 +925,7 @@ def current_dep(Grids, Grids_zero, T = 28.4, B_min = 0.45, B_max = 0.55, **kwarg
     data['data'] = {}
     for i, I in enumerate(currents):
         color = c((i+1)/float(len(currents)+1))
-        res, ind = find_res(Grids, Grids_zero, T, I, B_min, B_max)
+        res, ind = find_res(Grids_zero, T, I, B_min, B_max)
         
         
         data['data']['{} A'.format(I)]=Grids['{} A'.format(I)]['grid'][ind]
@@ -708,6 +943,30 @@ def current_dep(Grids, Grids_zero, T = 28.4, B_min = 0.45, B_max = 0.55, **kwarg
     if 'output' in kwargs.keys():
         if kwargs['output'] == True:
             return data
+
+def current_dep_utility(Grids, Grids_imag, T = 28.4, B_min = 0.45, B_max = 0.55, **kwargs):
+    """ Muss noch kommentiert werden
+
+    """    
+    for i in kwargs.keys():
+        if i not in ['currents', 'cmap', 'output', 'col_label']:
+            raise KeyError('Invalid Key "{}"'.format(i))
+    if 'currents' in kwargs.keys():
+        currents = kwargs['currents']
+    else:    
+        currents = get_valid_currents(Grids)
+   
+    data = {}
+    data['fields'] = Grids['{} A'.format(currents[0])]['fields']
+    data['data'] = {}
+    data_imag = {}
+    data_imag['fields'] = Grids_imag['{} A'.format(currents[0])]['fields']
+    data_imag['data'] = {}
+    for i, I in enumerate(currents):
+        res, ind = find_res(Grids, T, I, B_min, B_max)       
+        data['data']['{} A'.format(I)]=Grids['{} A'.format(I)]['grid'][ind]
+        data_imag['data']['{} A'.format(I)]=Grids_imag['{} A'.format(I)]['grid'][ind]
+    return data, data_imag
             
 
 def current_dep_neu(Data, T = 28.4, leg = True, **kwargs):

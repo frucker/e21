@@ -4,6 +4,14 @@ e21.sweet16 package
 Submodules
 ----------
 
+e21.sweet16.core module
+-----------------------
+
+.. automodule:: e21.sweet16.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 e21.sweet16.loader module
 -------------------------
 

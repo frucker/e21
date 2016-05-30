@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
@@ -33,14 +33,14 @@
     <link rel="top" title="E21 0.1.0dev documentation" href="index.html" />
     <link rel="up" title="e21 package" href="e21.html" />
     <link rel="next" title="e21.sweet16 package" href="e21.sweet16.html" />
-    <link rel="prev" title="e21 package" href="e21.html" />
+    <link rel="prev" title="e21.Nicos.Mira package" href="e21.Nicos.Mira.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -87,11 +87,11 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">e21.PPMS package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#e21-ppms-acms-module">e21.PPMS.ACMS module</a></li>
-<li><a class="reference internal" href="#e21-ppms-loader-module">e21.PPMS.loader module</a></li>
-<li><a class="reference internal" href="#e21-ppms-susceptibility-module">e21.PPMS.susceptibility module</a></li>
-<li><a class="reference internal" href="#e21-ppms-transport-module">e21.PPMS.transport module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-e21.PPMS.core">e21.PPMS.core module</a></li>
+<li><a class="reference internal" href="#module-e21.PPMS.loader">e21.PPMS.loader module</a></li>
+<li><a class="reference internal" href="#module-e21.PPMS.susceptibility">e21.PPMS.susceptibility module</a></li>
+<li><a class="reference internal" href="#module-e21.PPMS.transport">e21.PPMS.transport module</a></li>
+<li><a class="reference internal" href="#module-e21.PPMS">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -103,11 +103,11 @@
               
                 
   <li>
-    <a href="e21.html" title="Previous Chapter: e21 package"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; e21 package</span>
+    <a href="e21.Nicos.Mira.html" title="Previous Chapter: e21.Nicos.Mira package"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; e21.Nicos.Mir...</span>
     </a>
   </li>
   <li>
-    <a href="e21.sweet16.html" title="Next Chapter: e21.sweet16 package"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">e21.sweet16 pack... &raquo;</span>
+    <a href="e21.sweet16.html" title="Next Chapter: e21.sweet16 package"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">e21.sweet16 p... &raquo;</span>
     </a>
   </li>
               
@@ -146,20 +146,448 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="e21-ppms-acms-module">
-<h2>e21.PPMS.ACMS module<a class="headerlink" href="#e21-ppms-acms-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-e21.PPMS.core">
+<span id="e21-ppms-core-module"></span><h2>e21.PPMS.core module<a class="headerlink" href="#module-e21.PPMS.core" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.PPMS.core.PPMS">
+<em class="property">class </em><code class="descclassname">e21.PPMS.core.</code><code class="descname">PPMS</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/core.html#PPMS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.core.PPMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="e21.html#e21.core.Measurement" title="e21.core.Measurement"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Measurement</span></code></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></code></a></p>
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.angle">
+<code class="descname">angle</code><a class="headerlink" href="#e21.PPMS.core.PPMS.angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.field">
+<code class="descname">field</code><a class="headerlink" href="#e21.PPMS.core.PPMS.field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.filename">
+<code class="descname">filename</code><a class="headerlink" href="#e21.PPMS.core.PPMS.filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.init_field">
+<code class="descname">init_field</code><a class="headerlink" href="#e21.PPMS.core.PPMS.init_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.init_temperature">
+<code class="descname">init_temperature</code><a class="headerlink" href="#e21.PPMS.core.PPMS.init_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.mean_angle">
+<code class="descname">mean_angle</code><a class="headerlink" href="#e21.PPMS.core.PPMS.mean_angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.mean_field">
+<code class="descname">mean_field</code><a class="headerlink" href="#e21.PPMS.core.PPMS.mean_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.sample">
+<code class="descname">sample</code><a class="headerlink" href="#e21.PPMS.core.PPMS.sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.sweep_type">
+<code class="descname">sweep_type</code><a class="headerlink" href="#e21.PPMS.core.PPMS.sweep_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.target_field_rate">
+<code class="descname">target_field_rate</code><a class="headerlink" href="#e21.PPMS.core.PPMS.target_field_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.target_temperature_rate">
+<code class="descname">target_temperature_rate</code><a class="headerlink" href="#e21.PPMS.core.PPMS.target_temperature_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.temperature">
+<code class="descname">temperature</code><a class="headerlink" href="#e21.PPMS.core.PPMS.temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.temperature_stability">
+<code class="descname">temperature_stability</code><a class="headerlink" href="#e21.PPMS.core.PPMS.temperature_stability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the offset and standart deviation of the temperature
+from the target value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.core.PPMS.time">
+<code class="descname">time</code><a class="headerlink" href="#e21.PPMS.core.PPMS.time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="e21-ppms-loader-module">
-<h2>e21.PPMS.loader module<a class="headerlink" href="#e21-ppms-loader-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-e21.PPMS.loader">
+<span id="e21-ppms-loader-module"></span><h2>e21.PPMS.loader module<a class="headerlink" href="#module-e21.PPMS.loader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.PPMS.loader.Loader">
+<em class="property">class </em><code class="descclassname">e21.PPMS.loader.</code><code class="descname">Loader</code><span class="sig-paren">(</span><em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/loader.html#Loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.loader.Loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A ppms file loader.</p>
+<p>E.g. loading a susceptibility measurement:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;from e21.sweet16 import Loader</span>
+<span class="go">&gt;&gt;&gt;s16 = Loader(mode=&#39;susceptibility&#39;)</span>
+<span class="go">&gt;&gt;&gt;measurement = s16(&#39;path/to/susceptibility_measurement.dat&#39;)</span>
+</pre></div>
 </div>
-<div class="section" id="e21-ppms-susceptibility-module">
-<h2>e21.PPMS.susceptibility module<a class="headerlink" href="#e21-ppms-susceptibility-module" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="e21.PPMS.loader.Loader.CREATOR">
+<code class="descname">CREATOR</code><em class="property"> = {'susceptibility': &lt;function create at 0x2ab1e8332c08&gt;, 'transport': &lt;function create at 0x2ab1e8304ed8&gt;}</em><a class="headerlink" href="#e21.PPMS.loader.Loader.CREATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.PPMS.loader.Loader.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/loader.html#Loader.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.loader.Loader.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>A PPMS Data Parser.</p>
+<p>Ignores ppms header. Converts empty data points to nan. Conservses
+all data. 
+Returns data dictionary and params dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="e21-ppms-transport-module">
-<h2>e21.PPMS.transport module<a class="headerlink" href="#e21-ppms-transport-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-e21.PPMS.susceptibility">
+<span id="e21-ppms-susceptibility-module"></span><h2>e21.PPMS.susceptibility module<a class="headerlink" href="#module-e21.PPMS.susceptibility" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.PPMS.susceptibility.AngleScan">
+<em class="property">class </em><code class="descclassname">e21.PPMS.susceptibility.</code><code class="descname">AngleScan</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#AngleScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.AngleScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.PPMS.susceptibility.Susceptibility" title="e21.PPMS.susceptibility.Susceptibility"><code class="xref py py-class docutils literal"><span class="pre">e21.PPMS.susceptibility.Susceptibility</span></code></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></code></a></p>
+<dl class="method">
+<dt id="e21.PPMS.susceptibility.AngleScan.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>y='real'</em>, <em>x='angle'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#AngleScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.AngleScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.PPMS.susceptibility.Experiment">
+<em class="property">class </em><code class="descclassname">e21.PPMS.susceptibility.</code><code class="descname">Experiment</code><span class="sig-paren">(</span><em>measurements={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="e21.html#e21.core.Experiment" title="e21.core.Experiment"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Experiment</span></code></a></p>
+<dl class="method">
+<dt id="e21.PPMS.susceptibility.Experiment.add_measurements">
+<code class="descname">add_measurements</code><span class="sig-paren">(</span><em>filelist</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#Experiment.add_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.Experiment.add_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds measurements to Experiment</p>
+<p>filelist: list of measurement files</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.susceptibility.Experiment.field_scans">
+<code class="descname">field_scans</code><a class="headerlink" href="#e21.PPMS.susceptibility.Experiment.field_scans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.susceptibility.Experiment.temperature_scans">
+<code class="descname">temperature_scans</code><a class="headerlink" href="#e21.PPMS.susceptibility.Experiment.temperature_scans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.PPMS.susceptibility.FieldScan">
+<em class="property">class </em><code class="descclassname">e21.PPMS.susceptibility.</code><code class="descname">FieldScan</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#FieldScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.FieldScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.PPMS.susceptibility.Susceptibility" title="e21.PPMS.susceptibility.Susceptibility"><code class="xref py py-class docutils literal"><span class="pre">e21.PPMS.susceptibility.Susceptibility</span></code></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></code></a></p>
+<dl class="method">
+<dt id="e21.PPMS.susceptibility.FieldScan.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>y='real'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#FieldScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.FieldScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.PPMS.susceptibility.Susceptibility">
+<em class="property">class </em><code class="descclassname">e21.PPMS.susceptibility.</code><code class="descname">Susceptibility</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#Susceptibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.Susceptibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.PPMS.core.PPMS" title="e21.PPMS.core.PPMS"><code class="xref py py-class docutils literal"><span class="pre">e21.PPMS.core.PPMS</span></code></a></p>
+<dl class="attribute">
+<dt id="e21.PPMS.susceptibility.Susceptibility.M">
+<code class="descname">M</code><a class="headerlink" href="#e21.PPMS.susceptibility.Susceptibility.M" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.susceptibility.Susceptibility.amplitude">
+<code class="descname">amplitude</code><a class="headerlink" href="#e21.PPMS.susceptibility.Susceptibility.amplitude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.susceptibility.Susceptibility.experiment_type">
+<code class="descname">experiment_type</code><a class="headerlink" href="#e21.PPMS.susceptibility.Susceptibility.experiment_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.susceptibility.Susceptibility.frequency">
+<code class="descname">frequency</code><a class="headerlink" href="#e21.PPMS.susceptibility.Susceptibility.frequency" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.susceptibility.Susceptibility.imag">
+<code class="descname">imag</code><a class="headerlink" href="#e21.PPMS.susceptibility.Susceptibility.imag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.susceptibility.Susceptibility.real">
+<code class="descname">real</code><a class="headerlink" href="#e21.PPMS.susceptibility.Susceptibility.real" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.PPMS.susceptibility.TemperatureScan">
+<em class="property">class </em><code class="descclassname">e21.PPMS.susceptibility.</code><code class="descname">TemperatureScan</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#TemperatureScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.TemperatureScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.PPMS.susceptibility.Susceptibility" title="e21.PPMS.susceptibility.Susceptibility"><code class="xref py py-class docutils literal"><span class="pre">e21.PPMS.susceptibility.Susceptibility</span></code></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></code></a></p>
+<dl class="method">
+<dt id="e21.PPMS.susceptibility.TemperatureScan.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>y='real'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#TemperatureScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.TemperatureScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.PPMS.susceptibility.check_empty_files">
+<code class="descclassname">e21.PPMS.susceptibility.</code><code class="descname">check_empty_files</code><span class="sig-paren">(</span><em>filelist</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#check_empty_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.check_empty_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks for empty files in list of files.
+Empty files are files containing only header lines.
+input: filelist
+output: filelist, list of non-empty files</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.PPMS.susceptibility.create">
+<code class="descclassname">e21.PPMS.susceptibility.</code><code class="descname">create</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="e21.PPMS.susceptibility.sort_experiment">
+<code class="descclassname">e21.PPMS.susceptibility.</code><code class="descname">sort_experiment</code><span class="sig-paren">(</span><em>Exp</em>, <em>key='mean_field'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/susceptibility.html#sort_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.susceptibility.sort_experiment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-e21.PPMS.transport">
+<span id="e21-ppms-transport-module"></span><h2>e21.PPMS.transport module<a class="headerlink" href="#module-e21.PPMS.transport" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="e21.PPMS.transport.Experiment">
+<em class="property">class </em><code class="descclassname">e21.PPMS.transport.</code><code class="descname">Experiment</code><span class="sig-paren">(</span><em>measurements={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="e21.html#e21.core.Experiment" title="e21.core.Experiment"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Experiment</span></code></a></p>
+<dl class="method">
+<dt id="e21.PPMS.transport.Experiment.add_measurements">
+<code class="descname">add_measurements</code><span class="sig-paren">(</span><em>filelist</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#Experiment.add_measurements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.Experiment.add_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds measurements to Experiment</p>
+<p>filelist: list of measurement files</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Experiment.field_scans">
+<code class="descname">field_scans</code><a class="headerlink" href="#e21.PPMS.transport.Experiment.field_scans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Experiment.temperature_scans">
+<code class="descname">temperature_scans</code><a class="headerlink" href="#e21.PPMS.transport.Experiment.temperature_scans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.PPMS.transport.FieldScan">
+<em class="property">class </em><code class="descclassname">e21.PPMS.transport.</code><code class="descname">FieldScan</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#FieldScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.FieldScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.PPMS.transport.Transport" title="e21.PPMS.transport.Transport"><code class="xref py py-class docutils literal"><span class="pre">e21.PPMS.transport.Transport</span></code></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></code></a></p>
+<dl class="method">
+<dt id="e21.PPMS.transport.FieldScan.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>y='real'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#FieldScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.FieldScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.PPMS.transport.FieldScan.plot_hall">
+<code class="descname">plot_hall</code><span class="sig-paren">(</span><em>y='hall'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#FieldScan.plot_hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.FieldScan.plot_hall" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.PPMS.transport.FieldScan.plot_res">
+<code class="descname">plot_res</code><span class="sig-paren">(</span><em>y='res'</em>, <em>x='field'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#FieldScan.plot_res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.FieldScan.plot_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.PPMS.transport.TemperatureScan">
+<em class="property">class </em><code class="descclassname">e21.PPMS.transport.</code><code class="descname">TemperatureScan</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#TemperatureScan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.TemperatureScan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.PPMS.transport.Transport" title="e21.PPMS.transport.Transport"><code class="xref py py-class docutils literal"><span class="pre">e21.PPMS.transport.Transport</span></code></a>, <a class="reference internal" href="e21.html#e21.core.Plottable" title="e21.core.Plottable"><code class="xref py py-class docutils literal"><span class="pre">e21.core.Plottable</span></code></a></p>
+<dl class="method">
+<dt id="e21.PPMS.transport.TemperatureScan.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>y='real'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#TemperatureScan.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.TemperatureScan.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic temperature scan plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.PPMS.transport.TemperatureScan.plot_hall">
+<code class="descname">plot_hall</code><span class="sig-paren">(</span><em>y='hall'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#TemperatureScan.plot_hall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.TemperatureScan.plot_hall" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="e21.PPMS.transport.TemperatureScan.plot_res">
+<code class="descname">plot_res</code><span class="sig-paren">(</span><em>y='res'</em>, <em>x='temperature'</em>, <em>axes=None</em>, <em>subplot_kw={}</em>, <em>fig_kw={}</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#TemperatureScan.plot_res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.TemperatureScan.plot_res" title="Permalink to this definition">¶</a></dt>
+<dd><p>A default implementation for a generic fieldscan plot.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="e21.PPMS.transport.Transport">
+<em class="property">class </em><code class="descclassname">e21.PPMS.transport.</code><code class="descname">Transport</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#Transport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.Transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#e21.PPMS.core.PPMS" title="e21.PPMS.core.PPMS"><code class="xref py py-class docutils literal"><span class="pre">e21.PPMS.core.PPMS</span></code></a></p>
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.NV">
+<code class="descname">NV</code><a class="headerlink" href="#e21.PPMS.transport.Transport.NV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.X">
+<code class="descname">X</code><a class="headerlink" href="#e21.PPMS.transport.Transport.X" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.Y">
+<code class="descname">Y</code><a class="headerlink" href="#e21.PPMS.transport.Transport.Y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.amplification">
+<code class="descname">amplification</code><a class="headerlink" href="#e21.PPMS.transport.Transport.amplification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.contact_distance">
+<code class="descname">contact_distance</code><a class="headerlink" href="#e21.PPMS.transport.Transport.contact_distance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.dropping_resistance">
+<code class="descname">dropping_resistance</code><a class="headerlink" href="#e21.PPMS.transport.Transport.dropping_resistance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.excitation_amplitude">
+<code class="descname">excitation_amplitude</code><a class="headerlink" href="#e21.PPMS.transport.Transport.excitation_amplitude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.excitation_current">
+<code class="descname">excitation_current</code><a class="headerlink" href="#e21.PPMS.transport.Transport.excitation_current" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.field">
+<code class="descname">field</code><a class="headerlink" href="#e21.PPMS.transport.Transport.field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.geometry_factor">
+<code class="descname">geometry_factor</code><a class="headerlink" href="#e21.PPMS.transport.Transport.geometry_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates geometry factor b*d/(I_ac*Ampl*l_xx) 
+in muOhm*cm/V.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.hall">
+<code class="descname">hall</code><a class="headerlink" href="#e21.PPMS.transport.Transport.hall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the resistance of the X signal.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.heater">
+<code class="descname">heater</code><a class="headerlink" href="#e21.PPMS.transport.Transport.heater" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.imag_hall">
+<code class="descname">imag_hall</code><a class="headerlink" href="#e21.PPMS.transport.Transport.imag_hall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.mean_current">
+<code class="descname">mean_current</code><a class="headerlink" href="#e21.PPMS.transport.Transport.mean_current" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.mean_temperature">
+<code class="descname">mean_temperature</code><a class="headerlink" href="#e21.PPMS.transport.Transport.mean_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.needle_valve">
+<code class="descname">needle_valve</code><a class="headerlink" href="#e21.PPMS.transport.Transport.needle_valve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.real_hall">
+<code class="descname">real_hall</code><a class="headerlink" href="#e21.PPMS.transport.Transport.real_hall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.res">
+<code class="descname">res</code><a class="headerlink" href="#e21.PPMS.transport.Transport.res" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the resistance of the X signal.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.sample_thickness">
+<code class="descname">sample_thickness</code><a class="headerlink" href="#e21.PPMS.transport.Transport.sample_thickness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.sample_width">
+<code class="descname">sample_width</code><a class="headerlink" href="#e21.PPMS.transport.Transport.sample_width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.target_temperature">
+<code class="descname">target_temperature</code><a class="headerlink" href="#e21.PPMS.transport.Transport.target_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.temperature">
+<code class="descname">temperature</code><a class="headerlink" href="#e21.PPMS.transport.Transport.temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="e21.PPMS.transport.Transport.temperature_stability">
+<code class="descname">temperature_stability</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#Transport.temperature_stability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.Transport.temperature_stability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the offset and standart deviation of the temperature
+from the target value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="e21.PPMS.transport.Transport.time">
+<code class="descname">time</code><a class="headerlink" href="#e21.PPMS.transport.Transport.time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="e21.PPMS.transport.create">
+<code class="descclassname">e21.PPMS.transport.</code><code class="descname">create</code><span class="sig-paren">(</span><em>data</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/e21/PPMS/transport.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#e21.PPMS.transport.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes data and param and creates a FieldScan or TemperatureScan.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-e21.PPMS">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-e21.PPMS" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -176,7 +604,7 @@
     </p>
     <p>
         &copy; Copyright 2015, Felix.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

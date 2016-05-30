@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
@@ -38,7 +38,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -117,9 +117,9 @@
     <div class="col-md-12">
       
   <h1>Source code for e21.vsm</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="c">#</span>
-<span class="c"># e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.</span>
 
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">datetime</span> <span class="kn">as</span> <span class="nn">dt</span>
@@ -132,7 +132,7 @@
 
 <span class="kn">import</span> <span class="nn">e21.core</span>
 
-<span class="c">#-Loader-----------------------------------------------------------------------</span>
+<span class="c1">#-Loader-----------------------------------------------------------------------</span>
 <span class="k">def</span> <span class="nf">_to_quantity</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pq</span><span class="o">.</span><span class="n">Quantity</span><span class="p">):</span>
         <span class="n">val</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">x</span>
@@ -141,15 +141,15 @@
 
 
 <div class="viewcode-block" id="ParsingError"><a class="viewcode-back" href="../../e21.html#e21.vsm.ParsingError">[docs]</a><span class="k">class</span> <span class="nc">ParsingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Raised by the Loader classes when a parsing error occures.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Raised by the Loader classes when a parsing error occures.&quot;&quot;&quot;</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../e21.html#e21.vsm.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s">&#39;m_ref&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
-            <span class="n">kw</span><span class="p">[</span><span class="s">&#39;m_ref&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_quantity</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s">&#39;m_ref&#39;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="s">&#39;U_ref&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
-            <span class="n">kw</span><span class="p">[</span><span class="s">&#39;U_ref&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_quantity</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s">&#39;U_ref&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;m_ref&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
+            <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;m_ref&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_quantity</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s1">&#39;m_ref&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s1">&#39;U_ref&#39;</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
+            <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;U_ref&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_quantity</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s1">&#39;U_ref&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">kw</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
@@ -157,11 +157,11 @@
         <span class="n">params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">file_params</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s">&#39;Tset&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="s">&#39;H&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="c"># &gt; 0 if target temperature varies</span>
-            <span class="n">dT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Tset&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
-            <span class="c"># &gt; 0 if target field varies</span>
-            <span class="n">dH</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;Tset&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="s1">&#39;H&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="c1"># &gt; 0 if target temperature varies</span>
+            <span class="n">dT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Tset&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+            <span class="c1"># &gt; 0 if target field varies</span>
+            <span class="n">dH</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">dT</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dH</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">TScan</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">dT</span> <span class="ow">and</span> <span class="n">dH</span><span class="p">:</span>
@@ -190,103 +190,104 @@
         <span class="k">def</span> <span class="nf">assert_blank</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;Tiny helper function, checking for a blank line.&quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Line is not blank:{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Line is not blank:{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
 
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span>
-            <span class="s">&#39;filename&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span>
+            <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
         <span class="p">}</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">):</span>
-                    <span class="c"># TODO parse comments</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
+                    <span class="c1"># TODO parse comments</span>
                     <span class="k">continue</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">params</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_datetime</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_datetime</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                     <span class="k">break</span>
 
             <span class="n">assert_blank</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span>
-            <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)]</span>
-            <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)]</span>
+            <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
             <span class="n">assert_blank</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span>
 
-            <span class="n">precission</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>  <span class="c"># The precission isn&#39;t used.</span>
+            <span class="n">precission</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>  <span class="c1"># The precission isn&#39;t used.</span>
             <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">units</span><span class="p">)</span> <span class="o">==</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="n">ParsingError</span><span class="p">(</span><span class="s">&#39;Column mismatch&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ParsingError</span><span class="p">(</span><span class="s1">&#39;Column mismatch&#39;</span><span class="p">)</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">varname</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">it</span><span class="o">.</span><span class="n">izip</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
             <span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">params</span>
-</div>
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">params</span></div>
+
     <span class="k">def</span> <span class="nf">_parse_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="s">&#39;%a %b </span><span class="si">%d</span><span class="s"> %H:%M:%S %Y&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="s1">&#39;%a %b </span><span class="si">%d</span><span class="s1"> %H:%M:%S %Y&#39;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ParsingError</span><span class="p">(</span><span class="s">&#39;Invalid Date.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ParsingError</span><span class="p">(</span><span class="s1">&#39;Invalid Date.&#39;</span><span class="p">)</span></div>
 
-<span class="c">#-Measurement-classes----------------------------------------------------------</span></div>
+<span class="c1">#-Measurement-classes----------------------------------------------------------</span>
 <div class="viewcode-block" id="Magnetisation"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation">[docs]</a><span class="k">class</span> <span class="nc">Magnetisation</span><span class="p">(</span><span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Measurement</span><span class="p">):</span>
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Magnetisation.x"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation.x">[docs]</a>    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;X&#39;</span><span class="p">]</span>
-</div>
+    <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">]</span>
+
 <div class="viewcode-block" id="Magnetisation.y"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation.y">[docs]</a>    <span class="k">def</span> <span class="nf">y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Y&#39;</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">]</span></div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Magnetisation.m"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation.m">[docs]</a>    <span class="k">def</span> <span class="nf">m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculates the magnetic moment of the X signal.&quot;&quot;&quot;</span>
-        <span class="n">m_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;m_ref&#39;</span><span class="p">]</span>
-        <span class="n">U_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;U_ref&#39;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;X&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_ref</span> <span class="o">/</span> <span class="n">U_ref</span>
-</div>
+        <span class="n">m_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;m_ref&#39;</span><span class="p">]</span>
+        <span class="n">U_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;U_ref&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_ref</span> <span class="o">/</span> <span class="n">U_ref</span>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Magnetisation.field"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation.field">[docs]</a>    <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;H&#39;</span><span class="p">]</span>
-</div>
+    <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">]</span>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Magnetisation.control_temperature"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation.control_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">control_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Tcontrol&#39;</span><span class="p">]</span>
-</div>
+    <span class="k">def</span> <span class="nf">control_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Tcontrol&#39;</span><span class="p">]</span>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Magnetisation.target_temperature"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation.target_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">target_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Tset&#39;</span><span class="p">]</span>
-</div>
+    <span class="k">def</span> <span class="nf">target_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Tset&#39;</span><span class="p">]</span>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Magnetisation.temperature"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation.temperature">[docs]</a>    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Tsample&#39;</span><span class="p">]</span>
-</div>
+    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Tsample&#39;</span><span class="p">]</span>
+
 <div class="viewcode-block" id="Magnetisation.temperature_stability"><a class="viewcode-back" href="../../e21.html#e21.vsm.Magnetisation.temperature_stability">[docs]</a>    <span class="k">def</span> <span class="nf">temperature_stability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">dT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Tcontrol&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s">&#39;Tset&#39;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dT</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dT</span><span class="p">)</span>
+        <span class="n">dT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Tcontrol&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;Tset&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dT</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dT</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="FieldScan"><a class="viewcode-back" href="../../e21.html#e21.vsm.FieldScan">[docs]</a><span class="k">class</span> <span class="nc">FieldScan</span><span class="p">(</span><span class="n">Magnetisation</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
-<div class="viewcode-block" id="FieldScan.plot"><a class="viewcode-back" href="../../e21.html#e21.vsm.FieldScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;field&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="FieldScan.plot"><a class="viewcode-back" href="../../e21.html#e21.vsm.FieldScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;field&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
         <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s">&#39;B ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">),</span>
-            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s">&#39;m ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">),</span>
+            <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;B ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">),</span>
+            <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;m ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">control_temperature</span><span class="p">)))</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FieldScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">control_temperature</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FieldScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TemperatureScan"><a class="viewcode-back" href="../../e21.html#e21.vsm.TemperatureScan">[docs]</a><span class="k">class</span> <span class="nc">TemperatureScan</span><span class="p">(</span><span class="n">Magnetisation</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
-<div class="viewcode-block" id="TemperatureScan.plot"><a class="viewcode-back" href="../../e21.html#e21.vsm.TemperatureScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;temperature&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="TemperatureScan.plot"><a class="viewcode-back" href="../../e21.html#e21.vsm.TemperatureScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
         <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s">&#39;T ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">),</span>
-            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s">&#39;m ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">),</span>
+            <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;T ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">),</span>
+            <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;m ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="s">&#39;{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TemperatureScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-</pre></div></div></div>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TemperatureScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div></div>
+
+</pre></div>
 
     </div>
       
@@ -300,7 +301,7 @@
     </p>
     <p>
         &copy; Copyright 2015, Felix.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

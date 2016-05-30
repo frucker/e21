@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
@@ -38,7 +38,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -117,165 +117,106 @@
     <div class="col-md-12">
       
   <h1>Source code for e21.sweet16.susceptibility</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="c">#</span>
-<span class="c"># e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># e21, (c) 2013, see AUTHORS. Licensed under the GNU GPL.</span>
 <span class="kn">import</span> <span class="nn">e21.core</span>
+<span class="kn">from</span> <span class="nn">e21.sweet16.core</span> <span class="kn">import</span> <span class="n">Sweet16</span>
 <span class="kn">from</span> <span class="nn">e21.core</span> <span class="kn">import</span> <span class="n">lookup</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">e21.sweet16</span> <span class="kn">import</span> <span class="n">Loader</span>
-<span class="c">#from e21.sweet16.utility import check_empty_files</span>
 <span class="kn">import</span> <span class="nn">quantities</span> <span class="kn">as</span> <span class="nn">pq</span>
+<span class="kn">from</span> <span class="nn">e21.utility</span> <span class="kn">import</span> <span class="n">ProgressBar</span>
 
 
 <span class="k">def</span> <span class="nf">_correct_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">correction</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">field</span> <span class="o">-</span> <span class="n">correction</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">T</span>
 
-<span class="c"># Susceptibility-classes ------------------------------------------------------</span>
+<span class="c1"># Susceptibility-classes ------------------------------------------------------</span>
 
+<div class="viewcode-block" id="Susceptibility"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility">[docs]</a><span class="k">class</span> <span class="nc">Susceptibility</span><span class="p">(</span><span class="n">Sweet16</span><span class="p">):</span>
 
-<div class="viewcode-block" id="Susceptibility"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility">[docs]</a><span class="k">class</span> <span class="nc">Susceptibility</span><span class="p">(</span><span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Measurement</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">experiment_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;susceptibility&#39;</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.real"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.real">[docs]</a>    <span class="k">def</span> <span class="nf">real</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;LI1_CH2&#39;</span><span class="p">]</span><span class="o">*</span><span class="mf">1e6</span>
-</div>
+    <span class="k">def</span> <span class="nf">amplification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;amplification&#39;</span><span class="p">]</span>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.imag"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.imag">[docs]</a>    <span class="k">def</span> <span class="nf">imag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;LI1_CH1&#39;</span><span class="p">]</span>
-</div>
+    <span class="k">def</span> <span class="nf">dropping_resistance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;dropping_resistance&#39;</span><span class="p">]</span>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.angle"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.angle">[docs]</a>    <span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;angle&#39;</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mf">0.</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">deg</span>
-</div>
+    <span class="k">def</span> <span class="nf">real</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;LI1_CH2&#39;</span><span class="p">]</span>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.NV"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.NV">[docs]</a>    <span class="k">def</span> <span class="nf">NV</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;needle_valve_percentage&#39;</span><span class="p">]</span>
-</div>
+    <span class="k">def</span> <span class="nf">imag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;LI1_CH1&#39;</span><span class="p">]</span>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.time"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.time">[docs]</a>    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">]</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.heater"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.heater">[docs]</a>    <span class="k">def</span> <span class="nf">heater</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;heater&#39;</span><span class="p">]</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.needle_valve"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.needle_valve">[docs]</a>    <span class="k">def</span> <span class="nf">needle_valve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;needle_valve&#39;</span><span class="p">]</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.chi"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.chi">[docs]</a>    <span class="k">def</span> <span class="nf">chi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">chi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculates the susceptibility of the X signal.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.field"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.field">[docs]</a>    <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">]</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.mean_field"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.mean_field">[docs]</a>    <span class="k">def</span> <span class="nf">mean_field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.mean_current"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.mean_current">[docs]</a>    <span class="k">def</span> <span class="nf">mean_current</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;current&#39;</span><span class="p">]),</span> <span class="mi">2</span><span class="p">)</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.field_corrected"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.field_corrected">[docs]</a>    <span class="k">def</span> <span class="nf">field_corrected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Correction for Remanent Field offset during Magnetic Field Sweeps.</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;target_field_rate&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mf">0.05</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">_correct_field</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;target_field_rate&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mf">0.02</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">_correct_field</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.target_temperature"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.target_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">target_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c"># NOTE: The sweet 16 uses control_temp as the name for the target temp.</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;control_temp&#39;</span><span class="p">]</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.temperature"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.temperature">[docs]</a>    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>        
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;MC_LS372_2&#39;</span><span class="p">]</span>
-</div>
-<div class="viewcode-block" id="Susceptibility.temperature_stability"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.temperature_stability">[docs]</a>    <span class="k">def</span> <span class="nf">temperature_stability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Calculates the offset and standart deviation of the temperature</span>
-<span class="sd">        from the target value.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_temperature</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dT</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dT</span><span class="p">)</span>
-</div>
-    <span class="nd">@property</span>
-<div class="viewcode-block" id="Susceptibility.mean_temperature"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Susceptibility.mean_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">mean_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
-
-</div></div>
+        
 <div class="viewcode-block" id="FieldScan"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.FieldScan">[docs]</a><span class="k">class</span> <span class="nc">FieldScan</span><span class="p">(</span><span class="n">Susceptibility</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
 
-<div class="viewcode-block" id="FieldScan.plot"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.FieldScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;real&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;field&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="FieldScan.plot"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.FieldScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;real&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;field&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
              <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
         <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;B ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;field&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
-        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;U(V)&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;real&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;B ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s1">&#39;field&#39;</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;U(V)&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s1">&#39;real&#39;</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
         <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
-            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+            <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
         <span class="p">}</span>
         <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">),</span> <span class="mi">2</span><span class="p">)))</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">),</span> <span class="mi">2</span><span class="p">)))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FieldScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TemperatureScan"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.TemperatureScan">[docs]</a><span class="k">class</span> <span class="nc">TemperatureScan</span><span class="p">(</span><span class="n">Susceptibility</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
 
-<div class="viewcode-block" id="TemperatureScan.plot"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.TemperatureScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;real&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;temperature&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="TemperatureScan.plot"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.TemperatureScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;real&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span>
              <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
         <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;T ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;temperature&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
-        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">r&#39;${\mu}$V&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;real&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;T ({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">xa</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s1">&#39;temperature&#39;</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">r&#39;${\mu}$V&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s1">&#39;real&#39;</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
         <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
-            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+            <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
         <span class="p">}</span>
         <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="s">&#39;{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">TemperatureScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="AngleScan"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.AngleScan">[docs]</a><span class="k">class</span> <span class="nc">AngleScan</span><span class="p">(</span><span class="n">Susceptibility</span><span class="p">,</span> <span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Plottable</span><span class="p">):</span>
 
-<div class="viewcode-block" id="AngleScan.plot"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.AngleScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">&#39;real&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">&#39;angle&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="AngleScan.plot"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.AngleScan.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;real&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;angle&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
              <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{},</span> <span class="n">fig_kw</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A default implementation for a generic fieldscan plot.&quot;&quot;&quot;</span>
         <span class="n">xa</span><span class="p">,</span> <span class="n">ya</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">xlabel</span> <span class="o">=</span> <span class="s">&#39;Angle (Deg)&#39;</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s">&#39;angle&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
-        <span class="n">ylabel</span> <span class="o">=</span> <span class="s">r&#39;${\mu}$V&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s">&#39;real&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;Angle (Deg)&#39;</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="s1">&#39;angle&#39;</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">r&#39;${\mu}$V&#39;</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="s1">&#39;real&#39;</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
         <span class="n">subplot_default</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
-            <span class="s">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
+            <span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="n">xlabel</span><span class="p">,</span>
+            <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="n">ylabel</span>
         <span class="p">}</span>
         <span class="n">subplot_default</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subplot_kw</span><span class="p">)</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="s">&#39;{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">AngleScan</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-</div></div>
-<div class="viewcode-block" id="check_empty_files"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.check_empty_files">[docs]</a><span class="k">def</span> <span class="nf">check_empty_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;susceptibility&#39;</span><span class="p">):</span>
+            <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">subplot_default</span><span class="p">,</span> <span class="n">fig_kw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="check_empty_files"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.check_empty_files">[docs]</a><span class="k">def</span> <span class="nf">check_empty_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;susceptibility&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Checks for empty files in list of files.</span>
 <span class="sd">        Empty files are files containing only header lines.</span>
 <span class="sd">        input: filelist</span>
@@ -285,197 +226,172 @@
     <span class="n">s16</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
     <span class="n">fl</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
-        <span class="n">Test</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+        <span class="n">Test</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> 
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">Test</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;datetime&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">Test</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="n">fl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&#39;file empty: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">fl</span>
-</div>
+            <span class="k">print</span> <span class="s1">&#39;file empty: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fl</span></div>
+
 <div class="viewcode-block" id="create"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Takes data and param and creates a FieldScan or TemperatureScan.&quot;&quot;&quot;</span>
-    <span class="n">mode</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;mode&#39;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;BSWEEP&#39;</span> <span class="ow">or</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;BSTEP&#39;</span><span class="p">:</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;command&#39;</span><span class="p">][</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;BSWEEP&#39;</span> <span class="ow">or</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;BSTEP&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">FieldScan</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;TSWEEP&#39;</span> <span class="ow">or</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;TSTEP&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;TSWEEP&#39;</span> <span class="ow">or</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;TSTEP&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">TemperatureScan</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;ASWEEP&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;ASWEEP&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">AngleScan</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Susceptibility</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Susceptibility</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span></div>
 
 
 
-</div>
+
 <div class="viewcode-block" id="Experiment"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Experiment">[docs]</a><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="n">e21</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Experiment</span><span class="p">):</span>
 
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Experiment.temperature_scans"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Experiment.temperature_scans">[docs]</a>    <span class="k">def</span> <span class="nf">temperature_scans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">temperature_scans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">,</span>
                 <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
                 <span class="n">x</span><span class="p">,</span>
                 <span class="n">TemperatureScan</span><span class="p">)]</span>
-</div>
+
     <span class="nd">@property</span>
-<div class="viewcode-block" id="Experiment.field_scans"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Experiment.field_scans">[docs]</a>    <span class="k">def</span> <span class="nf">field_scans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">field_scans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">,</span>
                 <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">mean_temperature</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
                 <span class="n">x</span><span class="p">,</span>
                 <span class="n">FieldScan</span><span class="p">)]</span>          
-</div>
+
 <div class="viewcode-block" id="Experiment.add_measurements"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Experiment.add_measurements">[docs]</a>    <span class="k">def</span> <span class="nf">add_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filelist</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Adds measurements to Experiment</span>
 
 <span class="sd">            filelist: list of measurement files</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">s16</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;susceptibility&#39;</span><span class="p">)</span>
+        
+        <span class="n">s16</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;susceptibility&#39;</span><span class="p">)</span>
 
         <span class="n">meas_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">)</span>
         <span class="n">filelist</span> <span class="o">=</span> <span class="n">check_empty_files</span><span class="p">(</span><span class="n">filelist</span><span class="p">)</span>
         <span class="n">testfile</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">filelist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="s">&#39;dropping_resistance&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s1">&#39;dropping_resistance&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">dropping_resistance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Dropping Resistance [kOhms]: &#39;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="s">&#39;amplification&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">amplification</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Amplification: &#39;</span><span class="p">))</span>
+                <span class="nb">raw_input</span><span class="p">(</span><span class="s1">&#39;Dropping Resistance [kOhms]: &#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s1">&#39;amplification&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">testfile</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">amplification</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s1">&#39;Amplification: &#39;</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">index</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">meas_len</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">s16</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
-            <span class="k">if</span> <span class="s">&#39;amplification&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span>
-                    <span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span>
-                    <span class="s">&#39;amplification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplification</span>
-            <span class="k">if</span> <span class="s">&#39;current&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;current&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">if</span> <span class="s">&#39;dropping_resistance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span>
-                    <span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;kOhm&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
+            <span class="k">if</span> <span class="s1">&#39;amplification&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span>
+                    <span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span>
+                    <span class="s1">&#39;amplification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplification</span>
+            <span class="k">if</span> <span class="s1">&#39;current&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s1">&#39;k2440_current&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;current&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;k2440_current&#39;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;current&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> 
+            <span class="k">if</span> <span class="s1">&#39;dropping_resistance&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span>
+                    <span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;dropping_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;dropping_resistance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;kOhm&#39;</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span>
-                    <span class="s">&#39;dropping_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dropping_resistance</span>
-</div>
-<div class="viewcode-block" id="Experiment.MakeOverview"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.Experiment.MakeOverview">[docs]</a>    <span class="k">def</span> <span class="nf">MakeOverview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Overview over all measurements including every type of measurement (so far B/T Sweeps)</span>
-<span class="sd">        args options:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span>
+                    <span class="s1">&#39;dropping_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dropping_resistance</span></div></div>
 
-<span class="sd">                files: if true append column indicating paths of measurement files</span>
+<div class="viewcode-block" id="measurement_details"><a class="viewcode-back" href="../../../e21.sweet16.html#e21.sweet16.susceptibility.measurement_details">[docs]</a><span class="k">def</span> <span class="nf">measurement_details</span><span class="p">(</span><span class="n">Exp</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    returns a function g(i) which can be used with ipython.widges.interact</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># Create Table Header</span>
-        <span class="n">html_table</span> <span class="o">=</span> <span class="s">&#39;&lt;h1&gt; {} - Measurement Overview &lt;/h1&gt;&#39;</span> <span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;sample&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;latin-1&#39;</span><span class="p">))</span> 
-        <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;strong&gt; Sample: &lt;/strong&gt; {} &lt;br&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;sample&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;latin-1&#39;</span><span class="p">)</span>
-        <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;&lt;strong&gt; Measurement Option:&#39;</span>
-                      <span class="s">&#39;&lt;/strong&gt; Susceptibility &lt;br&gt; &lt;br&gt;&#39;</span><span class="p">)</span>
-        <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span>
-        <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;&lt;tr&gt; &lt;th&gt; Number &lt;/th&gt; &lt;th&gt; Sweep Type &lt;/th&gt; &lt;th&gt;&#39;</span>
-                       <span class="s">&#39;Start &lt;/th&gt; &lt;th&gt; Stop &lt;/th&gt; &lt;th&gt; T / B &lt;/th&gt; &lt;th&gt;&#39;</span>
-                       <span class="s">&#39;B_init &lt;/th&gt; &lt;th&gt; T_init &lt;/th&gt;&lt;th&gt; Ampl &lt;/th&gt;&lt;th&gt;&#39;</span>
-                       <span class="s">&#39;dropping res &lt;/th&gt;&lt;th&gt; sweep &lt;/th&gt;&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s">&#39;angle&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-            <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;th&gt; Angle &lt;/th&gt;&#39;</span>
-        <span class="k">if</span> <span class="s">&#39;current&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-            <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;th&gt; Current &lt;/th&gt;&#39;</span>
-        <span class="k">if</span> <span class="s">&#39;NV&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-            <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;th&gt; Needle Valve &lt;/th&gt;&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;/tr&gt;&#39;</span>
-        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">],</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">TemperatureScan</span><span class="p">)):</span>
-                <span class="n">T_init</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span>
-                <span class="n">T_final</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span>
-                <span class="n">B_field</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span>
-                <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span>
-                <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;&lt;tr&gt; &lt;td&gt;{}&lt;/td&gt; &lt;td&gt; Tsweep &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} K &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} K &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {}+-{} T &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} k&amp;Omega; &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">num</span><span class="p">,</span>
-                                    <span class="n">T_init</span><span class="p">,</span>
-                                    <span class="n">T_final</span><span class="p">,</span>
-                                    <span class="n">B_field</span><span class="p">,</span>
-                                    <span class="n">sigma</span><span class="p">,</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_field&#39;</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_temperature&#39;</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;amplification&#39;</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;target_temperature_rate&#39;</span><span class="p">])</span>
-                <span class="k">if</span> <span class="s">&#39;reserve&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;lock_in_1&#39;</span><span class="p">][</span><span class="s">&#39;dyn_reserve&#39;</span><span class="p">])</span>
-                <span class="k">if</span> <span class="s">&#39;angle&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;angle&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">))</span>
-                <span class="k">if</span> <span class="s">&#39;current&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">mean_current</span><span class="p">)</span>
-                <span class="k">if</span> <span class="s">&#39;NV&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">NV</span><span class="p">)</span>
-                <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;/tr&gt;&#39;</span>
+<span class="sd">    input parameters:</span>
 
-            <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">],</span> <span class="n">e21</span><span class="o">.</span><span class="n">sweet16</span><span class="o">.</span><span class="n">susceptibility</span><span class="o">.</span><span class="n">FieldScan</span><span class="p">)):</span>
-                <span class="n">B_init</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span>
-                <span class="n">B_final</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;B_field&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">6</span><span class="p">))</span>
-                <span class="n">Temp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span>
-                <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;sample_temp_1&#39;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span>
-                <span class="n">html_table</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;&lt;tr&gt; &lt;td&gt;{}&lt;/td&gt; &lt;td&gt; Field &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} T &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} T &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {}+-{} K &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} k&amp;Omega; &lt;/td&gt;&#39;</span>
-                               <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">num</span><span class="p">,</span>
-                                    <span class="n">B_init</span><span class="p">,</span>
-                                    <span class="n">B_final</span><span class="p">,</span>
-                                    <span class="n">Temp</span><span class="p">,</span>
-                                    <span class="n">sigma</span><span class="p">,</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_field&#39;</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;init_temperature&#39;</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;amplification&#39;</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;general&#39;</span><span class="p">][</span><span class="s">&#39;dropping_resistance&#39;</span><span class="p">],</span>
-                                    <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">][</span><span class="s">&#39;target_field_rate&#39;</span><span class="p">])</span>
-                <span class="k">if</span> <span class="s">&#39;reserve&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;lock_in_1&#39;</span><span class="p">][</span><span class="s">&#39;dyn_reserve&#39;</span><span class="p">])</span>
-                <span class="k">if</span> <span class="s">&#39;angle&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="nb">round</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;angle&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                            <span class="mi">2</span><span class="p">))</span>
-                <span class="k">if</span> <span class="s">&#39;current&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">mean_current</span><span class="p">)</span>
-                <span class="k">if</span> <span class="s">&#39;NV&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                    <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">NV</span><span class="p">)</span>
-                <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;/tr&gt;&#39;</span>
+<span class="sd">        Exp: e21 Experiment class dicitonary</span>
 
-        <span class="n">html_table</span> <span class="o">+=</span> <span class="s">&#39;&lt;/table&gt;&#39;</span>
-        <span class="k">return</span> <span class="n">html_table</span></div></div>
+<span class="sd">    output:</span>
+<span class="sd">    </span>
+<span class="sd">        g(i): function that displays a HTML table containing comprehensive</span>
+<span class="sd">              measurement information on Measurement Exp[i]</span>
+
+<span class="sd">    &#39;&#39;&#39;</span> 
+
+
+    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&lt;h2&gt; Measurement Details for Measurement Number {}&lt;/h2&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt; General information: &lt;/h3&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Date &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39; &lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Sample &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;sample&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Time &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; User &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;user&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Mode &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Amplification &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;amplification&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Dropping Resistance &lt;/strong&gt;&lt;/td&gt; &lt;td&gt;&#39;</span>
+             <span class="s1">&#39; {} k$\Omega$ &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                 <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;dropping_resistance&#39;</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Filename &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span>
+             <span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;filename&#39;</span><span class="p">]))</span>
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="k">if</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;contact_distance&#39;</span><span class="p">]:</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Contact Distance &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+                     <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;contact_distance&#39;</span><span class="p">]))</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Sample Thickness &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+                     <span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;sample_thickness&#39;</span><span class="p">]))</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Sample Width &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span>
+                     <span class="s1">&#39;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;general&#39;</span><span class="p">][</span><span class="s1">&#39;sample_width&#39;</span><span class="p">]))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>     
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt; Lockin Information: &lt;/h3&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span> 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;lock_in_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="n">keys_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>       
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keys_sorted</span><span class="p">)):</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; {} &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="s1">&#39;lock_in_2&#39;</span> <span class="ow">in</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">s</span> <span class="o">+=</span><span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;lock_in_2&#39;</span><span class="p">][</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="k">if</span> <span class="s1">&#39;lock_in_3&#39;</span> <span class="ow">in</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">s</span> <span class="o">+=</span><span class="s1">&#39;&lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt; &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;lock_in_3&#39;</span><span class="p">][</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/tr&gt;&#39;</span> 
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+            
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt; Temperature and Field Info: &lt;/h3&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span> 
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Mean Temperature &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39; &lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_temperature</span><span class="p">))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; Mean Field &lt;/strong&gt;&lt;/td&gt;&#39;</span>
+             <span class="s1">&#39; &lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">mean_field</span><span class="p">))</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/table&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt; Command File: &lt;/h3&gt;&#39;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;table class=&quot;table table-hover&quot;&gt;&#39;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;command&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="n">keys_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keys_sorted</span><span class="p">)):</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;&lt;tr&gt; &lt;td&gt;&lt;strong&gt; {} &lt;/strong&gt;&lt;/td&gt; &lt;td&gt; {} &lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">keys_sorted</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>      
+        <span class="n">s</span> <span class="o">=</span> <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">g</span></div>
+
 </pre></div>
 
     </div>
@@ -490,7 +406,7 @@
     </p>
     <p>
         &copy; Copyright 2015, Felix.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.3.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.1.<br/>
     </p>
   </div>
 </footer>

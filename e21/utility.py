@@ -405,12 +405,12 @@ def MakeOverview(Exp, *args):
                 try:
                     html_table += '<td> {} </td>'.format(list(findkey(Exp[num].params, k))[0])
                 except IndexError:
-                    print Warning('{} not found in parameters'.format(k))
+                    #print Warning('{} not found in parameters'.format(k))
                     try:
-                        html_table += '<td> {} </td>'.format(list(findkey(Exp[num].data, k))[0])
+                        html_table += '<td> {} </td>'.format(np.mean(list(findkey(Exp[num].data, k))[0]))
                     except IndexError:
-                        raise Warning('{} not found in data either'.format(k))
-
+                        #raise Warning('{} not found in data either'.format(k))
+                        pass
     
         html_table += '</tr>'   
     html_table += '</table>'

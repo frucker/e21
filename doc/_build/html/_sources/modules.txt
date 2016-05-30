@@ -5,3 +5,4 @@ e21
    :maxdepth: 4
 
    e21
+   setup

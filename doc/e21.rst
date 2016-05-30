@@ -6,11 +6,20 @@ Subpackages
 
 .. toctree::
 
+    e21.Nicos
     e21.PPMS
     e21.sweet16
 
 Submodules
 ----------
+
+e21.GUI module
+--------------
+
+.. automodule:: e21.GUI
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 e21.core module
 ---------------
