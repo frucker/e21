@@ -751,6 +751,10 @@ def chi_I_Amp(Data, Data_im,  T = 28.0, B = 0.2, offset = 0, y_out = 'real',
 
     if not 'amps' in kwargs.keys():
         amps = Data.keys()
+        for i,j in enumerate(amps):
+            if isinstance(j, str):
+                amps[i] = float(i.strip('-2'))
+    
         amps = sorted(amps)
     else:
         amps = kwargs['amps']
@@ -1054,7 +1058,10 @@ def calculate_output(x0,x0_im,x1,x2, y_out,delta):
             raise ValueError('{} invalid for y_out)'.format(y_out))
             
     elif delta == True:
-        if y_out =='real':
+        if y_out =='real-blanco':
+            points = x1
+            zlab = '\n'+r'$\rm{Re} \chi^\perp$'
+        elif y_out =='real':
             x = x1
             points = x-x0
             zlab = '\n'+r'$\Delta \rm{Re} \chi^\perp$'
@@ -1062,6 +1069,9 @@ def calculate_output(x0,x0_im,x1,x2, y_out,delta):
             x = x2
             points = x-x0_im
             zlab = '\n'+r'$\Delta \rm{Im} \chi^\perp$'
+        elif y_out =='imag-blanco':
+            points = x2
+            zlab = '\n'+r'$\rm{Im} \chi^\perp$'
         elif y_out == 'abs':
             x = np.sqrt(x1**2 + x2**2)
             x0_abs = np.sqrt(x0**2+x0_im**2)
@@ -1163,6 +1173,9 @@ def chi_B(Data, Data_im, T = 28.0, offset = 0, y_out = 'real',
             # make default title
             plt.title('T = {} K'.format(T))
             zeroline = [0+i*offset]*len(field)
+            # convert zero
+            if float(j) == 0:
+                j = '0' 
             plt.plot(field, points, '-', label = '{}'.format(j), color = color)
             #plt.plot(field, zeroline, color = 'g')
             ax = plt.gca()

@@ -7,6 +7,7 @@ import quantities as pq
 class Sweet16(e21.core.Measurement, e21.core.Plottable):
 
 # Mandatory Properties for new Instrument cores
+
     @property
     def sample(self):
         return self.params['info']['sample']
@@ -73,6 +74,14 @@ class Sweet16(e21.core.Measurement, e21.core.Plottable):
         return self.params['general']['filename'].split('/')[-1]
 
 # Optional Properties
+
+    @property
+    def amplitude(self):
+        return self.params['info']['command']['K6221 current']
+
+    @property
+    def frequency(self):
+        return self.params['info']['command']['k6221 frequency']
 
     @property
     def time(self):

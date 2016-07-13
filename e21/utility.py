@@ -534,16 +534,18 @@ def replace_zeros(only_y = False):
     ax = plt.gca()
     xlabels = [item.get_text() for item in ax.get_xticklabels()]
     ylabels = [item.get_text() for item in ax.get_yticklabels()]
-    for i, j in enumerate(xlabels):
-        if not j == '':
-            if float(j) == 0:
-                xlabels[i] = '0'
-    for i, j in enumerate(ylabels):
-        if not j == '':
-            if float(j) == 0:
-                ylabels[i] = '0'
-    if not only_y:    
-        ax.set_xticklabels(xlabels)
+    if not ax.get_xscale() == 'log':
+        for i, j in enumerate(xlabels):
+            if not j == '':
+                if float(j.replace(u'\u2212', '-')) == 0:
+                    xlabels[i] = '0'
+    if not ax.get_yscale() == 'log':
+        for i, j in enumerate(ylabels):
+            if not j == '':
+                if float(j.replace(u'\u2212', '-')) == 0:
+                    ylabels[i] = '0'
+        if not only_y:    
+            ax.set_xticklabels(xlabels)
     ax.set_yticklabels(ylabels)
 
 def replace_zeros_legend():
@@ -556,8 +558,8 @@ def replace_zeros_legend():
     for i, j in enumerate(lab):
         if j == '0.0':
             lab[i] = '0'
-    plt.legend(lin, lab)
-    return lin, lab
+    l.set_label(lab)
+    #return lin, lab
 
 def order_measurements(Exp, meas, param = 'temp'):
     """ Orders a list of measurements after a given parameter ascending
