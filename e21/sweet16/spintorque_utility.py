@@ -10,6 +10,7 @@ import os
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.collections import PolyCollection
 from matplotlib.colors import colorConverter
+import e21.filter as filt
 
 def get_current(Exp, meas, tol = 0.01):
     """ Returns current of a list of measurement. 
@@ -166,9 +167,9 @@ def make_grid(Exp, meas = [],data = 'real', min_y = 0, max_y = 0.6,
     grid = griddata(punkte/scale, values, (grid_x/xscale, grid_y/yscale),
                     method = 'linear', fill_value = np.nan)
     
-    Grd['temps'] = np.linspace(min_x, max_x, int(N.imag))
+    Grd['temps'] = np.linspace(float(min_x), float(max_x), int(N.imag))
     Grd['grid'] = grid
-    Grd['fields'] = np.linspace(min_y, max_y, int(N.imag))
+    Grd['fields'] = np.linspace(float(min_y), float(max_y), int(N.imag))
     
     return Grd, '{}'.format(current)
 
@@ -1114,6 +1115,10 @@ def chi_B(Data, Data_im, T = 28.0, offset = 0, y_out = 'real',
 
     """
     
+    # Add filter possibility
+    if 'savitzky_golay' in kwargs.keys():
+        window_size = kwargs['savitzky_golay'][1]
+        order = kwargs['savitzky_golay'][0]
  
     # Possibility to define own color map
     if not 'cmap' in kwargs.keys():
@@ -1152,7 +1157,8 @@ def chi_B(Data, Data_im, T = 28.0, offset = 0, y_out = 'real',
         xlab = '\n'+r'$\mu_0 H$ (T)'
         ylab = '\n'+r'$I$ (A)' 
         points, zlab = calculate_output(x0,x0_im,x1,x2, y_out,delta) 
-        
+        if 'savitzky_golay' in kwargs.keys():
+            points = filt.savitzky_golay(points,window_size, order)
         for j, val in enumerate(points):
             points[j]=points[j]+(i*offset)
 

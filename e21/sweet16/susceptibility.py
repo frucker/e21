@@ -98,7 +98,10 @@ class AngleScan(Susceptibility, e21.core.Plottable):
             y, x, axes, subplot_default, fig_kw, label=label, **kw)
 
 def check_empty_files(filelist, mode = 'susceptibility'):
-    """ Checks for empty files in list of files.
+    """ 
+	
+		ACHTUNG! Dauert viel zu lange...
+		Checks for empty files in list of files.
         Empty files are files containing only header lines.
         input: filelist
         output: filelist, list of non-empty files
@@ -114,6 +117,28 @@ def check_empty_files(filelist, mode = 'susceptibility'):
         except IndexError:
             print 'file empty: {}'.format(files)
     return fl
+	
+def check_empty_files(filelist, mode = 'susceptibility'):
+    """ 
+	
+		ACHTUNG! Dauert viel zu lange...
+		Checks for empty files in list of files.
+        Empty files are files containing only header lines.
+        input: filelist
+        output: filelist, list of non-empty files
+    """ 
+
+    s16 = Loader(mode=mode)
+    fl = []
+    for n, files in enumerate(filelist):
+        Test = s16(files) 
+        try:
+            if Test.data['datetime'][0]:
+                fl.append(files)
+        except IndexError:
+            print 'file empty: {}'.format(files)
+    return fl	
+
 
 def create(data, params):
     """Takes data and param and creates a FieldScan or TemperatureScan."""
@@ -159,7 +184,7 @@ class Experiment(e21.core.Experiment):
         s16 = Loader(mode='susceptibility')
 
         meas_len = len(self._measurements)
-        filelist = check_empty_files(filelist)
+        #filelist = check_empty_files(filelist)
         testfile = s16(filelist[0])
         p = ProgressBar(len(filelist))
 
@@ -168,29 +193,42 @@ class Experiment(e21.core.Experiment):
                 raw_input('Dropping Resistance [kOhms]: '))
         if 'amplification' not in testfile.params['general'].keys():
             amplification = float(raw_input('Amplification: '))
-
-        for n, files in enumerate(filelist):
-            p.animate(n+1)
-            index = n + meas_len
-
-            self._measurements[index] = s16(files)
-            self._measurements[index].params['general']['filename'] = files
-            if 'amplification' not in self._measurements[
-                    index].params['general'].keys():
-                self._measurements[index].params['general'][
-                    'amplification'] = amplification
-            if 'current' not in self._measurements[index].data.keys():
-                if 'k2440_current' in self._measurements[index].data.keys():
-                    self._measurements[index].data['current'] = self._measurements[index].data['k2440_current']
-                else:
-                    self._measurements[index].data['current'] = 0 
-            if 'dropping_resistance' in self._measurements[
-                    index].params['general'].keys():
-                self._measurements[index].params['general']['dropping_resistance'] = float(
-                    self._measurements[index].params['general']['dropping_resistance'].strip('kOhm'))
-            else:
-                self._measurements[index].params['general'][
-                    'dropping_resistance'] = dropping_resistance
+        emptyfiles = '\nEmpty files:\n'
+        i = 0
+        for n, file in enumerate(filelist):
+			
+			# i counting only non-empty files
+			
+			# Count import of all files (including empty ones)
+			p.animate(n+1)
+			# Check if imported file is empty, cheap trick..
+			try:
+				Test = s16(file)
+				if Test.data['datetime'][0]:
+					index = i + meas_len
+					self._measurements[index] = Test
+					self._measurements[index].params['general']['filename'] = file
+					if 'amplification' not in self._measurements[
+							index].params['general'].keys():
+						self._measurements[index].params['general'][
+							'amplification'] = amplification
+					if 'current' not in self._measurements[index].data.keys():
+						if 'k2440_current' in self._measurements[index].data.keys():
+							self._measurements[index].data['current'] = self._measurements[index].data['k2440_current']
+						else:
+							self._measurements[index].data['current'] = 0 
+					if 'dropping_resistance' in self._measurements[
+							index].params['general'].keys():
+						self._measurements[index].params['general']['dropping_resistance'] = float(
+							self._measurements[index].params['general']['dropping_resistance'].strip('kOhm'))
+					else:
+						self._measurements[index].params['general'][
+							'dropping_resistance'] = dropping_resistance
+					# only count if file was not empty	
+					i = i+1
+			except IndexError:
+				emptyfiles = emptyfiles + file + '\n'	
+        print emptyfiles
 
 def measurement_details(Exp):
     '''
