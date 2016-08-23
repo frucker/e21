@@ -50,7 +50,10 @@ class Sweet16(e21.core.Measurement, e21.core.Plottable):
                 try:
                     return self.data['MC_LS372_1']
                 except KeyError:
-                    return 0
+                    try:
+                        return self.data['MC_temp']
+                    except KeyError:
+                        return 0
       
 
     @property

@@ -61,7 +61,18 @@ def Calc_Sus_PPMS_SI_volume(input_emu, volume_in_mm3, field_in_mT):
     output=input_SI/volume_SI/field_SI
     return output
 
-
+def Vortrag_colormap():
+    cdict = {'red': ((0.0, .6, .6),
+                     (0.7, 1.0, 1.0),
+                     (1.0, 0., 0.)),
+         'green': ((0.0, 0.4, 0.4),
+                   (0.7, 0.0, 0.0),
+                   (1.0, 0.0, 0.0)),
+         'blue': ((0.0, 0.0, 0.0),
+                  (0.7, 0.0, 0.0), 
+                  (1.0, 1.0, 1.0))}
+    cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
+    return cmap
 
 def Felix_colormap():
     cdict = {'red': ((0.0, 1.0, 1.0),
