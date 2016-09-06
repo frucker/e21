@@ -4,3 +4,4 @@ include COPYING
 
 recursive-include e21/templates *
 recursive-include e21/sweet16 *
+recursive-include e21/mischer *
