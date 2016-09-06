@@ -565,11 +565,11 @@ def replace_zeros_legend():
     """
     ax = plt.gca()
     lin = ax.lines
-    lab = [l.get_label() for l in lin]
-    for i, j in enumerate(lab):
+    for i in lin:
+        j = i.get_label()
         if j == '0.0':
-            lab[i] = '0'
-    l.set_label(lab)
+            j= '0'
+        i.set_label(j)
     #return lin, lab
 
 def order_measurements(Exp, meas, param = 'temp'):
