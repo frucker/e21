@@ -78,7 +78,8 @@ class Loader(object):
                     data['datetime'] = []
                     data['time_numpy'] = []
                 elif line.startswith('('):
-                    units = [tok.strip('() ') for tok in line.split('\t')]
+                    units = [tok.strip('() ') for tok in line.split('\
+                    t')]
                     # TODO: Es tritt ein Fehler auf da Ohm am ende in Klammern
                     units = [tok.strip(')\r\n') for tok in units]
                     # The Sweet 16 uses 'Deg', quantities uses 'deg'.

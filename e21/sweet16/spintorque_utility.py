@@ -173,7 +173,7 @@ def make_grid(Exp, meas = [],data = 'real', min_y = 0, max_y = 0.6,
     
     return Grd, '{}'.format(current)
 
-def plot_grid(Grids, current, vmin = 0, vmax = 1e-6, nbins = 4, **kwargs): 
+def plot_grid(Grids, current, nbins = 4, **kwargs): 
        
     """ Makes a 2D Contourplot of a given Grid. The input grid has 
         to be stored in a dicitionary (result of make_grid)
@@ -222,6 +222,14 @@ def plot_grid(Grids, current, vmin = 0, vmax = 1e-6, nbins = 4, **kwargs):
         cmap = cm.jet
     else:
         cmap = kwargs['cmap']  
+    if not 'vmin' in kwargs.keys():
+        vmin = np.min(grid)
+    else:
+        vmin = kwargs['vmin']  
+    if not 'vmax' in kwargs.keys():
+        vmax = np.max(grid)
+    else:
+        vmax = kwargs['vmax']  
     plt.imshow(grid.T, origin='lower', extent=[min_x,max_x,min_y,max_y],
            aspect='auto', vmin=vmin, vmax=vmax, cmap = cmap )
     plt.title('Bsweeps @ I = {}\n'.format(current))
@@ -309,7 +317,7 @@ def plot_data(Exp, meas = [], data = 'real', scaling = -1, N = 400j, nbins = 4,
                                             float(T)))
     plt.xlabel('B (T)')
     plt.ylabel('U ($\mu$V)')
-    plt.title('Bsweeps @ I = {}\n'.format(current))
+
     plt.locator_params(nbins=nbins)
     if 'small' in legopts:
         lines = ax.lines[0], ax.lines[-1]

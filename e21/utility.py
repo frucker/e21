@@ -129,14 +129,14 @@ def calibrate(data,scaling):
             b = scaling[1]
             z = scaling[2]
         else:
-            raise ValueError('Scaling must be list of length 2 not {}'.format(len(scaling))) 
+            raise ValueError('Scaling must be list of length 2 or 3 not {}'.format(len(scaling))) 
     elif type(scaling) is float or int:
         m = scaling
         b = 0
         z = 0
     else:
         raise ValueError('Scaling must be list of length 2 or float not {}'.format(type(scaling)))  
-    return (data+z*pq.V)*m+b*pq.V
+    return (np.array(data)+z)*m+b
 
 def export_FS(data, numbers, path, option = 'susceptibility',
               scailing = 1, t_off = 0):

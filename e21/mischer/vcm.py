@@ -155,7 +155,7 @@ def create(data, params):
 
 
 
-class Experiment(e21.core.Experiment):
+class Experiment(e21.core.Experiment, Vcm):
 
     @property
     def temperature_scans(self):
