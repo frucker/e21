@@ -71,6 +71,14 @@ class Sweet16(e21.core.Measurement, e21.core.Plottable):
             # If not present in Data, return array of length of measurement
             # with Angle 0.
             return [0*pq.deg]*len(self)
+    @property
+    def phi(self):
+        try:
+            return self.data['Phi']
+        except KeyError:
+            # If not present in Data, return array of length of measurement
+            # with Angle 0.
+            return [0*pq.deg]*len(self)
 
     @property
     def filename(self):

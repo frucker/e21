@@ -31,11 +31,11 @@ class Susceptibility(Sweet16):
 
     @property
     def real(self):
-        return self.data['LI1_CH2']
+        return np.array(self.data['LI1_CH2'])
 
     @property
     def imag(self):
-        return self.data['LI1_CH1']
+        return np.array(self.data['LI1_CH1'])
 
     @property
     def chi(self):

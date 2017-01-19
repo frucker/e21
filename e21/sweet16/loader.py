@@ -96,6 +96,9 @@ class Loader(object):
             for col, unit in zip(variables, units):
                 if col not in ['date', 'time', 'capacity', 'loss']:
                     data[col] = pq.Quantity(data[col], unit)
+            # convert everything to numpy arrays
+            for var in data.keys():
+                data[var] = np.array(data[var])
         return data, params
 
     
@@ -103,7 +106,6 @@ class Loader(object):
         warning = ''
         tokens = line.strip().split('\t')
         row = {key: float(val) for key, val in zip(variables[2:], tokens[2:])}
-        
         # convert date and time to one datetime and insert in dict
         row['datetime'] = dt.datetime.strptime(tokens[0] + tokens[1],
                                                '%d.%m.%Y%H:%M:%S')
@@ -117,13 +119,20 @@ class Loader(object):
                 return {}
             elif row['sample_temp_1'] == 100.:
                 return {}
+        except KeyError:
+            pass        
         
-            # check if number of data headers fits to number of data columns
-            # (happens e.g. at last line after measurement abort)
-            elif (len(tokens) != len(variables)):
-                while len(tokens) < len(variables):
-                    tokens.append(np.NaN)
-            # TODO: Should raise a warning (per file) when inserting NaNs 
+        # check if number of data headers fits to number of data columns
+        # (happens e.g. at last line after measurement abort)
+        if (len(tokens) != len(variables)):
+            while len(tokens) < len(variables):
+                tokens.append(np.NaN)
+        # TODO: Should raise a warning (per file) when inserting NaNs 
+        try:
+            if np.round(row['Phi'],3) == 0.:
+                row['Phi'] = 0.
+            elif np.round(row['Phi'],3) == 360.:
+                row['Phi'] = 0.
         except KeyError:
             pass
         return row
@@ -172,7 +181,8 @@ def parse_commands(arguments):
     # Convert Lockin Sensitivity Units
     args['lockin1_sensitivity'] = sens[args['lockin1_sensitivity']]
     args['lockin2_sensitivity'] = sens[args['lockin2_sensitivity']]
-    args['needle_valve_const'] = needle_valve[args['needle_valve_const']]
+    #NV const wurde mit Phi ersetzt für AMI messungen
+    #args['needle_valve_const'] = needle_valve[args['needle_valve_const']]
     args['mode'] = modes[args['mode']]
     return args
 

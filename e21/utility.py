@@ -3,6 +3,7 @@ import numpy as np
 import quantities as pq
 import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from IPython.display import display, HTML
 from operator import itemgetter
 from tempfile import mkstemp
@@ -87,11 +88,16 @@ def Felix_colormap():
     cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
     return cmap
 
+def Felix_colormap_2(nbins=10):
+    colors = ['#0000cc','#006666',  '#00994d', '#fff400','#cc5200', '#ff0000','#800000', '#000000' ]
+    cm = LinearSegmentedColormap.from_list('Felix2', colors, N=nbins)
+    return cm
+    
 def STT_colormap():
     cpool = [ '#1b1da3', '#ff0000', '#e52b2b', '#0051ff','#00868b']
     cmap = matplotlib.colors.ListedColormap(cpool[0:6], 'indexed')
     return cmap
-
+    
 def merge_dicts(*dicts):
     """Merges multiple dicts together.
     
@@ -530,7 +536,7 @@ def replace(file_path, pattern, subst):
     move(abs_path, file_path)
 
 def replace_zeros(only_y = False):
-    """ Replaces 0.0 with 0 for Chrisitan.
+    """ Replaces 0.0 with 0 for Chrisitan. Works for all axes of figure...
     
     E.g.::
 
@@ -540,6 +546,79 @@ def replace_zeros(only_y = False):
     :param f: matplotlib figure.
 
     """
+    f=plt.gcf()
+    f.canvas.draw()
+    ax = f.get_axes()
+    for k in ax:
+        xlabels = [item.get_text() for item in k.get_xticklabels()]
+        ylabels = [item.get_text() for item in k.get_yticklabels()]
+        if not k.get_xscale() == 'log':
+            for i, j in enumerate(xlabels):
+                if not j == '':
+                    if float(j.replace(u'\u2212', '-')) == 0:
+                        xlabels[i] = '0'
+        if not k.get_yscale() == 'log':
+            for i, j in enumerate(ylabels):
+                if not j == '':
+                    if float(j.replace(u'\u2212', '-')) == 0:
+                        ylabels[i] = '0'
+        if not only_y:                      
+            k.set_xticklabels(xlabels)   
+        k.set_yticklabels(ylabels)
+
+def savefig(path, **kwargs):
+    """
+    Calls pylabs savefig function. Adds text file containing all plot data. Sofar only tested for single axes plots. Needs to be adapted for multipanel plots.
+    
+    E.g.::
+        
+        f, ax = figure()
+        legend()
+        savefig(path)
+    
+    :param path: str desired path
+    
+    """
+    import csv
+    import itertools as it
+    import pylab as plt
+    path = path.split('.')[0]
+    with open(path+'.txt', 'w') as f:
+        ax = plt.gca()
+        line = ax.lines[0]
+        data = []
+        handles, labels = ax.get_legend_handles_labels()
+        for i in range(len(ax.lines)):
+            line = ax.lines[i]
+            xdat = list(line.get_xdata())
+            try:
+                xtext = ax.xaxis.get_label_text()
+            except:
+                xtext = ''
+            xdat.insert(0,xtext)
+            
+            ydat = list(line.get_ydata())
+            ydat.insert(0,labels[i])
+            print ydat
+            data.append(xdat)
+            data.append(ydat)
+
+        #writestring = ''
+        #for j in range(len(data[0])):
+        #    for i in range(len(data)):
+        #        writestring += '{}\t'.format(data[i][j])
+        #    writestring +='\n'
+        writer = csv.writer(f, delimiter = '\t')
+        writer.writerows(it.izip_longest(*data))
+        f.close()
+    plt.savefig(path, **kwargs)
+
+
+        
+""" 
+depreciated. Not possible for multipanel plots   
+def replace_zeros(only_y = False):
+ 
     f = plt.gcf()
     f.canvas.draw()
     ax = plt.gca()
@@ -558,7 +637,7 @@ def replace_zeros(only_y = False):
         if not only_y:    
             ax.set_xticklabels(xlabels)
     ax.set_yticklabels(ylabels)
-
+"""
 def replace_zeros_legend():
     """ Replaces 0.0 with 0 for Chrisitan in legends
     
@@ -601,7 +680,7 @@ def order_measurements(Exp, meas, param = 'temp'):
         meas = sorted(val, key=lambda x: x[0])  
         meas = [meas[i][1] for i in range(len(meas))]#
     elif param == 'field':
-        for j, i in enumerate(meas):
+        for i in meas:
             B = np.round(Exp[i].mean_field,3)
             val.append((B,i))
         meas = sorted(val, key=lambda x: x[0])  
@@ -612,8 +691,19 @@ def order_measurements(Exp, meas, param = 'temp'):
             val.append((I,i))
         meas = sorted(val, key=lambda x: x[0])  
         meas = [meas[i][1] for i in range(len(meas))]#
-    else:       
-        raise NotImplementedError('Method not implemented yet: {}'.format(param))
+    else:
+        try:
+            for i in meas:
+                attr = getattr(Exp[i], param)
+                if type(attr) is np.ndarray:
+                    attr = np.round(np.median(attr),4)
+                    val.append((attr,i))
+                else:
+                    val.append((attr, i))
+            meas = sorted(val, key=lambda x: x[0])  
+            meas = [meas[i][1] for i in range(len(meas))]
+        except AttributeError:               
+            raise NotImplementedError('Method not implemented yet: {}'.format(param))
         
     return meas
 
