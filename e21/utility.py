@@ -145,7 +145,7 @@ def calibrate(data,scaling):
     return (np.array(data)+z)*m+b
 
 def export_FS(data, numbers, path, option = 'susceptibility',
-              scailing = 1, t_off = 0):
+              scaling = 1, t_off = 0):
     """
     Export Field Sweeps to txt files. 
     Outputfiles are stored in 'path' directory.
@@ -169,7 +169,7 @@ def export_FS(data, numbers, path, option = 'susceptibility',
     optional:        
 
         options:    - 'susceptibility' (default) for susceptiblity measurements    
-        scailing:   - scailing number to calibrate susceptibility
+        scaling:   - scaling number to calibrate susceptibility
         t_off:      - temperature offset    
     """
     if (option == 'susceptibility'):
@@ -184,8 +184,8 @@ def export_FS(data, numbers, path, option = 'susceptibility',
                 f.write('{}\t{}\t{}\t{}\n'.format(
                          float(correct_temp(data[i].temperature[j],t_off)),
                          float(data[i].field[j]), 
-                         float(calibrate(data[i].real[j],scailing)),
-                         float(calibrate(data[i].imag[j],scailing))))
+                         float(calibrate(data[i].real[j],scaling)),
+                         float(calibrate(data[i].imag[j],scaling))))
             f.close()
         f = open(path+'FS_gesamt.txt','w')
         f.write('Temperature\tField\tSUS\tSUSIM\n')
@@ -196,8 +196,8 @@ def export_FS(data, numbers, path, option = 'susceptibility',
         for i in numbers:
             T = correct_temp(data[i].temperature,t_off)
             B = data[i].field
-            S = calibrate(data[i].real,scailing)
-            SI = calibrate(data[i].imag,scailing)
+            S = calibrate(data[i].real,scaling)
+            SI = calibrate(data[i].imag,scaling)
             temps = np.hstack([temps, T])
             fields = np.hstack([fields, B])
             sus = np.hstack([sus, S])
@@ -583,34 +583,40 @@ def savefig(path, **kwargs):
     import itertools as it
     import pylab as plt
     path = path.split('.')[0]
-    with open(path+'.txt', 'w') as f:
-        ax = plt.gca()
-        line = ax.lines[0]
-        data = []
-        handles, labels = ax.get_legend_handles_labels()
-        for i in range(len(ax.lines)):
-            line = ax.lines[i]
-            xdat = list(line.get_xdata())
-            try:
-                xtext = ax.xaxis.get_label_text()
-            except:
-                xtext = ''
-            xdat.insert(0,xtext)
-            
-            ydat = list(line.get_ydata())
-            ydat.insert(0,labels[i])
-            print ydat
-            data.append(xdat)
-            data.append(ydat)
-
-        #writestring = ''
-        #for j in range(len(data[0])):
-        #    for i in range(len(data)):
-        #        writestring += '{}\t'.format(data[i][j])
-        #    writestring +='\n'
-        writer = csv.writer(f, delimiter = '\t')
-        writer.writerows(it.izip_longest(*data))
-        f.close()
+    fig = plt.gcf()
+    axes = fig.get_axes()
+    for num, ax in enumerate(axes):
+        # Open one file for each axis in figure. 
+        # If only one axis, name figure as '*figurename*.txt'
+        # else as '*figurename*_n.txt'
+        if len(axes)== 1:
+            path_txt = path+'.txt'
+        else:
+            path_txt = path+'_{}'.format(num)+'.txt'
+        with open(path_txt, 'w') as f:
+            data = []
+            handles, labels = ax.get_legend_handles_labels()
+            #iterate over all lines in plot (only for one axis)
+            for i in range(len(ax.lines)):
+                line = ax.lines[i]
+                xdat = list(line.get_xdata())
+                xdat = ['{:12.9f}'.format(l) for l in xdat]
+                # try to set xlabel as colum name for x values
+                try:
+                    xtext = ax.xaxis.get_label_text()
+                except:
+                    xtext = ''
+                # add column name on first column position
+                xdat.insert(0,xtext)
+                ydat = list(line.get_ydata())
+                ydat = ['{:12.9f}'.format(l) for l in ydat]
+                # Get label information to name y columns
+                ydat.insert(0,labels[i])
+                data.append(xdat)
+                data.append(ydat)
+            writer = csv.writer(f, delimiter = '\t')
+            writer.writerows(it.izip_longest(*data))
+            f.close()
     plt.savefig(path, **kwargs)
 
 
