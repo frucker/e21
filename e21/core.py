@@ -74,11 +74,20 @@ class Measurement(object):
         self.params = params
 
     def __getattr__(self, item):
-        return self.data[item]
+        try:
+            return self.data[item]
+        except KeyError:
+            raise AttributeError
+ 
+    def __getstate__(self):
+        return self.__dict__
+    def __setstate__(self, d):
+        self.__dict__.update(d) 
 
+ 
     def __dir__(self):
         return self.keys()
-
+    
 
     def _repr_html_(self):
         return "<h1>" + self.text + "</h1>"

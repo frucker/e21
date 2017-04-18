@@ -88,12 +88,14 @@ class Sweet16(e21.core.Measurement, e21.core.Plottable):
 
     @property
     def amplitude(self):
-        return self.params['info']['command']['K6221 current']
+        A = self.params['info']['command']['K6221 current']
+        return float(A.strip('A'))
 
     @property
     def frequency(self):
-        return self.params['info']['command']['k6221 frequency']
-
+        f = self.params['info']['command']['k6221 frequency']
+        return float(f.strip('Hz'))
+        
     @property
     def time(self):
         return self.data['datetime']

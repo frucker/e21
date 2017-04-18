@@ -421,7 +421,7 @@ def MakeOverview(Exp, *args):
             if k not in ['reserve', 'angle', 'current', 'NV', 'filename', 'dropping_resistance', 'amplification']:
                 try:
                     html_table += '<td> {} </td>'.format(list(findkey(Exp[num].params, k))[0])
-                except IndexError:
+                except IndexError:  
                     #print Warning('{} not found in parameters'.format(k))
                     try:
                         html_table += '<td> {} </td>'.format(np.mean(list(findkey(Exp[num].data, k))[0]))
@@ -582,7 +582,7 @@ def savefig(path, **kwargs):
     import csv
     import itertools as it
     import pylab as plt
-    path = path.split('.')[0]
+    path_txt = path.split('.')[0]
     fig = plt.gcf()
     axes = fig.get_axes()
     for num, ax in enumerate(axes):
@@ -590,10 +590,10 @@ def savefig(path, **kwargs):
         # If only one axis, name figure as '*figurename*.txt'
         # else as '*figurename*_n.txt'
         if len(axes)== 1:
-            path_txt = path+'.txt'
+            path2 = path_txt+'.txt'
         else:
-            path_txt = path+'_{}'.format(num)+'.txt'
-        with open(path_txt, 'w') as f:
+            path2 = path_txt+'_{}'.format(num)+'.txt'
+        with open(path2, 'w') as f:
             data = []
             handles, labels = ax.get_legend_handles_labels()
             #iterate over all lines in plot (only for one axis)
@@ -611,14 +611,20 @@ def savefig(path, **kwargs):
                 ydat = list(line.get_ydata())
                 ydat = ['{:12.9f}'.format(l) for l in ydat]
                 # Get label information to name y columns
-                ydat.insert(0,labels[i])
+                try:
+                    ytext = labels[i]
+                except:
+                    ytext = ''
+                ydat.insert(0,ytext)
                 data.append(xdat)
                 data.append(ydat)
             writer = csv.writer(f, delimiter = '\t')
             writer.writerows(it.izip_longest(*data))
             f.close()
-    plt.savefig(path, **kwargs)
-
+    if 'bbox_inches' in kwargs.keys():
+        plt.savefig(path,**kwargs)
+    else:
+        plt.savefig(path, bbox_inches = 'tight', **kwargs)
 
         
 """ 
@@ -696,7 +702,13 @@ def order_measurements(Exp, meas, param = 'temp'):
             I = np.round(Exp[i].mean_current,3)
             val.append((I,i))
         meas = sorted(val, key=lambda x: x[0])  
-        meas = [meas[i][1] for i in range(len(meas))]#
+        meas = [meas[i][1] for i in range(len(meas))]
+    elif param == 'frequency':
+        for j, i in enumerate(meas):
+            I = np.round(Exp[i].frequency,3)
+            val.append((I,i))
+        meas = sorted(val, key=lambda x: x[0])  
+        meas = [meas[i][1] for i in range(len(meas))]
     else:
         try:
             for i in meas:
