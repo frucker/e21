@@ -477,7 +477,7 @@ def get_temperature_shift(Grids, Grids_zero, I=0.0, T = 28, B_min = 0.49, B_max 
     
     res, ind = find_res(Grids_zero, T=T, current=I, B_min=B_min, B_max=B_max)
     T0 = Grids['{} A'.format(I)]['temps'][ind]
-    return T*pq.K-T0
+    return T*pq.K-T0*pq.K
 
 def get_all_Tshifts(Grids, Grids_zero, I = [], T = 28, B_min = 0.49, B_max = 0.55):
     """ gets the temperature shifts for different currents
@@ -519,7 +519,7 @@ def make_Data_dict(Grids, Grids_imag, T_min = 27.9, T_max = 28.9, n = 21, B_min 
 
 
 def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
-              delta = False, **kwargs):
+              delta = False,mpl = {}, **kwargs):
 
     """ Produces a plot of Chi vs. I. 
         
@@ -562,7 +562,11 @@ def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
         field_index = find_index(list(Data[T]['fields']), b)
 
         # define color map
-        color = cmap((j)/float(len(B)))
+        try:
+            if not 'color' in kwargs['mpl'].keys():
+                color = cmap((j)/float(len(B)))
+        except:
+            color = cmap((j)/float(len(B)))
 
         values = [] # data point (chi)
         x_axis = []  # x-coordinate (j)
@@ -591,7 +595,8 @@ def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
             # make default title
             values.append(points+(i*offset))        
         plt.title('T = {} K'.format(T))
-        plt.plot(x_axis, values, '-o', label = '{}'.format(b), color=color)
+ 
+        plt.plot(x_axis, values, 'o', label = '{}'.format(b), **mpl)
     plt.ylabel(zlab)
     plt.xlabel(xlab)
 
@@ -1103,8 +1108,8 @@ def calculate_output(x0,x0_im,x1,x2, y_out,delta):
  
 
 
-def chi_B(Data, Data_im, T = 28.0, offset = 0, y_out = 'real',
-          plot_3d = False, delta = False, **kwargs):
+def chi_B(Data, Data_im, T = 28.0, offset = 0, y_out = 'real', fill = True,
+          plot_3d = False, delta = False, mpl = {}, **kwargs):
     """ Produces a plot of Chi vs. Magnetic Field 
         
         Takes a Dictionary containing various grids of data for different
@@ -1160,50 +1165,56 @@ def chi_B(Data, Data_im, T = 28.0, offset = 0, y_out = 'real',
         #print x
         field = Data[T]['fields']
         #print field
-        x1 = Data[T]['data']['{} A'.format(I)]
-        x2 = Data_im[T]['data']['{} A'.format(I)]
-        xlab = '\n'+r'$\mu_0 H$ (T)'
-        ylab = '\n'+r'$I$ (A)' 
-        points, zlab = calculate_output(x0,x0_im,x1,x2, y_out,delta) 
-        if 'savitzky_golay' in kwargs.keys():
-            points = filt.savitzky_golay(points,window_size, order)
-        for j, val in enumerate(points):
-            points[j]=points[j]+(i*offset)
+        try:
+            x1 = Data[T]['data']['{} A'.format(I)]
+            x2 = Data_im[T]['data']['{} A'.format(I)]
+            xlab = '\n'+r'$\mu_0 H$ (T)'
+            ylab = '\n'+r'$I$ (A)' 
+            points, zlab = calculate_output(x0,x0_im,x1,x2, y_out,delta) 
+            if 'savitzky_golay' in kwargs.keys():
+                points = filt.savitzky_golay(points,window_size, order)
+            for j, val in enumerate(points):
+                points[j]=points[j]+(i*offset)
 
-        # Convert current to current density
-        if 'A' in kwargs.keys():
-            A = kwargs['A']
-            j = round(float(I)/A*1e-6,2)
-           
-        else:
-            j = I
-
-        if plot_3d == True:
-            points[0], points[-1] = 0, 0
-            verts.append(list(zip(field, points)))
-            cl.append(color)
-        else:
-            # Generate 2D Waterfall
-            # make default title
-            plt.title('T = {} K'.format(T))
-            zeroline = [0+i*offset]*len(field)
-            # convert zero
-            if float(j) == 0:
-                j = '0' 
-            plt.plot(field, points, '-', label = '{}'.format(j), color = color)
-            #plt.plot(field, zeroline, color = 'g')
-            ax = plt.gca()
-            ax.fill_between(field, points, zeroline, where=points>=zeroline, facecolor='grey', interpolate=True, alpha = 0.3)
-            ax.fill_between(field, points, zeroline, where=points<=zeroline, facecolor='red', interpolate=True, alpha = 0.2)
-            
-            plt.ylabel(zlab)
-            plt.xlabel(xlab)
-            #plt.legend(title = r'$\vec{j} (\frac{MA}{m^2})$')
+            # Convert current to current density
             if 'A' in kwargs.keys():
-                plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-                #e21u.replace_zeros_legend()
-                #plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+                A = kwargs['A']
+                j = round(float(I)/A*1e-6,2)
+               
+            else:
+                j = I
 
+            if plot_3d == True:
+                points[0], points[-1] = 0, 0
+                verts.append(list(zip(field, points)))
+                cl.append(color)
+            else:
+                # Generate 2D Waterfall
+                # make default title
+                plt.title('T = {} K'.format(T))
+                zeroline = [0+i*offset]*len(field)
+                # convert zero
+                if float(j) == 0:
+                    j = '0' 
+                plt.plot(field, points, '-', label = '{}'.format(j), color = color, **mpl)
+                #plt.plot(field, zeroline, color = 'g')
+                ax = plt.gca()
+                if fill == True:
+                    ax.fill_between(field, points, zeroline, where=points>=zeroline, facecolor='grey', interpolate=True, alpha = 0.3)
+                    ax.fill_between(field, points, zeroline, where=points<=zeroline, facecolor='#4f0202', interpolate=True, alpha = 0.2)
+                
+                plt.ylabel(zlab)
+                plt.xlabel(xlab)
+                #plt.legend(title = r'$\vec{j} (\frac{MA}{m^2})$')
+                if 'A' and 'legend' in kwargs.keys():
+                    if kwargs['legend']:
+                        plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+                        #e21u.replace_zeros_legend()
+                        #plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+                elif 'A' in kwargs.keys():
+                    plt.legend(title=r'$\vec{j}$ ($\frac{MA}{m^2}$)',bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+        except KeyError:
+            pass
     # Generate 3D Watefall         
     if plot_3d == True:
         fig = plt.figure()

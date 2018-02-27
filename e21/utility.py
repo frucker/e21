@@ -88,6 +88,20 @@ def Felix_colormap():
     cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
     return cmap
 
+def Felix_colormap_r():
+    cdict = {'red':((0.0, 0.0, 0.0),
+                  (0.7, 0.0, 0.0), 
+                  (1.0, 1.0, 1.0)) ,
+         'green': ((0.0, 0.8, 0.8),
+                   (0.7, 0.0, 0.0),
+                   (1.0, 0.0, 0.0)),
+         'blue': ((0.0, 1.0, 1.0),
+                     (0.7, 1.0, 1.0),
+                     (1.0, 0.24, 0.24)) }
+    cmap = matplotlib.colors.LinearSegmentedColormap('my_colormap',cdict,256)
+    return cmap
+
+    
 def Felix_colormap_2(nbins=10):
     colors = ['#0000cc','#006666',  '#00994d', '#fff400','#cc5200', '#ff0000','#800000', '#000000' ]
     cm = LinearSegmentedColormap.from_list('Felix2', colors, N=nbins)
@@ -535,7 +549,7 @@ def replace(file_path, pattern, subst):
     #Move new file
     move(abs_path, file_path)
 
-def replace_zeros(only_y = False):
+def replace_zeros(only_y = False, axis = 'all'):
     """ Replaces 0.0 with 0 for Chrisitan. Works for all axes of figure...
     
     E.g.::
@@ -549,22 +563,25 @@ def replace_zeros(only_y = False):
     f=plt.gcf()
     f.canvas.draw()
     ax = f.get_axes()
-    for k in ax:
-        xlabels = [item.get_text() for item in k.get_xticklabels()]
-        ylabels = [item.get_text() for item in k.get_yticklabels()]
-        if not k.get_xscale() == 'log':
-            for i, j in enumerate(xlabels):
-                if not j == '':
-                    if float(j.replace(u'\u2212', '-')) == 0:
-                        xlabels[i] = '0'
-        if not k.get_yscale() == 'log':
-            for i, j in enumerate(ylabels):
-                if not j == '':
-                    if float(j.replace(u'\u2212', '-')) == 0:
-                        ylabels[i] = '0'
-        if not only_y:                      
-            k.set_xticklabels(xlabels)   
-        k.set_yticklabels(ylabels)
+    if axis == 'all':
+        for k in ax:
+            xlabels = [item.get_text() for item in k.get_xticklabels()]
+            ylabels = [item.get_text() for item in k.get_yticklabels()]
+            if not k.get_xscale() == 'log':
+                if axis == 'all' or 'x':
+                    for i, j in enumerate(xlabels):
+                        if not j == '':
+                            if float(j.replace(u'\u2212', '-')) == 0:
+                                xlabels[i] = '0'
+            if axis == 'all' or 'y':
+                if not k.get_yscale() == 'log':
+                    for i, j in enumerate(ylabels):
+                        if not j == '':
+                            if float(j.replace(u'\u2212', '-')) == 0:
+                                ylabels[i] = '0'
+            if not only_y:                      
+                k.set_xticklabels(xlabels)   
+            k.set_yticklabels(ylabels)
 
 def savefig(path, **kwargs):
     """
@@ -663,7 +680,7 @@ def replace_zeros_legend():
         i.set_label(j)
     #return lin, lab
 
-def order_measurements(Exp, meas, param = 'temp'):
+def order_measurements(Exp, meas, param = 'temp', rev = False):
     """ Orders a list of measurements after a given parameter ascending
     
     
@@ -723,7 +740,12 @@ def order_measurements(Exp, meas, param = 'temp'):
         except AttributeError:               
             raise NotImplementedError('Method not implemented yet: {}'.format(param))
         
-    return meas
+    
+    if reversed == True:
+        return list(rev(meas))
+    else:
+        return meas
+    
 
 def save(Obj, path, name, binary = False):
     if not os.path.exists(path):

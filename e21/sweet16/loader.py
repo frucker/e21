@@ -147,6 +147,7 @@ def parse_commands(arguments):
                            (like one line in S16 command_file.txt)
 
         """
+    #print len(arguments)
     command_line = ['mode', 'init_temperature', 'init_temperature_rate',
                     'target_temperature', 'target_temperature_rate',
                     'init_field', 'init_field_rate', 'target_field',
@@ -224,6 +225,7 @@ def parse_header(line, params, block_title):
             # check if 'command' line. Then argument is dictionary containing
             # infromation of command line of command_file.txt of measurement
             if (kw == 'command'):
+                #print arg
                 arg = parse_commands(arg)
             # Corret bad data file output (files befor 08/14)
             if (kw == 'offset.'):
