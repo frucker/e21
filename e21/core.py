@@ -47,7 +47,7 @@ RC = {
     'ytick.major.width': 1.5,
     'ytick.labelsize': 22,
     'ytick.color': COLORS['dark gray'],
-    'axes.color_cycle': (COLORS['light blue'], COLORS['green'], COLORS['light red'], COLORS['yellow'], COLORS['pink'], COLORS['black']),
+    #'axes.color_cycle': (COLORS['light blue'], COLORS['green'], COLORS['light red'], COLORS['yellow'], COLORS['pink'], COLORS['black']),
     'axes.labelcolor': COLORS['dark gray'],
     'axes.grid': True,
     'legend.fontsize': 22,
