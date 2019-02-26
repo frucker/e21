@@ -42,18 +42,21 @@ class Sweet16(e21.core.Measurement, e21.core.Plottable):
     @property
     def temperature(self):
         try:        
-            return self.data['LS340_temp']
+            return self.data[self.params['temperature']]
         except KeyError:
-            try: 
-                return self.data['sample_temp_1']
-            except KeyError:     
-                try:
-                    return self.data['MC_LS372_1']
-                except KeyError:
+            try:        
+                return self.data['LS340_temp']
+            except KeyError:
+                try: 
+                    return self.data['sample_temp_1']
+                except KeyError:     
                     try:
-                        return self.data['MC_temp']
+                        return self.data['MC_LS372_1']
                     except KeyError:
-                        return 0
+                        try:
+                            return self.data['MC_temp']
+                        except KeyError:
+                            return 0
       
 
     @property
@@ -88,13 +91,14 @@ class Sweet16(e21.core.Measurement, e21.core.Plottable):
 
     @property
     def amplitude(self):
-        A = self.params['info']['command']['K6221 current']
-        return float(A.strip('A'))
+        #A = self.params['info']['command']['K6221 current']
+		return np.median(self.data['K6221_amplitude'])
+        
 
     @property
     def frequency(self):
-        f = self.params['info']['command']['k6221 frequency']
-        return float(f.strip('Hz'))
+        #f = self.params['info']['command']['k6221 frequency']
+        return np.median(self.data['K6221_frequency'])
         
     @property
     def time(self):
