@@ -1,4 +1,4 @@
-import e21.utility as e21u
+﻿import e21.utility as e21u
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
@@ -11,6 +11,50 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.collections import PolyCollection
 from matplotlib.colors import colorConverter
 import e21.filter as filt
+
+def get_amplitude(Exp, meas, tol = 0.01):
+    """ Returns amplitdue of a list of measurement. 
+      
+    Exception raised if measurements have different amplitdues.
+    
+    E.g.::plot_grid
+        
+        path = '/Your_Path/'
+        MnSi_T = e21.sweet16.susceptibility.Experiment()
+        MnSi_T.add_measurements(sorted(glob.glob(path+'*.dat'),
+                                key=os.path.getmtime))
+        current, current_string = get_current(MnSi_T, meas)
+    
+    :param dict Exp: sweet16 Experiment class dictionary
+    :param list meas: list of numbers of desired measurements
+    :param float tol: Tolerance in which all currents have to be equal
+    
+    :raises: ValueError, Measuremetns don't have the same current within tol
+    
+    :return  float: current of measurements as float 
+         
+    
+    """
+    # check if measurements given
+    if len(meas)==0:
+        raise ValueError('No measurements given')
+    
+    try:
+        #get amplitude of first measurement in meas
+        amplitude = abs(np.median(Exp[meas[0]].data['K6221_amplitude']))
+       
+        # check if all measurements have the same current within a tolerance
+        for i, j in enumerate(meas):
+            check_amplitude = abs(np.median(Exp[j].data['K6221_amplitude']))
+            if (check_amplitude-amplitude) > 0.01:
+                raise ValueError("Current of measurement number {} not " 
+                      "the same ({})"
+                      "as standard: {}!".format(j,Exp[j].mean_current, current))
+
+        return amplitude
+    except KeyError:
+        return 0
+
 
 def get_current(Exp, meas, tol = 0.01):
     """ Returns current of a list of measurement. 
@@ -100,7 +144,7 @@ def make_grid(Exp, meas = [],data = 'real', min_y = 0, max_y = 0.6,
         Grids[c] = g
     
     :param dict Exp: sweet16 Experiment class
-    :param list meas: list of measurements
+    :param list meas: list of measurements taken at same current/amplitude
     :param str,callable data: Desired Measurement data
                               (property of Susc. Measurement),
                               e.g. 'imag' or callable
@@ -127,8 +171,14 @@ def make_grid(Exp, meas = [],data = 'real', min_y = 0, max_y = 0.6,
     if len(meas) == 0:
         raise Exception("No measurements given!")
     
-    # get current
-    current, current_string = get_current(Exp, meas)
+    # get current or amplitude
+    try:
+         if kwargs['Amplitude'] == True:
+            parameter = get_amplitude(Exp, meas)
+         else:
+            parameter, string = get_current(Exp, meas)
+    except KeyError:
+        parameter, string = get_current(Exp, meas)
        
     # get temperature boundaries
     if not 'min_x' in kwargs.keys():
@@ -171,7 +221,7 @@ def make_grid(Exp, meas = [],data = 'real', min_y = 0, max_y = 0.6,
     Grd['grid'] = grid
     Grd['fields'] = np.linspace(float(min_y), float(max_y), int(N.imag))
     
-    return Grd, '{}'.format(current)
+    return Grd, '{}'.format(parameter)
 
 def plot_grid(Grids, current, nbins = 4, **kwargs): 
        
@@ -526,7 +576,7 @@ def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
         Takes a Dictionary containing various grids of data for different
         currents. Checks which currents are available in grid.
 
-    
+
     :param dict Data: Dictionary, output of :func:`~.make_grid`
     :param dict Data_im: Dictionary, output of :func:`~.make_grid`
                             usually Grids
@@ -542,9 +592,8 @@ def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
             * cmap (*callbale*) - Matplotlib colormap instance
             * A (*float*) - Sample cross section
             *
-
     """
-
+    print 'Begin'
     # Possibility to define own color map
     if not 'cmap' in kwargs.keys():
         cmap = cm.jet
@@ -565,8 +614,11 @@ def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
         try:
             if not 'color' in kwargs['mpl'].keys():
                 color = cmap((j)/float(len(B)))
+                print 'Hello'
         except:
             color = cmap((j)/float(len(B)))
+            print 'Hello2'
+            print 'Hello2'
 
         values = [] # data point (chi)
         x_axis = []  # x-coordinate (j)
@@ -596,7 +648,7 @@ def chi_I_neu(Data, Data_im, T = 28.0, B = [0.2], offset = 0, y_out = 'real',
             values.append(points+(i*offset))        
         plt.title('T = {} K'.format(T))
  
-        plt.plot(x_axis, values, 'o', label = '{}'.format(b), **mpl)
+        plt.plot(x_axis, values, 'o', label = '{}'.format(b), color = color, **mpl)
     plt.ylabel(zlab)
     plt.xlabel(xlab)
 

@@ -32,6 +32,7 @@ class Loader(object):
         except KeyError:
             return Measurement(data, params)
 
+
     def parse(self, path):
         """
         Parser for sweet 16 measurement files. Only works for files younger

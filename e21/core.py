@@ -100,7 +100,7 @@ class Measurement(object):
 
 class Experiment(object):
     """Minimal implementation of a experiment class."""
-    def __init__(self, measurements={}):
+    def __init__(self, measurements={}, **kw):
         self._measurements = {}
         
     def __getitem__(self, item):

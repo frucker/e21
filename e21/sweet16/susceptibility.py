@@ -28,15 +28,26 @@ class Susceptibility(Sweet16):
     @property
     def dropping_resistance(self):
         return self.params['general']['dropping_resistance']
-
     @property
     def real(self):
-        return np.array(self.data['LI1_CH2'])
-
+        try:
+            return np.array(self.data['LI1_CH2'])
+        except KeyError:
+            try:
+                return np.array(self.data['LI2_CH2'])
+            except KeyError:
+                return [0]
     @property
     def imag(self):
-        return np.array(self.data['LI1_CH1'])
-
+        try:
+            return np.array(self.data['LI1_CH1'])
+        except KeyError:
+            try:
+                return np.array(self.data['LI2_CH1'])
+            except KeyError:
+                return [0]
+    
+        
     @property
     def chi(self):
         """Calculates the susceptibility of the X signal."""
@@ -99,9 +110,9 @@ class AngleScan(Susceptibility, e21.core.Plottable):
 
 def check_empty_files(filelist, mode = 'susceptibility'):
     """ 
-	
-		ACHTUNG! Dauert viel zu lange...
-		Checks for empty files in list of files.
+    
+        ACHTUNG! Dauert viel zu lange...
+        Checks for empty files in list of files.
         Empty files are files containing only header lines.
         input: filelist
         output: filelist, list of non-empty files
@@ -117,12 +128,12 @@ def check_empty_files(filelist, mode = 'susceptibility'):
         except IndexError:
             print 'file empty: {}'.format(files)
     return fl
-	
+    
 def check_empty_files(filelist, mode = 'susceptibility'):
     """ 
-	
-		ACHTUNG! Dauert viel zu lange...
-		Checks for empty files in list of files.
+    
+        ACHTUNG! Dauert viel zu lange...
+        Checks for empty files in list of files.
         Empty files are files containing only header lines.
         input: filelist
         output: filelist, list of non-empty files
@@ -137,7 +148,7 @@ def check_empty_files(filelist, mode = 'susceptibility'):
                 fl.append(files)
         except IndexError:
             print 'file empty: {}'.format(files)
-    return fl	
+    return fl   
 
 
 def create(data, params):
@@ -175,7 +186,7 @@ class Experiment(e21.core.Experiment):
                 x,
                 FieldScan)]          
 
-    def add_measurements(self, filelist):
+    def add_measurements(self, filelist,**kw):
         """ Adds measurements to Experiment
 
             filelist: list of measurement files
@@ -196,38 +207,38 @@ class Experiment(e21.core.Experiment):
         emptyfiles = '\nEmpty files:\n'
         i = 0
         for n, file in enumerate(filelist):
-			
-			# i counting only non-empty files
-			
-			# Count import of all files (including empty ones)
-			p.animate(n+1)
-			# Check if imported file is empty, cheap trick..
-			try:
-				Test = s16(file)
-				if Test.data['datetime'][0]:
-					index = i + meas_len
-					self._measurements[index] = Test
-					self._measurements[index].params['general']['filename'] = file
-					if 'amplification' not in self._measurements[
-							index].params['general'].keys():
-						self._measurements[index].params['general'][
-							'amplification'] = amplification
-					if 'current' not in self._measurements[index].data.keys():
-						if 'k2440_current' in self._measurements[index].data.keys():
-							self._measurements[index].data['current'] = self._measurements[index].data['k2440_current']
-						else:
-							self._measurements[index].data['current'] = 0 
-					if 'dropping_resistance' in self._measurements[
-							index].params['general'].keys():
-						self._measurements[index].params['general']['dropping_resistance'] = float(
-							self._measurements[index].params['general']['dropping_resistance'].strip('kOhm'))
-					else:
-						self._measurements[index].params['general'][
-							'dropping_resistance'] = dropping_resistance
-					# only count if file was not empty	
-					i = i+1
-			except IndexError:
-				emptyfiles = emptyfiles + file + '\n'	
+            
+            # i counting only non-empty files
+            
+            # Count import of all files (including empty ones)
+            p.animate(n+1)
+            # Check if imported file is empty, cheap trick..
+            try:
+                Test = s16(file, **kw)
+                if Test.data['datetime'][0]:
+                    index = i + meas_len
+                    self._measurements[index] = Test
+                    self._measurements[index].params['general']['filename'] = file
+                    if 'amplification' not in self._measurements[
+                            index].params['general'].keys():
+                        self._measurements[index].params['general'][
+                            'amplification'] = amplification
+                    if 'current' not in self._measurements[index].data.keys():
+                        if 'k2440_current' in self._measurements[index].data.keys():
+                            self._measurements[index].data['current'] = self._measurements[index].data['k2440_current']
+                        else:
+                            self._measurements[index].data['current'] = 0 
+                    if 'dropping_resistance' in self._measurements[
+                            index].params['general'].keys():
+                        self._measurements[index].params['general']['dropping_resistance'] = float(
+                            self._measurements[index].params['general']['dropping_resistance'].strip('kOhm'))
+                    else:
+                        self._measurements[index].params['general'][
+                            'dropping_resistance'] = dropping_resistance
+                    # only count if file was not empty  
+                    i = i+1
+            except IndexError:
+                emptyfiles = emptyfiles + file + '\n'   
         print emptyfiles
 
 def measurement_details(Exp):
